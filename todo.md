@@ -1,11 +1,13 @@
 # Miles to go before I sleep...
 ---------
 ## Code writing
-* Write `.pyf` file for the `dbihar` subroutine to make it more pythonic.
-* Write some compilation scripts for that.
+* ~~Write `.pyf` file for the `dbihar` subroutine to make it more pythonic.~~
+* ~~Write some compilation scripts for that.~~
 * Write higher order finite difference schemes.
 * Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
 * Fit defect positions to a square root function (or parabola or whatever). 
+* Write out a biharmonic solver in Python.
+* Figure out whether @jit works for scipy functions.
 ---------
 ## Testing
 * Figure out how to effectively test the methods in the `LiquidCrystalHelper` package.
