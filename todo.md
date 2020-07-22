@@ -18,6 +18,14 @@
 * Clean up explanation of the theory (and get rid of Fourier Transform stuff)
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
+* Explicitly show that the $\lambda_k$'s are eigenvalues of $\mathbb{F}$
+* Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
+* Explicitly write down the effect of $B$ on $U$
+* Figure out how to think of a horizontal concatenation of a tensor product
+* Explicitly find the effect of $V$ and $V^\top$ on $U$
+* Show explicitly that $VV^\top = B$
+* Write out the Woodbury identity, show how it works in this case
+* Explain how the conjugate gradients method words
 -----------
 ## Code refactoring
 * Rewrite finite difference scheme so it works with Dirichlet or Neumann BC
