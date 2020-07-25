@@ -1,0 +1,1050 @@
+\documentclass[reqno]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{relsize}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{pgf, tikz}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usetikzlibrary{graphs}
+
+\setlength{\textheight}{9truein}
+\setlength{\topmargin}{-0.5truein}
+\setlength{\textwidth}{6truein}
+\setlength{\oddsidemargin}{.25truein}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\newcommand{\Pic}[1]{\text{Pic}(#1)}
+\newcommand{\Div}[1]{\text{Div}(#1)}
+\newcommand{\divv}[1]{\text{div}(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Jac}{\text{Jac}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{conjecture}{Theorem}
+
+\setlength{\parindent}{40pt}
+
+\begin{document}
+	\title{Nematohydrodynamics, Quasi-2D (Stream Function) and Linear Approximations}
+	\author{Lucas Myers}
+	\maketitle
+	
+	\section*{Assumptions}
+	We will consider a coupled nematic liquid crystal and hydrodynamic system on a flat substrate. We assume the fluid velocity and Q-tensor magnitude are small so we neglect terms higher than order-1 in $Q_{ij}$ and $v_i$. Additionally, we assume no acceleration so that $\partial v_i/\partial t = 0$ always. We give an initial director field configuration of $\mathbf{n} = (\cos\varphi, \sin\varphi, 0)$ for some $\varphi$ (to be specified) so that the Q-tensor, given by $Q_{ij} = S/2(3n_i n_j - \delta_{ij})$ takes the form:
+	\begin{align}
+		Q_{ij} &= \frac{S}{2}\left[
+			\begin{matrix}
+				3\cos^2\varphi - 1 & 3\cos\varphi\sin\varphi & 0 \\
+				3\cos\varphi\sin\varphi & 3\sin^2\varphi - 1 & 0 \\
+				0 & 0 & -1
+			\end{matrix}
+		\right]\\
+		&= \frac{S}{2}\left[
+			\begin{matrix}
+				3\cos^2\varphi - 1 & \frac{3}{2}\sin2\varphi & 0 \\
+				\frac{3}{2}\sin2\varphi & 3\sin^2\varphi - 1 & 0 \\
+				0 & 0 & -1
+			\end{matrix}
+		\right]
+	\end{align}
+	
+	\section{Three-dimensional linearized equations}
+	
+	\subsection{Computing homoegenous and elastic generalized force}
+	From Svensek and Zumer, the free energy density is given by
+	\begin{equation}
+		f = \phi(Q) + \frac{1}{2} L \partial_i Q_{jk} \partial_i Q_{jk}
+	\end{equation}
+	so that the homogeneous elastic part of the generalized force is given by:
+	\begin{equation}
+		h^{he}_{ij} = L\partial_k^2 Q_{ij} - \frac{\partial \phi}{\partial Q_{ij}} + \lambda \delta_{ij} + \lambda_k\epsilon_{kij}
+	\end{equation}
+	where $\phi$ is the Landau de Gennes bulk free energy:
+	\begin{equation} \label{eq:LdG}
+		\phi(Q) = \frac{1}{2}A Q_{ij}Q_{ji} + \frac{1}{3}B Q_{ij}Q_{jk}Q_{ki} + \frac{1}{4} C(Q_{ij}Q_{ji})^2
+	\end{equation}
+	We begin by explicitly calculating the second term in terms of $Q_{ij}$, one term at a time in $\phi$:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}}\left(\frac{1}{2}AQ_{ij}Q_{ji}\right) &= \frac{1}{2}A \left(\delta_{im}\delta_{jn}Q_{ji} + Q_{ij}\delta_{jm}\delta_{in}\right) \\
+		&= \frac{1}{2}A (Q_{nm} + Q_{nm}) \\
+		&= A Q_{mn}
+	\end{split}
+	\end{equation}
+	where in the last step we've used symmetry of $Q_{ij}$.
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}} \left( \frac{1}{3}BQ_{ij}Q_{jk}Q_{ki} \right) &= \frac{1}{3}B ( \delta_{im}\delta_{jn}Q_{jk}Q_{ki} + Q_{ij}\delta_{jm}\delta_{kn}Q_{ki} + Q_{ij}Q_{jk}\delta_{mk}\delta_{ni} ) \\
+		&= \frac{1}{3}B(Q_{nk}Q_{km} + Q_{im}Q_{ni} + Q_{nj}Q_{jm}) \\
+		&= BQ_{ni}Q_{im}
+	\end{split}
+	\end{equation}
+	And the final term gives:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}}\left( \frac{1}{4} C(Q_{ij}Q_{ji})^2 \right) &= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \frac{\partial(Q_{kl}Q_{lk})}{\partial Q_{mn}} \\
+		&= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \cdot (\delta_{mk}\delta_{nl}Q_{lk} + Q_{kl}\delta_{lm}\delta_{kn}) \\
+		&= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \cdot (Q_{nm} + Q_{nm}) \\
+		&= C Q_{mn} (Q_{ij}Q_{ji})
+	\end{split}
+	\end{equation}
+	Thus, the total homogeneous and elastic force reads:
+	\begin{equation}
+		h^{he}_{ij} = L\partial^2 Q_{ij} - A Q_{ij} - BQ_{ik}Q_{kj} - C Q_{ij} (Q_{kl}Q_{lk}) + \lambda\delta_{ij} + \lambda_k \epsilon_{kij}
+	\end{equation}
+	
+	\subsection{Computing viscous force explicitly}
+	Alrighty then, now we need the viscous force on the liquid crystals. From Svensek and Zumer, the viscous force is given by:
+	\begin{equation}
+		-h^v_{ij} = \frac{1}{2} \mu_2 A_{ij} + \mu_1 N_{ij}
+	\end{equation}
+	with 
+	\begin{equation}
+		N_{ij} = \frac{d Q_{ij}}{dt} + W_{ik} Q_{kj} - Q_{ik} W_{kj}
+	\end{equation}
+	and
+	\begin{equation}
+		\frac{d Q_{ij}}{dt} = \frac{\partial Q_{ij}}{\partial t} + (v\cdot \nabla)Q_{ij}
+	\end{equation}
+	The second two terms in the expression for $N_{ij}$ are quadratic in $v_i$ and $Q_{ij}$ so we may drop them, and $(v\cdot \nabla)Q_{ij}$ is clearly quadratic. Hence, we make the approximation
+	\begin{equation}
+		N_{ij} \approx \frac{\partial Q_{ij}}{\partial t}
+	\end{equation}
+	We also have the definition
+	\begin{equation}
+		A_{ij} = (\partial_i v_j + \partial_j v_i)
+	\end{equation}
+	Note that we want to restrict our analysis to an incompressible fluid, so we must have a further restriction that:
+	\begin{equation}\label{eq:incompressible}
+		\partial_i v_i = 0
+	\end{equation}
+	One way of implicitly enforcing this requirement in two dimensions is to define a stream function $\psi_i$ such that $\epsilon_{ijk}\partial_j \psi_k = v_i$ -- note that for $v_i$ defined on a simply-connected set satisfying \eqref{eq:incompressible} this is always true. For a two-dimensional flow, we have $v_3 = 0$ always, so that 
+	\begin{equation}
+	\begin{split}
+		v_3 &= \partial_1 \psi_2 - \partial_2 \psi_1 = 0 \\
+		v_2 &= \partial_3 \psi_1 - \partial_1 \psi_3 \\
+		v_1 &= \partial_2 \psi_3 - \partial_3 \psi_1
+	\end{split}
+	\end{equation}
+	Suppose we set $\psi_2 = \psi_1 = 0$. Then the condition on $v_3$ is satisfied, and the expression becomes
+	\begin{equation}
+	\begin{split}
+		v_2 &= -\partial_1 \psi_3 \\
+		v_1 &= \partial_2 \psi_3
+	\end{split}
+	\end{equation}
+	which implies that
+	\begin{equation}
+		\psi_3 = \int v_2 dx + f(y)
+	\end{equation}
+	giving
+	\begin{equation}
+		v_1 = \int \frac{\partial v_2}{\partial y} dx + \frac{df}{dy}
+	\end{equation}
+	We may solve this equation by integrating in $y$. Thus, for any $v_1$ and $v_2$ we may produce a $\psi_i = (0, 0, \psi_3)$ which describes the 2D flow. Then the expression for the complete viscous force is
+	\begin{equation}
+	\begin{split}
+		-h^v_{ij} &= \frac{1}{2}\mu_2 (\partial_i v_j + \partial_j v_i) + \mu_1 \frac{\partial Q_{ij}}{\partial t} \\
+		&= \frac{1}{2}\mu_2 (\epsilon_{jkl} \partial_i \partial_k \psi_l +  \epsilon_{ikl} \partial_j \partial_k \psi_l) + \mu_1 \frac{\partial Q_{ij}}{\partial t}
+	\end{split}
+	\end{equation}
+	Note that this equation is simpler than one might think, since both of the terms in parentheses only yield nonzero results when $l = 3$. 
+	One equation of motion is then given by 
+	\begin{equation}
+		h^{he}_{ij} + h^{v}_{ij} = 0
+	\end{equation}
+	or explicitly
+	\begin{multline}\label{eq:forceeq}
+		\mu_1 \frac{\partial Q_{ij}}{\partial t} = L\partial^2 Q_{ij} - A Q_{ij} - BQ_{ik}Q_{kj} - C Q_{ij} (Q_{kl}Q_{lk}) + \lambda\delta_{ij} + \lambda_k \epsilon_{kij} - \frac{1}{2}\mu_2 (\epsilon_{jkl} \partial_i \partial_k \psi_l +  \epsilon_{ikl} \partial_j \partial_k \psi_l)
+	\end{multline}
+	Using this, we may update $Q_{ij}$ in time by solving for $\partial Q_{ij}/\partial t$ in terms of $Q_{ij}$ and $v_i$ from the previous iteration.
+	
+	\subsection{Computing the elastic stress tensor explicitly}
+	The elastic stress tensor is obtained via
+	\begin{equation}
+		\sigma^{e}_{ij} = -\frac{\partial f}{\partial (\partial_i Q_{kl})} \partial_j Q_{kl}
+	\end{equation}
+	Note that only the elastic part of the free energy make references to derivatives:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial f}{\partial (\partial_i Q_{kl})} &= \frac{\partial}{\partial (\partial_i Q_{kl})} \frac{1}{2} L \partial_j Q_{mn} \partial_j Q_{mn} \\
+		&= \frac{1}{2} L (\delta_{ij}\delta_{km}\delta_{ln} \partial_j Q_{mn} + \partial_j Q_{mn} \delta_{ij}\delta_{km}\delta_{ln}) \\
+		&= \frac{1}{2} L (\partial_i Q_{kl} + \partial_i Q_{kl}) \\
+		&= L\partial_i Q_{kl}
+	\end{split}
+	\end{equation}
+	Then the elastic stress tensor is given by
+	\begin{equation}
+		\sigma^e_{ij} = -L\partial_i Q_{kl} \partial_j Q_{kl}
+	\end{equation}
+	
+	\subsection{Computing viscous stress tensor explicitly}
+	The viscous stress tensor is given by
+	\begin{equation}
+		\sigma^v_{ij} = \beta_1 Q_{ij}Q_{kl}A_{kl} + \beta_4 A_{ij} + \beta_5 Q_{ik} A_{ki} + \frac{1}{2} \mu_2 N_{ij} - \mu_1 Q_{ik}N_{kj} + \mu_1 Q_{jk}N_{ki}
+	\end{equation}
+	However, only the $\beta_4$ and $\mu_2$ are linear in $Q_{ij}$ and $v_i$. Hence, this simplifies to
+	\begin{equation}
+		\sigma^v_{ij} \approx \beta_4 A_{ij} + \frac{1}{2} \mu_2 N_{ij}
+	\end{equation}
+	Again, plugging in for $A_{ij}$ and $N_{ij}$ as we did for the viscous force, we get
+	\begin{equation}
+		\sigma^v_{ij} \approx \beta_4 (\partial_i v_j + \partial_j v_i) + \frac{1}{2} \mu_2  \frac{\partial Q_{ij}}{\partial t}
+	\end{equation}
+	
+	\subsection{Computing the fluid equation of motion}
+	The equation of motion for the fluid is given by
+	\begin{equation}
+		\rho \frac{\partial v_i}{\partial t} = -\partial_i p + \partial_j (\sigma^v_{ji} + \sigma^{e}_{ji})
+	\end{equation}
+	We've made the assumption that $\partial v_i/\partial t \approx 0$. Plugging in for $\sigma^v_{ji}$ and $\sigma^e_{ji}$ yields
+	\begin{equation}
+	\begin{split}
+		0 &= -\partial_i p + \partial_j \left( -L\partial_j Q_{kl} \partial_i Q_{kl} + \beta_4 (\partial_j v_i + \partial_i v_j) + \frac{1}{2} \mu_2  \frac{\partial Q_{ji}}{\partial t} \right) \\
+		&= -\partial_i p - L\left[(\partial^2 Q_{kl}) \partial_i Q_{kl} + (\partial_j Q_{kl}) \partial_j \partial_i Q_{kl}\right] + \beta_4(\partial^2 v_i + \partial_j \partial_i v_j) + \frac{1}{2} \mu_2 \partial_j \frac{\partial Q_{ji}}{\partial t} \\
+		&= -\partial_i p - L\left[(\partial^2 Q_{kl}) \partial_i Q_{kl} + (\partial_j Q_{kl}) \partial_j \partial_i Q_{kl}\right] + \beta_4\partial^2 v_i + \frac{1}{2} \mu_2 \partial_j \frac{\partial Q_{ji}}{\partial t}
+	\end{split}
+	\end{equation}
+	where in the last step we have used the condition that $\partial_j v_j = 0$. Let's take the curl in order to get rid of the pressure term:
+	\begin{equation}
+	\begin{split}
+		0 &= -\epsilon_{mni}\partial_n\partial_i p - L\epsilon_{mni}\partial_n\left[(\partial^2 Q_{kl}) \partial_i Q_{kl} + (\partial_j Q_{kl}) \partial_j \partial_i Q_{kl}\right] + \beta_4 \epsilon_{mni}\partial_n \partial^2 v_i + \frac{1}{2}\mu_2\epsilon_{mni}\partial_n \partial_j\frac{\partial Q_{ji}}{\partial t} \\
+	\end{split}
+	\end{equation}
+	Now note that the first term becomes
+	\begin{equation}
+	\begin{split}
+		\epsilon_{mni}\partial_n\partial_i p &= -\epsilon_{min}\partial_n\partial_i p \\
+		&= -\epsilon_{min}\partial_i\partial_n p \\
+		&= -\epsilon_{mni}\partial_n\partial_i p
+	\end{split}
+	\end{equation}
+	where in the last step we've reindexed $n \leftrightarrow i$. Hence, the first term vanishes. For the second term we find:
+	\begin{multline}
+		L\epsilon_{mni}\partial_n\left[(\partial^2 Q_{kl}) \partial_i Q_{kl} + (\partial_j Q_{kl}) \partial_j \partial_i Q_{kl}\right] = L\epsilon_{mni} \left[ (\partial_n \partial^2 Q_{kl})\partial_i Q_{kl} + (\partial^2 Q_kl)\partial_n \partial_i Q_{kl} \right. \\ \left. + (\partial_n\partial_j Q_{kl})\partial_j\partial_i Q_{kl} + (\partial_j Q_{kl})\partial_j\partial_i\partial_n Q_{kl} \right]
+	\end{multline}
+	Note that the second, third, and fourth terms are symmetric in $n$ and $i$ so that they go to zero with the Levi-Civita (as with the pressure term). Our equation of motion becomes
+	\begin{equation}
+		L\epsilon_{mni}(\partial_n \partial^2 Q_{kl})\partial_i Q_{kl} = \beta_4 \epsilon_{mni}\partial_n \partial^2 v_i + \frac{1}{2} \mu_2 \epsilon_{mni} \partial_n \partial_j \frac{\partial Q_{ji}}{\partial t}
+	\end{equation}
+	Lastly, we may plug in the stream function expression for velocity. This yields
+	\begin{equation}
+	\begin{split}
+		\beta_4 \epsilon_{mni}\partial_n\partial^2 v_i &= \beta_4 \epsilon_{mni}\epsilon_{ijk}\partial^2\partial_n\partial_j \psi_k \\
+		&= \beta_4 (\delta_{mj}\delta_{nk} - \delta_{mk}\delta_{nj}) \partial^2\partial_n\partial_j \psi_k \\
+		&= \beta_4 \partial^2 \left( \partial_n \partial_m \psi_n - \partial_n \partial_n \psi_m \right) \\
+		&= \beta_4 \left( \partial_m \partial_n \partial^2 \psi_n - \partial^4 \psi_m \right)
+	\end{split}
+	\end{equation}
+	Hence, the final equation of motion becomes:
+	\begin{equation}
+		L\epsilon_{mni}(\partial_n \partial^2 Q_{kl})\partial_i Q_{kl} = \beta_4 \left( \partial_m \partial_n \partial^2 \psi_n - \partial^4 \psi_m \right) + \frac{1}{2} \mu_2 \epsilon_{mni} \partial_n \partial_j \frac{\partial Q_{ji}}{\partial t}
+	\end{equation}
+	Now, for the quasi-2D formulation, we assume that everything is constant in the z-direction so that this equation becomes:
+	\begin{equation} \label{eq:visceq}
+		\beta_4 \partial^4 \psi_m = \frac{1}{2} \mu_2 \epsilon_{mni} \partial_n \partial_j \frac{\partial Q_{ji}}{\partial t} - L\epsilon_{mni}(\partial_n \partial^2 Q_{kl})\partial_i Q_{kl}
+	\end{equation}
+	Where we have gotten rid of a term by noting that $\psi_1 = \psi_2 = 0$ and that $\partial_3 \psi_i = 0$ for any $i$. 
+	
+	\section{Writing equations of motion in terms of $\eta$, $\mu$ and $\nu$}
+	The $Q$-tensor can be written as
+	\begin{equation} \label{eq:traceless-symmetric}
+		Q_{ij} = S\left(n_i n_j - \tfrac13\delta_{ij}\right) + P\left(m_i m_j - l_i l_j \right)
+	\end{equation}
+	for orthogonal vectors $\{n_i, m_i, l_i\}$. This is true for all traceless, symmetric tensors. Supposing that $n_i$ and $m_i$ stay in the plane with $l_i$ directed out of the plane (as is the case with these 2D nematic experiments), we may define a series of auxiliary variables:
+	\begin{align}
+		\eta &= S - \tfrac32 \left( S - P \right) \sin^2\varphi \\
+		\mu &= P + \tfrac12 \left( S - P \right) \sin^2\varphi \\
+		\nu &= \tfrac12\left( S - P \right) \sin 2\varphi
+	\end{align}
+	This allows us to write the Q-tensor for nematic thin films as:
+	\begin{equation}
+		Q = 
+		\begin{pmatrix}
+		\frac{2}{3} \eta & \nu & 0\\
+		\nu & -\frac{1}{3}\eta + \mu & 0 \\
+		0 & 0 & -\frac{1}{3}\eta - \mu
+		\end{pmatrix}
+	\end{equation}
+	From \eqref{eq:traceless-symmetric} we may read off the eigenvalues of $Q_{ij}$ as $\frac23 S$, $P - \frac13 S$, $-(P + \frac13 S)$ with corresponding eigenvectors $n_i, m_i, l_i$. The last of these is exactly $-(\frac13 \eta + \mu)$ while the first two must be calculated from the upper left block. Since $S > P$, we just have to find the largest eigenvalue to find $S$. 
+	
+	Note that we will no longer need the Lagrange multipliers because this choice of variables makes the Q-tensor traceless by definition. We begin by explicitly writing out the contractions in \eqref{eq:forceeq}:
+	\begin{equation}
+	\begin{split}
+		Q_{ik}Q_{kj} &= 
+		\begin{pmatrix}
+		\frac{2}{3} \eta & \nu & 0\\
+		\nu & -\frac{1}{3}\eta + \mu & 0 \\
+		0 & 0 & -\frac{1}{3}\eta - \mu
+		\end{pmatrix}
+		\begin{pmatrix}
+		\frac{2}{3} \eta & \nu & 0\\
+		\nu & -\frac{1}{3}\eta + \mu & 0 \\
+		0 & 0 & -\frac{1}{3}\eta - \mu
+		\end{pmatrix} \\
+		&=
+		\begin{pmatrix}
+			\frac{4}{9} \eta^2 + \nu^2 & \frac{2}{3}\eta\nu - \frac{1}{3}\eta\nu + \mu\nu & 0 \\
+			\frac{2}{3}\eta\nu -\frac{1}{3}\eta\nu + \mu\nu & \nu^2 + \left( -\frac{1}{3}\eta + \mu \right)^2 & 0 \\
+			0 & 0 & \left( -\frac{1}{3}\eta - \mu \right)^2
+		\end{pmatrix} \\
+		&= \begin{pmatrix}
+			\frac{4}{9}\eta^2 + \nu^2 & \nu\left( \frac{1}{3}\eta + \mu \right) & 0 \\
+			\nu\left( \frac{1}{3}\eta + \mu \right) & \nu^2 + \left( \frac{1}{3}\eta - \mu \right)^2 & 0 \\
+			0 & 0 & \left( \frac{1}{3}\eta + \mu \right)^2
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	Not super clean, but okay. Now for $Q_{kl}Q_{lk}$, we just have to multiply each entry and sum:
+	\begin{equation} \label{eq:fullcontrac}
+	\begin{split}
+		Q_{kl}Q_{lk} &= \frac{4}{9}\eta^2 + \nu^2 + \nu^2 + \left( \frac{1}{3}\eta - \mu \right)^2 + \left( \frac{1}{3}\eta + \mu \right)^2 \\
+		&= \frac{4}{9}\eta^2 + 2\nu^2 + \frac{1}{9}\eta^2 - \frac{2}{3}\eta\mu + \mu^2 + \frac{1}{9}\eta^2 + \frac{2}{3}\eta\mu + \mu^2 \\
+		&= \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2
+	\end{split}
+	\end{equation}
+	
+	\subsection{Writing the force equation in terms of the auxiliary variables} \label{sec:force-aux}
+	Begin with $\eta$. Note that $\eta = \frac{3}{2}Q_{11}$ so that
+	\begin{equation} \label{eq:etaeq}
+	\begin{split}
+		\mu_1 \frac{\partial \eta}{\partial t} &= \frac{3}{2}\left( L\partial^2 Q_{11} - A Q_{11} - B Q_{1k}Q_{k1} - C Q_{11}\left( Q_{kl}Q_{lk} \right) - \frac{1}{2}\mu_2 \left( \epsilon_{1kl}\partial_1\partial_k \psi_l + \epsilon_{1kl}\partial_1 \partial_k \psi_l \right) \right) \\
+		&= L\partial^2 \eta - A\eta - B\left( \frac{2}{3}\eta^2 + \frac{3}{2}\nu^2 \right) - C\eta\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) - \frac{3}{2}\mu_2\left( \partial_1\partial_2 \psi_3 \right)
+	\end{split}
+	\end{equation}
+	Now for $\mu$. Note that $\mu = Q_{22} + \frac{1}{2} Q_{11}$. Then we have
+	\begin{equation} \label{eq:mueq}
+	\begin{split}
+		\mu_1 \frac{\partial \mu}{\partial t} &= L \partial^2 \left( Q_{22} + \frac{1}{2}Q_{11} \right) - A\left(Q_{22} + \frac{1}{2} Q_{11}\right) - B\left( Q_{2k}Q_{k2} + \frac{1}{2}Q_{1k}Q_{k1} \right) \\
+		&\qquad\qquad - C\left( Q_{22} + \frac{1}{2} Q_{11}\right)\left( Q_{kl}Q_{lk} \right) - \mu_2\left( \epsilon_{2kl}\partial_2\partial_k \psi_l + \frac{1}{2}\epsilon_{1kl}\partial_1\partial_k\psi_l \right) \\
+		&= L\partial^2\mu - A\mu - B\left( \nu^2 + \left( \frac{1}{3}\eta - \mu \right)^2 + \frac{2}{9}\eta^2 + \frac{1}{2}\nu^2 \right) - C\mu\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \\
+		&\qquad\qquad - \mu_2\left( -\partial_2\partial_1\psi_3 + \frac{1}{2}\partial_1\partial_2\psi_3 \right) \\
+		&= L\partial^2\mu - A\mu - B\left( \frac{1}{3}\eta^2 + \mu^2 + \frac{3}{2}\nu^2 - \frac{2}{3}\eta\mu \right) - C\mu\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) + \frac{1}{2}\mu_2\partial_1\partial_2 \psi_3
+	\end{split}
+	\end{equation}
+	Now for $\nu$. Note that $\nu = Q_{12}$, so that
+	\begin{equation}\label{eq:nueq}
+	\begin{split}
+		\mu_1 \frac{\partial \nu}{\partial t} &= L\partial^2 Q_{12} - A Q_{12} - B Q_{1k}Q_{k2} - C Q_{12}\left( Q_{kl}Q_{lk} \right) - \frac{1}{2}\mu_2 \left( \epsilon_{1kl}\partial_2\partial_k \psi_l + \epsilon_{2kl}\partial_1 \partial_k \psi_l \right) \\
+		&= L\partial^2\nu - A\nu - B\left( \frac{1}{3}\eta\nu + \mu\nu \right) - C\nu\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right)
+	\end{split}
+	\end{equation}
+	
+	\subsection{Writing the viscosity equation in terms of the auxiliary variables}
+	Consider equation \eqref{eq:visceq}. We begin with $m = 1$ to see if anything nonzero shows up. Here we get:
+	\begin{equation}
+	\begin{split}
+	0 &= \frac{1}{2}\mu_2\left( \partial_2 \partial_j \frac{\partial Q_{j3}}{\partial t} - \partial_3 \partial_j \frac{\partial Q_{j2}}{\partial t} \right) - L\left[ \left( \partial_1\partial^2 Q_{kl} \right) \partial_3 Q_{kl} - \left( \partial_3 \partial^2 Q_{kl} \right) \partial_1 Q_{kl} \right] \\
+	&= \frac{1}{2}\mu_2 \left( \partial_2\partial_1 \frac{\partial Q_{13}}{\partial t} + \partial_2\partial_2 \frac{\partial Q_{23}}{\partial t} \right) \\
+	&= 0
+	\end{split}
+	\end{equation}
+	This gives us nothing new. I reckon $m = 2$ will be about the same, but let's just be sure:
+	\begin{equation}
+	\begin{split}
+	0 &= \frac{1}{2}\mu_2 \left( \partial_3 \partial_j \frac{\partial Q_{j1}}{\partial t} - \partial_1\partial_j \frac{\partial Q_{j3}}{\partial t} \right) - L\left[ \left( \partial_3\partial^2 Q_{kl} \right)\partial_1 Q_{kl} - \left( \partial_1\partial^2 Q_{kl} \right)\partial_3 Q_{kl} \right] \\
+	&= 0
+	\end{split}
+	\end{equation}
+	Great, we'll only have one equation to deal with then. Let's look at $m = 3$:
+	\begin{equation}\label{eq:biharmexplcit}
+	\begin{split}
+		\beta_4\partial^4 \psi_3 &= \frac{1}{2}\mu_2 \left( \partial_1 \partial_j \frac{\partial Q_{j2}}{\partial t} - \partial_2\partial_j\frac{\partial Q_{j1}}{\partial t} \right) - L\left( \partial_1\partial^2 Q_{kl} \right)\partial_2 Q_{kl} + L\left( \partial_2 \partial^2 Q_{kl} \right) \partial_1 Q_{kl} \\
+		&= \frac{1}{2}\mu_2 \left( \partial_1\partial_1 \frac{\partial Q_{12}}{\partial t} + \partial_1\partial_2 \frac{\partial Q_{22}}{\partial t} - \partial_2\partial_1 \frac{\partial Q_{11}}{\partial t} - \partial_2 \partial_2 \frac{\partial Q_{21}}{\partial t} \right)\\
+		&\qquad\qquad -  L\left( \partial_1\partial^2 Q_{kl} \right)\partial_2 Q_{kl} + L\left( \partial_2 \partial^2 Q_{kl} \right) \partial_1 Q_{kl} \\
+	\end{split}
+	\end{equation}
+	I don't care about the spatial derivatives of $Q_{ij}$ right now (those will be easy to calculate once we have the time evolution of $Q_{ij}$), so let's define a function:
+	\begin{equation}
+		f_1(Q) \equiv L\left( \partial_2 \partial^2 Q_{kl} \right) \partial_1 Q_{kl} - L\left( \partial_1\partial^2 Q_{kl} \right)\partial_2 Q_{kl}
+	\end{equation}
+	Let's write this out fully -- this should yield 8 terms total, but we might be able to leverage the linearity of the derivative operator to make some things cancel out. Start with the first term:
+	\begin{equation}
+	\begin{alignedat}{2}
+		\left(\partial_2 \partial^2 Q_{kl}\right) \partial_1 Q_{kl} &= \tfrac49 \left(\partial_2\partial^2\eta\right)\partial_1\eta + 2\left( \partial_2\partial^2 \nu \right) \partial_1 \nu &&+ \left( \partial_2\partial^2 \left[ -\tfrac13\eta + \mu \right] \right) \partial_1\left[-\tfrac13\eta + \mu\right] \\
+		& &&+  \left( \partial_2\partial^2 \left[ -\tfrac13\eta - \mu \right] \right) \partial_1\left[-\tfrac13\eta - \mu\right] \\
+		&= \tfrac49 \left(\partial_2\partial^2\eta\right)\partial_1\eta + 2\left( \partial_2\partial^2 \nu \right) \partial_1 \nu &&+ \tfrac19\left( \partial_2\partial^2 \eta \right)\partial_1 \eta - \tfrac13 \left( \partial_2\partial^2 \eta \right) \partial_1 \mu \\
+		& &&- \tfrac13 \left( \partial_2\partial^2\mu \right)\partial_1\eta + \left( \partial_2\partial^2 \mu \right)\partial_1\mu \\
+		& &&+ \tfrac19 \left( \partial_2\partial^2 \eta \right) \partial_1 \eta + \tfrac13\left( \partial_2 \partial^2 \eta \right)\partial_1 \mu \\
+		& &&+ \tfrac13\left( \partial_2\partial^2 \mu \right) \partial_1 \eta + \left( \partial_2 \partial^2 \mu \right)\partial_1 \mu \\
+		&= \tfrac23\left( \partial_2\partial^2 \eta \right)\partial_1\eta + 2\left( \partial_2\partial^2\nu \right)\partial_1 \nu &&+ 2\left( \partial_2\partial^2 \mu \right)\partial_1\mu
+	\end{alignedat}
+	\end{equation}
+	Maybe it was obvious that it would turn out this way, given the form of equation \eqref{eq:fullcontrac}, but whatever. Clearly to get the second term we just make the exchange $\partial_1 \leftrightarrow \partial_2$ to get:
+	\begin{equation}
+		\left( \partial_1\partial^2 Q_{kl}\right)\partial_2 Q_{kl} = \tfrac23\left( \partial_1\partial^2 \eta \right)\partial_2\eta + 2\left( \partial_1\partial^2\nu \right)\partial_2 \nu + 2\left( \partial_1\partial^2 \mu \right)\partial_2\mu
+	\end{equation}
+	Then written out explicitly, we have that
+	\begin{multline}
+		f_1(\eta, \mu, \nu) = 2L \bigg[ \tfrac13 \left( \partial_2\partial^2 \eta \right) \partial_1 \eta - \tfrac13 \left( \partial_1\partial_2 \eta\right)\partial_2 \eta + \left(\partial_2 \partial^2 \nu\right)\partial_1 \nu \\ - \left(\partial_1 \partial^2 \nu\right)\partial_2 \nu + \left(\partial_2 \partial^2 \mu\right)\partial_1 \mu - \left(\partial_1 \partial^2 \mu\right)\partial_2 \mu \bigg]
+	\end{multline}
+	Additionally, we'd like to plug in for the time derivatives of $Q_{ij}$ so that we have everything in terms of $\psi_3$, $Q_{ij}$ and spatial derivatives of those two. This will allow us to get rid of $\psi_3$ in our time evolution equation for $Q_{ij}$ using Fourier Transforms.  Let's go term by term. First term reads:
+	\begin{equation}
+		\frac{\partial Q_{12}}{\partial t} = \frac{\partial \nu}{\partial t} = \frac{1}{\mu_1} \left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]
+	\end{equation}
+	Second term reads:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial Q_{22}}{\partial t} &= \frac{1}{\mu_1}\left[ L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) - A\left( \mu - \tfrac{1}{3}\eta \right) - B\left( \nu^2 + 
+		\left( \tfrac{1}{3}\eta - \mu \right)^2 \right)\right. \\
+		&\qquad\qquad\left.\vphantom{\frac13^2}- C\left( \mu - \tfrac{1}{3}\eta \right)\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) + \mu_2 \partial_1\partial_2 \psi_3 \right]
+	\end{split}
+	\end{equation}
+	Third term reads:
+	\begin{equation}
+		\frac{\partial Q_{11}}{\partial t} = \frac{1}{\mu_1} \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) - \mu_2 \partial_1\partial_2 \psi_3 \right]
+	\end{equation}
+	We may plug these into \eqref{eq:biharmexplcit} to get
+	\begin{multline}
+		\beta_4 \partial^4 \psi_3 = \frac12 \frac{\mu_2}{\mu_1} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
+		+ \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) - A\left( \mu - \tfrac{1}{3}\eta \right) - B\left( \nu^2 + 
+		\left( \tfrac{1}{3}\eta - \mu \right)^2 \right)\right. \\
+		\Bigl.- C\left( \mu - \tfrac{1}{3}\eta \right)\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \Bigr] \\
+		- \partial_1\partial_2 \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right] \\
+		\biggl. + 2\mu_2 \partial_1^2\partial_2^2 \psi_3 \biggr) + f_1(Q) \\
+	\end{multline}
+	To simplify this equation, define:
+	\begin{multline} \label{eq:f2-1}
+		f_2(\eta, \mu, \nu) \equiv \frac12 \frac{\mu_2}{\mu_1} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
+		+ \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) - A\left( \mu - \tfrac{1}{3}\eta \right) - B\left( \nu^2 + 
+		\left( \tfrac{1}{3}\eta - \mu \right)^2 \right)\right. \\
+		\Bigl.- C\left( \mu - \tfrac{1}{3}\eta \right)\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \Bigr] \\
+		\biggl.- \partial_1\partial_2 \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right] \biggr)
+	\end{multline}
+	One thing we might do in order to make this more tidy is to organize the $\partial_1\partial_2$ terms together. This yields:
+	\begin{multline}
+		f_2(\eta, \mu, \nu) \equiv \frac12 \frac{\mu_2}{\mu_1} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
+		\biggl. + \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \eta \right) - A\left( \mu - \eta \right) - B\left( -\tfrac19 \eta^2 - \tfrac23 \eta\mu + \mu^2 \right) - C\left( \mu - \eta\right) \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2 \right)\right] \biggr) 
+	\end{multline}
+	Making this substitution in the stream function equation yields:
+	\begin{equation} \label{eq:streamfuncsimp}
+		\beta_4 \partial^4 \psi_3 - \frac{\mu_2^2}{\mu_1} \partial_1^2\partial_2^2 \psi_3 = f_1(Q) + f_2(Q)
+	\end{equation}
+	
+	\section{Computationial Scheme}
+	Here we will explicitly list all of the steps necessary to numerically solve this system. Before we begin in earnest, we will first test the setup without hydrodynamics, and add the hydrodynamics in later. 
+	
+	\subsection{Boundary conditions and initial configuration}
+	Following Svensek and Zumer, we invoke Neumann boundary conditions setting the normal derivatives of the order parameter (i.e. the auxiliary parameters) to zero at the boundaries. Additionally, the initial configuration will be given by $Q_{ij} = 1/2(3n_in_j - \delta_{ij})$ with $\mathbf{n} = (\cos\varphi, \sin\varphi, 0)$ and $\varphi = \sum_{k=1}^2 m_k\arctan\left[ (y - y_k)/(x - x_k) \right]$ with $(x_k, y_k)$ and $m_k$ the location and strength of the $k$th defect respectively. Note that we will iterate \eqref{eq:etaeq}, \eqref{eq:mueq}, and \eqref{eq:nueq} in time \textit{without} the stream function term a few steps in order to relax the configuration. 
+	
+	\subsection{Finite difference scheme}
+	For the simplified setup, we only need to approximate second derivatives in the $x$ and $y$ directions. To approximate the second derivative in the $x$-direction, we do a Taylor series expansion about the $i, j$th point (the one at which we're interested in finding the derivative) evaluated at the $i + 1, j$th point:
+	\begin{multline}
+		\eta_{i + 1, j} = \eta_{i, j} + \left( x_{i + 1, j} - x_{i, j}\right) \left. \frac{\partial \eta}{\partial x}\right|_{i, j} + \left( y_{i + 1, j} - y_{i, j}\right) \left. \frac{\partial \eta}{\partial y}\right|_{i, j} + \tfrac12 \left( x_{i + 1, j} - x_{i, j}\right)^2 \left. \frac{\partial^2 \eta}{\partial x^2}\right|_{i, j}\\
+		+ \tfrac12\left( y_{i + 1, j} - y_{i, j}\right)^2 \left. \frac{\partial^2 \eta}{\partial y^2}\right|_{i, j} + \tfrac12 \left(x_{i + 1, j} - x_{i, j}\right)\left( y_{i + 1, j} - y_{i, j}\right) \left. \tfrac{\partial^2 \eta}{\partial x\partial y}\right|_{i, j} \\
+		+ \tfrac16 \left( x_{i + 1, j} - x_{i, j} \right)^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{i, j} + \tfrac16 \left(x_{i + 1, j} - x_{i, j}\right)^2 \left( y_{i + 1, j} - y_{i, j} \right) \left. \frac{\partial^3 \eta}{\partial x^2\partial y}\right|_{i, j} \\
+		+ \tfrac16 \left( x_{i + 1, j} - x_{i, j}\right) \left( y_{i + 1, j} - y_{i, j} \right)^2 \left.\frac{\partial^3 \eta}{\partial x \partial y^2}\right|_{i, j} + \tfrac16 \left( y_{i + 1, j} - y_{i, j}\right)^3 \left.\frac{\partial^3 \eta}{\partial y^3}\right|_{i, j} + \mathcal{O}\left( \Delta x^4\right)
+	\end{multline}
+	Now, note that $y_{i + 1, j} - y_{i, j} = 0$ since these $y$'s are evaluated at the same $y$ position. Also, we've defined $\Delta x \equiv x_{i + 1, j} - x_{i, j}$. Given this, the expression simplifies to
+	\begin{equation}
+		\eta_{i + 1, j} = \eta_{i, j} + \Delta x \left. \frac{\partial \eta}{\partial x}\right|_{i, j} + \tfrac12 \Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2} \right|_{i, j} + \tfrac16 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{i, j} + \mathcal{O}\left( \Delta x^4 \right)
+	\end{equation}
+	Similarly, if we expand about the point of $i - 1, j$ we get
+	\begin{equation}
+		\eta_{i - 1, j} = \eta_{i, j} - \Delta x \left. \frac{\partial \eta}{\partial x}\right|_{i, j} + \tfrac12 \Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2} \right|_{i, j} - \tfrac16 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{i, j} + \mathcal{O}\left( \Delta x^4 \right)
+	\end{equation}
+	Adding these two equations yields
+	\begin{equation}
+		\eta_{i + 1, j} + \eta_{i - 1, j} = 2\eta_{i, j} + \Delta x^2 \left.\frac{\partial^2\eta}{\partial x^2}\right|_{i, j} + \mathcal{O}\left( \Delta x^4 \right) 
+	\end{equation}
+	So that our expression for the derivative becomes:
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial x^2}\right|_{i, j} = \frac{\eta_{i + 1, j} - 2\eta_{i, j} + \eta_{i - 1, j}}{\Delta x^2} + \mathcal{O} \left(\Delta x^2\right)
+	\end{equation}
+	Similarly for the derivative in the $y$-direction:
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial y^2}\right|_{i, j} = \frac{\eta_{i, j + 1} - 2\eta_{i, j} + \eta_{i , j - 1}}{\Delta y^2} + \mathcal{O} \left(\Delta y^2\right)
+	\end{equation}
+	Now, we also need to take our boundary conditions into account -- indeed, for the endpoints we will not be able to use this formula. Let's derive the formula for the left endpoint $(i = 0)$:
+	\begin{equation} \label{eq:Neumann1}
+		\eta_{1, j} = \eta_{0, j} + \tfrac12 \Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2} \right|_{0, j} + \tfrac16 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{0, j} + \mathcal{O}\left( \Delta x^4 \right)
+	\end{equation}
+	where we have invoked our zero normal derivative Neumann boundary condition. Additionally, we know
+	\begin{equation}
+		\eta_{2, j} = \eta_{0, j} + 2 \Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2} \right|_{0, j} + \tfrac43 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{0, j} + \mathcal{O}\left( \Delta x^4 \right)
+	\end{equation}
+	We'd like to get rid of the third derivative, so multiply \eqref{eq:Neumann1} by 8 and subtract
+	\begin{equation}
+		8\eta_{1, j} - \eta_{2, j} = 7\eta_{0, j} + 2\Delta x^2 \left.\frac{\partial^2 \eta}{\partial x^2} \right|_{0, j} + \mathcal{O} \left( \Delta x^4 \right) 
+	\end{equation}
+	which leads to
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial x^2}\right|_{0, j} = \frac{8\eta_{1, j} - \eta_{2, j} - 7\eta_{0, j}}{2\Delta x^2} + \mathcal{O}\left( \Delta x^2 \right)
+	\end{equation}
+	For the right boundary, note that
+	\begin{align}
+		\eta_{N - 2, j} &= \eta_{N - 1, j} + \tfrac12 \Delta x^2 \left.\frac{\partial^2 \eta}{\partial x^2}\right|_{N - 1, j} - \tfrac16 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{N - 1, j} + \mathcal{O}\left(\Delta x^4\right) \\
+		\eta_{N - 3, j} &= \eta_{N - 1, j} + 2\Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2}\right|_{N - 1, j} - \tfrac43 \Delta x^3 \left.\frac{\partial^3 \eta}{\partial x^3}\right|_{N - 1, j}
+	\end{align}
+	Multiplying the first by $8$ and then subtracting the second from the first yields:
+	\begin{equation}
+		8\eta_{N - 2, j} - \eta_{N - 3, j} = 7\eta_{N - 1, j} + 2 \Delta x^2 \left. \frac{\partial^2 \eta}{\partial x^2}\right|_{N - 1, j} + \mathcal{O} \left( \Delta x^4 \right)
+	\end{equation}
+	Which implies
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial x^2}\right|_{N - 1, j} = \frac{8\eta_{N - 2, j} - \eta_{N - 3, j} - 7\eta_{N - 1, j}}{2\Delta x^2} + \mathcal{O}\left( \Delta x^2 \right)
+	\end{equation}
+	Similarly for top and bottom boundaries we have:
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial y^2}\right|_{i, 0} = \frac{8\eta_{i, 1} - \eta_{i, 2} - 7\eta_{i, 0}}{2\Delta y^2} + \mathcal{O}\left( \Delta y^2 \right)
+	\end{equation}
+	and
+	\begin{equation}
+		\left.\frac{\partial^2 \eta}{\partial y^2}\right|_{i, N - 1} = \frac{8\eta_{i, N - 2} - \eta_{i, N - 3} - 7\eta_{i, N - 1}}{2\Delta y^2} + \mathcal{O} \left( \Delta y^2 \right)
+	\end{equation}
+	
+	\subsection{Dimensionless form}
+	Following the lead of Svensek and Zumer, we define a correlation length to be
+	\begin{equation}
+		\xi \equiv \sqrt{\frac32 \frac{L}{\left.\phi''\right|_{S_0}}}
+	\end{equation}
+	where $\left.\phi''\right|_{S_0}$ is the second derivative of \eqref{eq:LdG} with respect to the scalar order parameter $S$ evaluated at equilibrium. We also define a characteristic timescale as
+	\begin{equation}
+		\tau \equiv \mu_1 \xi^2/L
+	\end{equation}
+	Finally, we define the dimensionless quantities:
+	\begin{align}
+		\bar{x} &\equiv x/\xi \\
+		\bar{y} &\equiv y/\xi \\
+		\bar{t} &\equiv t/\tau 
+	\end{align}
+	We'll have to figure out the stream function dimensionless quantity later. Note that this gives:
+	\begin{equation}
+		\frac{\partial^2}{\partial x^2} = \frac{\partial}{\partial x}\frac{\partial}{\partial x} = \frac{\partial}{\partial x} \frac{\partial \bar{x}}{\partial x} \frac{\partial}{\partial \bar{x}} = \frac{1}{\xi^2}\frac{\partial^2}{\partial \bar{x}^2}
+	\end{equation}
+	A similar equation holds for $y$ and $t$. Then our equations of motion for $\psi = 0$ are given by
+	\begin{align}
+		\frac{\partial \eta}{\partial \bar{t}} &= \partial^2 \eta - \bar{A}\eta - \bar{B}\left( \tfrac 23 \eta^2 + \tfrac 32 \nu^2\right) - \bar{C} \eta \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) \\
+		\frac{\partial \mu}{\partial \bar{t}} &= \partial^2 \mu - \bar{A}\mu - \bar{B}\left( \tfrac13 \eta^2 + \mu^2 + \tfrac32 \nu^2 - \tfrac23 \eta \mu \right) - \bar{C}\mu\left(\tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) \\
+		\frac{\partial \nu}{\partial \bar{t}} &= \partial^2 \nu - \bar{A}\nu - \bar{B}\left( \tfrac13\eta\nu + \mu\nu \right) - \bar{C}\nu\left(\tfrac23\eta^2 + 2\nu^2 + 2\mu^2\right)
+	\end{align}
+	Where we have defined dimensionless Landau coefficients:
+	\begin{align}
+		\bar{A} &\equiv \frac{A \xi^2}{L} \approx -0.064 \\
+		\bar{B} &\equiv \frac{B \xi^2}{L} \approx -1.57 \\
+		\bar{C} &\equiv \frac{C \xi^2}{L} \approx 1.29
+	\end{align}
+	where we have gotten the numerical values from Svensek and Zumer. Finally, we give numerical values for the characteristic length and time scales:
+	\begin{align}
+		\xi &\approx 2.11\text{nm} \\
+		\tau &\approx 32.6\text{ns}
+	\end{align}
+	
+	\subsection{Plotting}
+	We will plot the director field angle $\varphi$ when $S > 0.3$ and we will plot $S$ as a colormap over. In order to actually calculate these values, we must find the eigenvalues and the eigenvectors of the upper right $2\times 2$ block of the Q-tensor. The higher of these two values will be $S$ and the corresponding vector will be the direction of the director. The eigenvalues $\lambda$ are given by:
+	\begin{equation}
+	\begin{split}
+		0 &= \det
+		\begin{pmatrix}
+		\tfrac23\eta - \lambda & \nu \\
+		\nu & -\tfrac13\eta + \mu - \lambda
+		\end{pmatrix} \\
+		&= -\tfrac29\eta^2 + \tfrac23 \eta \mu -\tfrac23 \eta \lambda + \lambda \tfrac13 \eta - \lambda\mu + \lambda^2 - \nu^2 \\
+		&= \lambda^2 - \left( \tfrac13 \eta + \mu\right) \lambda + \left( \tfrac23\eta\mu - \tfrac29\eta^2 - \nu^2\right)
+	\end{split}
+	\end{equation}
+	Hence, the eigenvectors are given by
+	\begin{equation}
+	\begin{split}
+		\lambda_\pm &= \tfrac12\left(\tfrac13\eta + \mu \pm \sqrt{\tfrac19\eta^2 + \tfrac23\eta\mu + \mu^2 - \tfrac83\eta\mu + \tfrac89\eta^2 + 4\nu^2}\right) \\
+		&= \tfrac16\eta + \tfrac12\mu \pm \tfrac12\sqrt{\left( \eta - \mu \right)^2 + 4\nu^2}
+	\end{split}
+	\end{equation}
+	The eigenvectors are given by:
+	\begin{equation}
+	\begin{split}
+		\left(\tfrac23 \eta - \lambda_\pm\right)a + \nu b = 0 \\
+		\implies a = \frac{\nu b}{\lambda_\pm - \tfrac23\eta}
+	\end{split}
+	\end{equation}
+	So that the director angle is given by
+	\begin{equation}
+		\varphi_\pm = \arctan\left( \frac{\lambda_\pm -\tfrac23 \eta}{\nu} \right)
+	\end{equation}
+	We should try to get this into a normalized $(x, y)$ pair for easy plotting. To normalize, we want
+	\begin{equation}
+	\begin{split}
+		1 &= a^2 + b^2 \\
+		&= \left(\left( \frac{\nu}{\lambda_\pm - \tfrac23 \eta} \right)^2 + 1\right)b^2 \\
+		\implies b &= \left(\left( \frac{\nu}{\lambda_\pm - \tfrac23 \eta} \right)^2 + 1\right)^{-1/2}
+	\end{split}
+	\end{equation}
+	Note that, in the special case of $\varphi = 0$ and $P = 0$, this expression becomes undefined because $\lambda_\pm = \tfrac23\eta$. In this case, we must solve as follows:
+	\begin{equation}
+	\begin{split}
+		a\nu + \left(-\tfrac13 \eta + \mu - \lambda_\pm\right)b = 0 \\
+		\implies b = \frac{\nu}{\tfrac13 \eta - \mu + \lambda_\pm}a
+	\end{split}
+	\end{equation}
+	Normalizing yields:
+	\begin{equation}
+		a = \left(\left( \frac{\nu}{\tfrac13 \eta - \mu + \lambda_\pm} \right)^2 + 1\right)^{-1/2}
+	\end{equation}
+	
+	\subsection{Higher degree finite difference schemes}
+	Here we derive the rest of the finite difference schemes for the higher degree derivatives needed to include the flow. Note that, for brevity, we will use $x$ and $y$ to refer to $\Delta x$ and $\Delta y$, and we will leave off the partial derivative factors in the Taylor series, noting that each combination of $x$ and $y$ corresponds unambiguously to a particular mixed partial. 
+	
+	Now note that we may map this problem into a matrix inversion problem. If we write each of the Taylor expansions of $\eta_{i + m, j + n}$ in graded lexicographical order (truncated after the desired degree minus $(1 - \text{the desired order}$), we may take the coefficients as the row entries of a matrix that multiplies a vector whose entries correspond to the different monomials which are products of $x$ and $y$. The vector entries on the right side (which should be all 1's to start) correspond to each of the $\eta_{i + m, j + n}$ terms. If we invert the coefficient matrix, then the $i$th row of the inverted matrix contains the coefficients of the set of $\eta_{i + m, j + m}$'s to approximate the $i$th mixed partial (whatever that happens to tbe in the graded lexicographical order) up to our desired order. A method in the \verb|FiniteDifference.py| file called \verb|genFDStencile| which can calculate these stencils for us. What follows are the results of using this program on all the mixed partials:
+	
+	\subsection{Solving the modified biharmonic equation}
+	In order to include the hydrodynamics, we must solve \eqref{eq:streamfuncsimp} which is a modified biharmonic equation of the form
+	\begin{equation}
+		\partial^4 \psi + \alpha \partial_x^2\partial_y^2 \psi = f(x, y)
+	\end{equation}
+	Most of the information necessary to understand how to solve this numerically can be found \href{https://math.stackexchange.com/a/3763462/683123}{here}, but I will fill in a few details that were unclear to me. First, we want to represent the finite difference $\partial_x^4$ operation as some kind of matrix. We know the $i, j$th element of $\partial_x^4 \psi$ can be approximated as:
+	\begin{equation}
+		\partial_x^4 \psi = \frac{u_{i-2,j} -4 u_{i-1,j} + 6u_{i,j} -4 u_{i+1,j} + u_{i+2,j}}{h_x^4} + \mathcal{O}(h_x^2)
+	\end{equation}
+	for internal grid points -- that is, $i = 1$ to $i = N_x - 1$. We also have the following $x$-boundary conditions:
+	\begin{align}
+		u_{0,j} = u_{N_x,j} = u_{i,0} = u_{i,N_y} = 0\\
+		\frac{u_{1,j} - u_{-1,j}}{2h_x} = 
+		\frac{u_{N_x + 1,j} - u_{N_x - 1,j}}{2h_x} = 0\\
+		\frac{u_{i,1} - u_{i,-1}}{2h_y} = 
+		\frac{u_{i,N_y+1} - u_{i,N_y-1}}{2h_y} = 0\\
+	\end{align}
+	This gives, the following difference equation for the first node:
+	\begin{equation}
+		(\partial_x^4 \psi)_{1, j} \approx \frac{u_{1, j} - 4\cdot0 + 6u_{1, j} - 4u_{2, j} + u_{3, j}}{h_x^4} = \frac{7u_{1, j} - 4u_{2, j} + u_{3, j}}{h_x^4}
+	\end{equation}
+	Additionally, the second node is given by:
+	\begin{equation}
+		(\partial_x^4 \psi)_{2, j} \approx \frac{0 - 4u_{1, j} + 6u_{2, j} - 4u_{3, j} + u_{4, j}}{h_x^4}
+	\end{equation}
+	The $N_x - 1$ node is given by
+	\begin{equation}
+		(\partial_x^4 \psi)_{N_x - 1, j} \approx \frac{u_{N_x - 3, j} - 4u_{N_x - 2, j} + 6u_{N_x - 1, j} - 4\cdot0 + u_{N_x - 1}}{h_x^4} = \frac{u_{N_x - 3, j} - 4u_{N_x - 2, j} + 7u_{N_x - 1, j}}{h_x^4}
+	\end{equation}
+	and the $N_x - 2$ node is given by
+	\begin{equation}
+		(\partial_x^4 \psi)_{N_x - 2, j} \approx \frac{u_{N_x - 4, j} - 4u_{N_x - 3, j} + 6u_{N_x - 2, j} - 4u_{N_x - 1, j} + 0}{h_x^4}
+	\end{equation}
+	This only runs along the $x$-axis, so we just need to do some kind of dot product. Note that we may decompose the discrete matrix $U$ into
+	\begin{equation}
+		U = \sum_j
+		\begin{bmatrix}
+			&0 &\ldots &u_{1,j} & \ldots&0 \\
+			&0 &\ldots &u_{2,j} &\ldots &0 \\
+			&\vdots & &\vdots & &\vdots \\
+			&0 &\ldots &u_{N_x - 1,j} &\ldots &0
+		\end{bmatrix}
+		= \sum_j X_j \otimes e_j
+	\end{equation}
+	where
+	\begin{equation}
+		X_j \equiv 
+		\begin{bmatrix}
+			u_{1,j} \\
+			u_{2,j} \\
+			\vdots \\
+			u_{N_x - 1,j}
+		\end{bmatrix}
+	\end{equation}
+	Note that the following matrix, when multiplying $X_j$, gives the $j$th column of $(\partial_x^4 \psi)_{i, j}$:
+	\begin{equation}
+		\Lambda_4 = \begin{pmatrix}
+		7 & -4 & 1\\
+		-4 & 6 & -4 & 1\\
+		1 & -4 & 6 & -4 & 1\\
+		&\ddots&\ddots&\ddots&\ddots&\ddots\\
+		&&1 & -4 & 6 & -4 & 1\\
+		&&&1 & -4 & 6 & -4\\
+		&&&&1 & -4 & 7
+		\end{pmatrix}
+	\end{equation}
+	The formula for each of the entries of $\frac{1}{h_x^4}\Lambda_4 X_j$ can be compared with the corresponding finite difference formulas to give the desired result. Then note that
+	\begin{equation}
+		\left(\frac{1}{h_x^4} \Lambda_4 \otimes I\right) \left(\sum_j X_j \otimes e_j\right) = \sum_j \frac{1}{h_x^4} \left(\Lambda_4 X_j \otimes e_j\right)
+	\end{equation}
+	which is just the fourth $x$-partial finite difference scheme applied to $U$. The $y$-partial finite difference scheme is identical, except it corresponds to the rows, so $U$ must be decomposed as
+	\begin{equation}
+		U = \sum_i e_i \otimes Y_j
+	\end{equation}
+	where
+	\begin{equation}
+		Y_j = \begin{bmatrix}
+		u_{i, 1} &u_{i, 2} &\ldots &u_{i, N_y - 1}
+		\end{bmatrix}^\top
+	\end{equation}
+	corresponds to the $i$th row of $U$. Since the operation should be identical, we get that the finite difference scheme corresponds to:
+	\begin{equation}
+		\frac{1}{h_y^4} \left(I\otimes \Lambda_4\right) \left( \sum_i e_i\otimes Y_i \right) = \sum_i \frac{1}{h_y^4} \left(e_i \otimes \Lambda_4 Y_i\right)
+	\end{equation}
+	
+	To understand the mixed derivative term, we first look at the finite difference equation:
+	\begin{equation}
+		\left(\partial_x^2\partial_y^2 \psi\right) \approx \frac{u_{i-1,j-1} - 2u_{i-1,j} + u_{i-1,j+1} -2 u_{i,j-1} + 4u_{i,j} -2u_{i,j+1}+u_{i+1,j-1} - 2u_{i+1,j} + u_{i+1,j+1}}{h_x^2 h_y^2}
+	\end{equation}
+	We will show that this corresponds to two applications of the second derivative finite difference scheme, one for $x$ and one for $y$. Here we have
+	\begin{align}
+		\left(\partial_x^2 \psi\right)_{i, j} \approx \frac{u_{i - 1, j} - 2u_{i, j} + u_{i + 1, j}}{h_x^2} \\
+		\left(\partial_y^2 \psi\right)_{i, j} \approx \frac{u_{i, j - 1} - 2u_{i, j} + u_{i, j + 1}}{h_y^2}
+	\end{align}
+	To check repeated applications we need to define the matrix after we apply the $\partial_y^2$ second derivative finite difference operator:
+	\begin{align}
+		\left(u_{yy}\right)_{i, j} \equiv \left(\partial_y^2\psi\right)_{i, j}
+	\end{align}
+	So then
+	\begin{align}
+		\left(\partial_x^2 \partial_y^2 \psi\right)_{i, j} &= \frac{\left( u_{yy} \right)_{i - 1, j} - 2\left( u_{yy} \right)_{i, j}  + \left( u_{yy} \right)_{i + 1, j}}{h_x^2} \\
+		&= \frac{ \left( u_{i - 1, j - 1} - 2u_{i - 1, j} + u_{i - 1, j + 1} \right) - 2\left( u_{i, j - 1} - 2u_{i, j} + u_{i, j + 1} \right) + \left( u_{i + 1, j - 1} - 2u_{i + 1, j} + u_{i + 1, j + 1} \right)}{h_y^2 h_x^2} \\
+		&= \frac{ u_{i - 1, j - 1} - 2u_{i - 1, j} + u_{i - 1, j + 2} - 2u_{i, j - 1} + 4u_{i, j} - 2u_{i, j + 1} + u_{i + 1, j - 1} - 2u_{i + 1, j} + u_{i + 1, j + 1}}{h_y^2 h_x^2}
+ 	\end{align}
+	Since the stencil only extends one grid point out, we only have to worry about the Dirichlet boundary conditions, which are zero in this case. Thus, like before the matrix corresponding to $\partial_x^2$ is given by
+	\begin{equation}
+		\left( \partial_x^2 \psi \right)_{i, j} = \frac{1}{h_x^2} \left( \Lambda_2 \otimes I \right) U
+	\end{equation}
+	and the matrix corresponding to $\partial_y^2$ is given by
+	\begin{equation}
+		\left( \partial_y^2 \psi \right)_{i, j} = \frac{1}{h_y^2} \left( I \otimes \Lambda_2 \right) U
+	\end{equation}
+	where
+	\begin{equation}
+		 \Lambda_2 = \begin{pmatrix}
+		 -2 & 1\\
+		 1 & -2 & 1\\
+		 &\ddots&\ddots&\ddots\\
+		 &&1 & -2 & 1\\
+		 &&&1 & -2\\
+		 \end{pmatrix}
+	\end{equation}
+	So that the mixed partial operator is given by
+	\begin{equation}
+		\frac{1}{h_y^2} \left( I \otimes \Lambda_2 \right) \frac{1}{h_x^2} \left( \Lambda_2 \otimes I \right) = \frac{1}{h_x^2 h_y^2} \left( \Lambda_2 \otimes \Lambda_2 \right)
+	\end{equation}
+	Thus, the entire matrix equation to be solved is given by
+	\begin{equation}
+		\left[
+		\frac{1}{h_x^4} \Lambda_4 \otimes I + 
+		\frac{2 + \alpha}{h_x^2 h_y^2} \Lambda_2 \otimes \Lambda_2 + 
+		\frac{1}{h_y^4} I \otimes \Lambda_4\right] U = F
+	\end{equation}
+	
+	Now, note that the 1D Discrete Sine Transform (of the first kind) is given by:
+	\begin{equation}
+		x_n = \sqrt\frac{2}{N}\sum_{k=1}^{N-1} X_k \sin \frac{\pi kn}{N}, \qquad
+		X_k = \sqrt\frac{2}{N}\sum_{n=1}^{N-1} x_n \sin \frac{\pi kn}{N}, \qquad
+	\end{equation}
+	which, if we consider $x_n$ to be a vector is given by the linear transformation:
+	\begin{equation}
+		\mathbb{F} \equiv \left[ \sqrt{\frac{2}{N}} \sin \frac{\pi k n}{N} \right]_{kn}
+	\end{equation}
+	It is clear from the definition that $\mathbb{F}^\top = \mathbb{F}$. Additionally, we may show that it is its own inverse:
+	\begin{equation}
+	\begin{split}
+		\mathbb{F}_{ij} \mathbb{F}_{jk} &= \sum_{j = 1}^{N - 1} \frac{2}{N} \sin \frac{\pi ij}{N} \sin \frac{\pi j k}{N} \\
+		&= \sum_{j = 1}^{N - 1} \frac{1}{N} \left( \cos \frac{\pi j (i - k)}{N} - \cos \frac{\pi j (i + k)}{N} \right) \\
+		&= \sum_{j = 1}^{N - 1} \frac{1}{N} \text{Re} \left[ e^{i\pi j(i - k)/N} - e^{i \pi j(i + k)/n} \right] \\
+		&= \frac{1}{N} \text{Re} \left[ \sum_{j = 0}^{N - 1} e^{i\pi j(i - k)/N} - e^{i \pi j(i + k)/N} \right] \\
+		&\overset{(*)}{=} \frac{1}{N} \text{Re} \left[ \frac{1 - e^{i\pi (i - k)}}{1 - e^{i \pi (i - k)/N}} - \frac{1 - e^{i\pi(i + k)}}{1 - e^{i \pi (i + k)/N}} \right]
+	\end{split}
+	\end{equation}
+	where $(*)$ is only true if $i \neq k$. Now, note that if $i - k$ is even, so too is $i + k$. Also, in this case, both terms evaluate to zero. if $i - k$ is not even, then $i + k$ is not even, in which case the expression becomes:
+	\begin{equation}
+	\begin{split}
+		&= \frac{2}{N} \text{Re} \left[ \frac{1 - e^{i\pi(i + k)/N} - 1 + e^{i\pi (i - k)/N}}{1 - e^{i\pi i/N}\left( e^{i\pi k/N} + e^{-i \pi k/N} \right) + e^{i 2\pi i/N}} \right] \\
+		&= \frac{2}{N} \text{Re} \left[ \frac{e^{i\pi k/N} - e^{-i\pi  k/N}}{e^{-i\pi i/N} - \left( e^{i\pi k/N} + e^{-i \pi k/N} \right) + e^{i \pi i/N}} \right]
+	\end{split}
+	\end{equation}
+	The numerator is imaginary, and the denominator is real, so the real part of the whole expression is 0. Thus, if $i \neq k$, the entry is 0. If $i = k$, then the expression evaluates to
+	\begin{equation}
+	\begin{split}
+		&= \frac{1}{N} \text{Re} \left[ N - \frac{1 - e^{i\pi(i + k)}}{1 - e^{i \pi (i + k)/N}} \right] \\
+		&= 1
+	\end{split}
+	\end{equation}
+	where we have used the fact that $e^{i\pi 2k} = 1$. Hence, $\mathbb{F}$ is its own inverse. Additionally, $\mathbb{F}$ diagonalizes $\Lambda_2$. We will show this by showing that the columns of $\mathbb{F}$ are eigenvalues of $\Lambda_2$. Since we already showed that the columns of $\mathbb{F}$ and $\mathbb{F}^\top = \mathbb{F}$ are orthonormal since $\mathbb{F}$ is its own inverse, showing that its columns are eignevectors of $\Lambda_2$ will show that $\mathbb{F} \Lambda_2 \mathbb{F} = \text{diag}[\lambda_1, ..., \lambda_{N - 1}]$ where $\lambda_k$ is the $k$th eigenvalues. The $k$th column of $\mathbb{F}$ is given by:
+	\begin{equation}
+		\psi^{(k)} = \sqrt{\frac{2}{N}}\begin{pmatrix}
+		\sin \frac{\pi k}{N}&
+		\sin \frac{2 \pi k}{N}&
+		\dots&
+		\sin \frac{(N-2) \pi k}{N}&
+		\sin \frac{(N-1) \pi k}{N}
+		\end{pmatrix}^\top.
+	\end{equation}
+	Note first that $\Lambda_2 = -2\delta_{i, j} + \delta_{i - 1, j} + \delta_{i + 1, j}$ so that
+	\begin{equation}
+	\begin{split}
+		\left(\Lambda_2\right)_{i, j} \psi^{(k)}_j &= \left( -2\delta_{i, j} + \delta_{i - 1, j} + \delta_{i + 1, j} \right) \sqrt{\frac{2}{N}} \sin \frac{\pi jk}{N} \\
+		&= \sqrt{\frac{2}{N}} \left( -2\sin \frac{\pi ik}{N} + \sin \frac{\pi (i - 1)k}{N}  + \sin \frac{\pi (i + 1)k}{N} \right) \\
+		&= \sqrt{\frac{2}{N}} \left( -2\sin \frac{\pi i k}{N} + 2\sin \frac{\pi i k}{N} \cos \frac{\pi k}{N} \right) \\
+		&= 2\left( \cos \frac{\pi k}{N} - 1 \right) \sqrt{\frac{2}{N}} \sin \frac{\pi i k}{N} \\
+		&= -4 \sin^2 \frac{\pi k}{2 N} \sqrt{\frac{2}{N}} \sin \frac{\pi i k}{N}
+	\end{split}
+	\end{equation}
+	Hence, the eigenvectors are given by
+	\begin{equation}
+		\lambda_k = -4\sin^2 \frac{\pi k}{2N}
+	\end{equation}
+	Now note that
+	\begin{equation}
+	\begin{split}
+		\left(\Lambda_2\right)_{i, j} \left(\Lambda_2\right)_{j, k} &= \left( -2\delta_{i, j} + \delta_{i - 1, j} + \delta_{i + 1, j} \right)\left( -2\delta_{j, k} + \delta_{j, k + 1} + \delta_{j, k - 1} \right) \\
+		&= 4\delta_{i, k} - 2\delta_{i, k + 1} - 2\delta_{i, k - 1} - 2\delta_{i - 1, k} + \delta_{i - 1, k + 1} + \delta_{i - 1, k - 1} - 2\delta_{i + 1, k} + \delta_{i + 1, k + 1} + \delta_{i + 1, k - 1} \\
+		&= 6 \delta_{i, k} - 4\delta_{i, k + 1} - 4\delta_{i, k - 1} + \delta_{i - 1, k + 1} + \delta_{i + 1, k - 1}
+	\end{split}
+	\end{equation}
+	(I'll make this work out in a little bit).
+	Now, we have that
+	\begin{equation}
+		\Lambda_4 - \Lambda_4^c = R \equiv \text{diag}[2, 0, \ldots, 0, 2]
+	\end{equation}
+	Thus, we have that
+	\begin{equation}
+		\frac{1}{h_x^4} \left( \Lambda_4 \otimes I \right) = \frac{1}{h_x^4} \left( (\Lambda_4^c + R) \otimes I \right) = \frac{1}{h_x^4} \left( \Lambda_4^c \otimes I + R \otimes I \right)
+	\end{equation}
+	Similarly
+	\begin{equation}
+		\frac{1}{h_y^4} \left( I \otimes \Lambda_4 \right) = \frac{1}{h_y^4} \left( I \otimes \Lambda_4^c + I\otimes R \right)
+	\end{equation}
+	We define $B$ to be the perturbation term which cannot be diagonalized via the DST:
+	\begin{equation}
+		B \equiv \frac{1}{h_x^4} R\otimes I + \frac{1}{h_y^4} I \otimes R
+	\end{equation}
+	Let's look at the effect of the first term on $U$:
+	\begin{equation}
+	\begin{split}
+		\left( \frac{1}{h_x^4} R\otimes I \right)
+		\left( \sum_i X_i \otimes e_i \right) &=
+		\sum_i \frac{1}{h_x^4} R X_i \otimes e_i\\ &=
+		\sum_i \frac{1}{h_x^4} 
+		\begin{pmatrix}
+			2 &0 &\ldots &0 \\
+			0 &\ddots & &\vdots \\
+			\vdots & & & & \\
+			0 &0 \ldots &0 &2
+		\end{pmatrix}
+		\begin{pmatrix}
+			u_{1, i}\\
+			u_{2, i} \\
+			\vdots \\
+			u_{N_x - 2, i}\\
+			u_{N_x - 1, i}
+		\end{pmatrix}
+		\otimes e_i
+		\\
+		&= \sum_i \frac{1}{h_x^4} 
+		\begin{pmatrix}
+			2 u_{1, i}\\
+			0 \\
+			\vdots \\
+			0\\
+			2 u_{N_x - 1, i}
+		\end{pmatrix}
+		\otimes e_i \\
+		&=
+		\frac{1}{h_x^4}
+		\begin{pmatrix}
+			2u_{1, 1} &2u_{1, 2} &\ldots &2u_{1, N_y - 1} \\
+			0 &0 & &0 \\
+			\vdots &\vdots & &\vdots \\
+			0 &0 & &0 \\
+			2u_{N_x - 1, 1} &2u_{N_x - 1, 2} &\ldots &2u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	Similarly, the effect of the second term on $U$ is
+	\begin{equation}
+		\left( \frac{1}{h_y^4} I \otimes R \right)
+		\left( \sum_j e_j \otimes Y_j \right) = 
+		\frac{1}{h_y^4}
+		\begin{pmatrix}
+			2u_{1, 1} &0 &\ldots &0 &2u_{1, N_y - 1} \\
+			2u_{2, 1} &0 &\ldots &0 &2u_{2, N_y - 1} \\
+			\vdots &\vdots & &\vdots &\vdots \\
+			2u_{N_x - 1, 1} &0 &\ldots &0 &2u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{equation}
+	The effect of $B$ is just the sum of these two matrices. We want to be able to use the \href{https://en.wikipedia.org/wiki/Woodbury_matrix_identity}{Woodbury matrix identity} so we need to break down $B$ into two matrices. To do this, define:
+	\begin{equation}
+		V_1 = \frac{\sqrt{2}}{h_x^2} \begin{pmatrix}
+		1&0\\
+		0&0\\
+		\vdots&\vdots\\
+		0&0\\
+		0&1
+		\end{pmatrix} \otimes I, \quad
+		V_2 = \frac{\sqrt{2}}{h_y^2} I \otimes \begin{pmatrix}
+		1&0\\
+		0&0\\
+		\vdots&\vdots\\
+		0&0\\
+		0&1
+		\end{pmatrix}
+	\end{equation}
+	Now define $V \equiv \left( V_1 V_2 \right)$. We will show that $B = V V^\top$. We begin with the effect of $V^\top$. Note that
+	\begin{equation}
+		V^\top =
+		\begin{pmatrix}
+			V_1^\top \\
+			V_2^\top
+		\end{pmatrix}
+	\end{equation}
+	and that the transpose of a tensor product is the tensor product of the respective transposes. Thus, we get
+	\begin{equation}
+	\begin{split}
+		V_1^\top U &= 
+		\sum_i
+		\frac{\sqrt{2}}{h_x^2} 
+		\begin{pmatrix}
+			1 &0 &\ldots &0 &0 \\
+			0 &0 &\ldots &0 &1
+		\end{pmatrix}
+		\begin{pmatrix}
+			u_{1, i} \\
+			\vdots \\
+			u_{N_x - 1, i}
+		\end{pmatrix}
+		\otimes e_i \\
+		&= \frac{\sqrt{2}}{h_x^2}
+		\begin{pmatrix}
+			u_{1, 1} &u_{1, 2} &\ldots &u_{1, N_y - 1} \\
+			u_{N_x - 1, 1} &u_{N_x - 1, 2} &\ldots &u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	Similarly, we have
+	\begin{equation}
+	\begin{split}
+		V_2^\top U &= 
+		\sum_j \frac{\sqrt{2}}{h_y^2}
+		e_j \otimes
+		\begin{pmatrix}
+			1 &0 &\ldots &0 &0 \\
+			0 &0 &\ldots &0 &1
+		\end{pmatrix}
+		\begin{pmatrix}
+			u_{j, 1} \\
+			u_{j, 2} \\
+			\vdots \\
+			u_{j, N_y - 1}
+		\end{pmatrix} \\
+		&= \frac{\sqrt{2}}{h_y^2}
+		\begin{pmatrix}
+			u_{1, 1} & u_{1, N_y - 1} \\
+			u_{2, 1} &u_{2, N_y - 1} \\
+			\vdots &\vdots \\
+			u_{N_x - 1, 1} & u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	Now, recall that when we think about an $m\times n$ matrix as the tensor product of two vectors, it becomes an $mn$ length vector with the rows as columns which are stacked up on one another. If we think of $V_1^\top U$ and $V_2^\top U$ in this way, then $V^\top U$ is just the vertical concatenation of these two vectors:
+	\begin{equation}
+		V^\top U =
+		\begin{pmatrix}
+			\frac{\sqrt{2}}{h_x^2} u_{1, 1} \\
+			\vdots \\
+			\frac{\sqrt{2}}{h_x^2} u_{1, N_y - 1} \\
+			\frac{\sqrt{2}}{h_x^2} u_{N_x - 1, 1} \\
+			\vdots \\
+			\frac{\sqrt{2}}{h_x^2} u_{N_x - 1, N_y - 1} \\
+			\frac{\sqrt{2}}{h_y^2} u_{1, 1} \\
+			\frac{\sqrt{2}}{h_y^2} u_{1, N_y - 1} \\
+			\vdots \\
+			\frac{\sqrt{2}}{h_y^2} u_{N_x - 1, 1} \\
+			\frac{\sqrt{2}}{h_y^2} u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{equation}
+	This vector has $2(N_y - 1) + 2(N_x - 1)$ entries. Now since $V$ is the horizontal concatenation of one $(N_x - 1)(N_y - 1)\times 2(N_y - 1)$ and one $(N_x - 1)(N_y - 1)\times (N_x - 1)2$ sized matrix, we have that $V$ is of size $(N_x - 1)(N_y - 1)\times \left(2(N_y - 1) + 2(N_x - 1)\right)$. 
+	
+	Note that the $V_1$ part deals with the first $2(N_y - 1)$ entries of $V^\top U$ (call this $U_1$) and the $V_2$ part deals with the latter $2(N_x - 1)$ entries (call this $U_2$). Hence, take the first $2(N_y - 1)$ entries and rewrite them as a sum of tensor products of a size $2$ and a size $(N_y - 1)$ vector. This gives the following sum:
+	\begin{equation}
+	\begin{split}
+		V_1 U_1 &=
+		\frac{\sqrt{2}}{h_x^2} 
+		\begin{pmatrix}
+			1 &0 \\
+			0 &0 \\
+			\vdots &\vdots \\
+			0 &0 \\
+			0 &1
+		\end{pmatrix}
+		\otimes I
+		\left[
+		e_1 \otimes \frac{\sqrt{2}}{h_x^2}
+		\begin{pmatrix}
+			u_{1, 1} \\
+			\vdots \\
+			u_{1, N_y - 1}
+		\end{pmatrix}
+		+ e_2 \otimes \frac{\sqrt{2}}{h_x^2}
+		\begin{pmatrix}
+			u_{N_x - 1, 1}\\
+			\vdots \\
+			u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+		\right] \\
+		&= \frac{2}{h_x^4} 
+		\begin{pmatrix}
+			u_{1, 1} &\ldots &u_{1, N_y - 1} \\
+			0 &\ldots &0 \\
+			\vdots & &\vdots \\
+			0 &\ldots &0 \\
+			u_{N_x - 1, 1} &\ldots &u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	Now we need to take the latter $2(N_x - 1)$ entries and rewrite them as a sum of tensor products of a size $(N_x - 1)$ and a size $2$ vector. This gives the following
+	\begin{equation}
+	\begin{split}
+		V_2 U_2 &= I\otimes
+		\frac{\sqrt{2}}{h_y^2}
+		\begin{pmatrix}
+			1 &0 \\
+			0 &0 \\
+			\vdots &\vdots \\
+			0 &0 \\
+			0 &1
+		\end{pmatrix}
+		\left[
+		\frac{\sqrt{2}}{h_y^2}
+		\sum_{i = 1}^{N_x - 1} e_i \otimes
+		\begin{pmatrix}
+			u_{i, 1} \\
+			u_{i, N_y - 1}
+		\end{pmatrix}
+		\right] \\
+		&= \frac{2}{h_y^4}
+		\begin{pmatrix}
+			u_{1, 1} &0 &\ldots &0 &u_{1, N_y - 1} \\
+			u_{2, 1} &0 &\ldots &0 &u_{2, N_y - 1} \\
+			\vdots & & & &\vdots \\
+			u_{N_x - 1, 1} &0 &\ldots &0 &u_{N_x - 1, N_y - 1}
+		\end{pmatrix}
+	\end{split}
+	\end{equation}
+	We add these two results, based on matrix multiplication of the vectorized $V^\top U$ and the horizontal concatenation definition of $V$. Note that this is exactly the effect of $B$. Additionally, note that the effect of $V^\top$ is just to extract the $x$- and $y$-boundaries of $U$, scaling the former by $\sqrt{2}/h_x^2$ and the latter by $\sqrt{2}/h_y^2$. $V$ returns the boundaries to the original $U$-matrix shape with $0$'s at all the internal nodes, scaling them again, in the same way as $V^\top$. 
+	
+	For simplicity in the actual computer algorithm, note that $V^\top U$ has a really strange ordering of elements. It really does not matter if we reorder the elements, so long as we always undo that reordering afterwards (presumably with $V$). We will choose the reordering to just concatenate all of the boundaries. The Woodbury matrix identity yields:
+	\begin{equation}
+		(A + VV^\top)^{-1} F = A^{-1} F -
+		A^{-1} V (I + V^\top A^{-1} V)^{-1} V^\top A^{-1} F
+	\end{equation}
+	We would like to compute $(I + V^\top A^{-1} V)^{-1}r$ where $r = V^\top A^{-1} F$. We may do this by computing it as a solution to
+	\begin{equation}
+		(I + V^\top A^{-1} V) s = r
+	\end{equation}
+	This matrix is symmetric positive definite (shown later), so we may use method of conjugate gradients. We will just need to compute the effect of the linear operator above. If we leave $s$ in the ordering stated above, we will just need to respect that with the first application of $V$ and the second application of $V^\top$. Additionally, $s$ will be in that ordering so we will need to respect that when we apply the final $V$. 
+	
+	To see that this matrix is symmetric positive definite, note first that
+	\begin{equation}
+		(I + V^\top A^{-1} V)^\top = I^\top + V^\top (A^{-1})^\top (V^\top)^\top = I + V^\top A^{-1} V
+	\end{equation}
+	where we have used that $A$ is symmetric (this is obvious upon inspection). Note also that
+	\begin{equation}
+	\begin{split}
+		x^\top (I + V^\top A^{-1} V)x &= x^\top x + x^\top V^\top \mathbb{F}^\top \text{diag}[\lambda_k] \mathbb{F} V x \\
+		&= x^\top x + \text{diag}[\lambda_k](\mathbb{F} V x)^\top \mathbb{F} V x
+	\end{split}
+	\end{equation}
+	Note that $x^T x$ and $(\mathbb{F}V x)^\top (\mathbb{F} Vx)$ are just inner products of vectors, so they must be positive by definition. Additionally, every $\lambda_k$ is positive. Hence, the matrix is symmetric positive definite. 
+	\end{document}

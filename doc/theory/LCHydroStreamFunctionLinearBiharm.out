@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Three-dimensional linearized equations}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Computing homoegenous and elastic generalized force}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Computing viscous force explicitly}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Computing the elastic stress tensor explicitly}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Computing viscous stress tensor explicitly}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Computing the fluid equation of motion}{section.1}% 6
+\BOOKMARK [1][-]{section.2}{Writing equations of motion in terms of , \040and }{}% 7
+\BOOKMARK [2][-]{subsection.2.1}{Writing the force equation in terms of the auxiliary variables}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.2}{Writing the viscosity equation in terms of the auxiliary variables}{section.2}% 9
+\BOOKMARK [1][-]{section.3}{Computationial Scheme}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Boundary conditions and initial configuration}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Finite difference scheme}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.3}{Dimensionless form}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.4}{Plotting}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.5}{Higher degree finite difference schemes}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.6}{Solving the modified biharmonic equation}{section.3}% 16

@@ -6,12 +6,14 @@ c     --------------------------------------------------
 c     --------------------------------------------------
 c     --------------------------------------------------
 
-      subroutine dbihar(a,b,m,bda,bdb,bdc,bdd,c,d,n,f,idf,
-     +                  alpha,beta,iflag,tol,itcg,w,lw)
+      subroutine dbihar(g,a,b,c,d,bda,bdb,bdc,bdd,tolin,win,
+     +                  iflagin,alpha,beta,m,n,idf,lw,
+     +                  f,itcg,iflag,tol,w)
 c
-      integer m,n,idf,iflag,itcg,lw
-      double precision a,b,c,d,alpha,beta,tol
-      double precision bda(*),bdb(*),bdc(*),bdd(*),f(idf,*),w(*)
+      integer m,n,idf,iflagin,iflag,itcg,lw
+      double precision a,b,c,d,alpha,beta,tolin,tol
+      double precision bda(n),bdb(n),bdc(m),bdd(m),f(m+2,n+2)
+      double precision g(m+2,n+2),win(lw),w(lw)
 c
 c
 c     this subroutine solves the equation
@@ -283,11 +285,25 @@ c
 c     biharmonic:         dstart, dftrnx, dftrny, dbislf, dbisld
 c     fortran:            mod,min,max
 c
+c
       integer i1,i2,i3,i4,i5,i6,i7,i8
       integer nold,mold,iwf,iwl,il1,il2
       integer maxi
       double precision dx,dy,del,alf,bet
       double precision dxo,dyo,alfo,beto,wfo,wlo
+c
+c     copy input values into output to avoid inplace variables
+c
+      do i=1,m+2
+          do j=1,n+2
+              f(i,j) = g(i,j)
+          enddo
+      enddo
+      tol = tolin
+      iflag = iflagin
+      do i=1,lw
+          w(i) = win(i)
+      enddo
 c
 c     check input for mistakes.
 c
