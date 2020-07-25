@@ -1,0 +1,349 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module bihar ! in 
+    interface  ! in :bihar
+        subroutine dbihar(g,a,b,c,d,bda,bdb,bdc,bdd,tolin,win,iflagin,alpha,beta,m,n,idf,lw,f,itcg,iflag,tol,w) ! in :bihar:bihar.f
+            double precision dimension(m + 2,n + 2) :: g
+            double precision intent(in) :: a
+            double precision intent(in) :: b
+            double precision intent(in) :: c
+            double precision intent(in) :: d
+            double precision dimension(n),depend(n),intent(in) :: bda
+            double precision dimension(n),depend(n),intent(in) :: bdb
+            double precision dimension(m),depend(m),intent(in) :: bdc
+            double precision dimension(m),depend(m),intent(in) :: bdd
+            double precision intent(in) :: tolin
+            double precision dimension(lw),intent(in) :: win
+            integer optional,intent(in) :: iflagin=2
+            double precision optional,intent(in) :: alpha=0
+            double precision optional,intent(in) :: beta=0
+            integer optional,check((shape(g,0)-2)==m),depend(g),intent(in) :: m=(shape(g,0)-2)
+            integer optional,check((shape(g,1)-2)==n),depend(g),intent(in) :: n=(shape(g,1)-2)
+            integer optional,intent(in) :: idf=m+2
+            integer optional,check(len(win)>=lw),depend(win),intent(in) :: lw=len(win)
+            double precision dimension(m + 2,n + 2),depend(m,n),intent(out) :: f
+            integer intent(out) :: itcg
+            integer intent(out) :: iflag
+            double precision intent(out) :: tol
+            double precision dimension(lw),depend(lw),intent(out) :: w
+        end subroutine dbihar
+        subroutine dbisld(m,n,iflag,del,alpha,beta,idf,f,s,z,ws,trig,cmat) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            integer :: iflag
+            double precision :: del
+            double precision :: alpha
+            double precision :: beta
+            integer, optional,check(shape(f,0)==idf),depend(f) :: idf=shape(f,0)
+            double precision dimension(idf,*) :: f
+            double precision dimension(*) :: s
+            double precision dimension(*) :: z
+            double precision dimension(*) :: ws
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: cmat
+        end subroutine dbisld
+        subroutine dmatge(m2,n2,ki,kj,del,alpha,beta,trig,cmat,w) ! in :bihar:bihar.f
+            integer :: m2
+            integer :: n2
+            integer :: ki
+            integer :: kj
+            double precision :: del
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: cmat
+            double precision dimension(*) :: w
+        end subroutine dmatge
+        subroutine dbislf(m,n,maxi,iflag,del,tol,alpha,beta,itcg,idf,f,p,s,y,z,ws,trig,w3,diag) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            integer :: maxi
+            integer :: iflag
+            double precision :: del
+            double precision :: tol
+            double precision :: alpha
+            double precision :: beta
+            integer :: itcg
+            integer, optional,check(shape(f,0)==idf),depend(f) :: idf=shape(f,0)
+            double precision dimension(idf,*) :: f
+            double precision dimension(*) :: p
+            double precision dimension(*) :: s
+            double precision dimension(*) :: y
+            double precision dimension(*) :: z
+            double precision dimension(*) :: ws
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: w3
+            double precision dimension(*) :: diag
+        end subroutine dbislf
+        subroutine dconju(mm,nn,ki,kj,maxi,iflag,itcg,del,tol,alpha,beta,z,s,p,y,trig,ws,diag,w3) ! in :bihar:bihar.f
+            integer :: mm
+            integer :: nn
+            integer :: ki
+            integer :: kj
+            integer :: maxi
+            integer :: iflag
+            integer :: itcg
+            double precision :: del
+            double precision :: tol
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(*) :: z
+            double precision dimension(*) :: s
+            double precision dimension(*) :: p
+            double precision dimension(*) :: y
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: ws
+            double precision dimension(*) :: diag
+            double precision dimension(*) :: w3
+        end subroutine dconju
+        subroutine dupdat(nn,kj,maxu,iflag,km,tol,y,s,d,al,h,ws) ! in :bihar:bihar.f
+            integer, optional,check(shape(h,0)==nn),depend(h) :: nn=shape(h,0)
+            integer :: kj
+            integer :: maxu
+            integer :: iflag
+            integer :: km
+            double precision :: tol
+            double precision dimension(*) :: y
+            double precision dimension(*) :: s
+            double precision dimension(*) :: d
+            double precision dimension(*) :: al
+            double precision dimension(nn,*) :: h
+            double precision dimension(*) :: ws
+        end subroutine dupdat
+        subroutine dpreco(nn,kj,iflag,maxu,km,p,z,d,al,h,ws) ! in :bihar:bihar.f
+            integer, optional,check(shape(h,0)==nn),depend(h) :: nn=shape(h,0)
+            integer :: kj
+            integer :: iflag
+            integer :: maxu
+            integer :: km
+            double precision dimension(*) :: p
+            double precision dimension(*) :: z
+            double precision dimension(*) :: d
+            double precision dimension(*) :: al
+            double precision dimension(nn,*) :: h
+            double precision dimension(*) :: ws
+        end subroutine dpreco
+        subroutine dhzero(nn,kj,x,y,d,ws) ! in :bihar:bihar.f
+            integer :: nn
+            integer :: kj
+            double precision dimension(*) :: x
+            double precision dimension(*) :: y
+            double precision dimension(*) :: d
+            double precision dimension(*) :: ws
+        end subroutine dhzero
+        subroutine dcmult(mm,nn,ki,kj,del,alpha,beta,x,y,trig,ws) ! in :bihar:bihar.f
+            integer :: mm
+            integer :: nn
+            integer :: ki
+            integer :: kj
+            double precision :: del
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(*) :: x
+            double precision dimension(*) :: y
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: ws
+        end subroutine dcmult
+        subroutine dpentf(n2,kj,xl,alpha,beta,trig,y,x,ws) ! in :bihar:bihar.f
+            integer :: n2
+            integer :: kj
+            double precision :: xl
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: y
+            double precision dimension(*) :: x
+            double precision dimension(*) :: ws
+        end subroutine dpentf
+        subroutine dhzeri(m,n,kj,del,alpha,beta,diag,trig,ws) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            integer :: kj
+            double precision :: del
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(*) :: diag
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: ws
+        end subroutine dhzeri
+        subroutine dtrigi(n,del,trig,w) ! in :bihar:bihar.f
+            integer :: n
+            double precision :: del
+            double precision dimension(*) :: trig
+            double precision dimension(*) :: w
+        end subroutine dtrigi
+        subroutine dftrny(m,n,f,idf,ws) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            double precision dimension(idf,*) :: f
+            integer, optional,check(shape(f,0)==idf),depend(f) :: idf=shape(f,0)
+            double precision dimension(*) :: ws
+        end subroutine dftrny
+        subroutine dftrnx(m,n,f,idf,ws) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            double precision dimension(idf,*) :: f
+            integer, optional,check(shape(f,0)==idf),depend(f) :: idf=shape(f,0)
+            double precision dimension(*) :: ws
+        end subroutine dftrnx
+        subroutine dsint(n,x,wsave) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(*) :: x
+            double precision dimension(*) :: wsave
+        end subroutine dsint
+        subroutine drfftf(n,r,wsave) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: r
+            double precision dimension(1) :: wsave
+        end subroutine drfftf
+        subroutine drftf1(n,c,ch,wa,ifac) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(*) :: c
+            double precision dimension(*) :: ch
+            double precision dimension(*) :: wa
+            integer dimension(*) :: ifac
+        end subroutine drftf1
+        subroutine dradfg(ido,ip,l1,idl1,cc,c1,c2,ch,ch2,wa) ! in :bihar:bihar.f
+            integer, optional,check(shape(cc,0)==ido),depend(cc) :: ido=shape(cc,0)
+            integer, optional,check(shape(cc,1)==ip),depend(cc) :: ip=shape(cc,1)
+            integer, optional,check(shape(cc,2)==l1),depend(cc) :: l1=shape(cc,2)
+            integer, optional,check(shape(c2,0)==idl1),depend(c2) :: idl1=shape(c2,0)
+            double precision dimension(ido,ip,l1) :: cc
+            double precision dimension(ido,l1,ip),depend(ido,l1,ip) :: c1
+            double precision dimension(idl1,ip),depend(ip) :: c2
+            double precision dimension(ido,l1,ip),depend(ido,l1,ip) :: ch
+            double precision dimension(idl1,ip),depend(idl1,ip) :: ch2
+            double precision dimension(1) :: wa
+        end subroutine dradfg
+        subroutine dradf5(ido,l1,cc,ch,wa1,wa2,wa3,wa4) ! in :bihar:bihar.f
+            integer, optional,check(shape(cc,0)==ido),depend(cc) :: ido=shape(cc,0)
+            integer, optional,check(shape(cc,1)==l1),depend(cc) :: l1=shape(cc,1)
+            double precision dimension(ido,l1,5) :: cc
+            double precision dimension(ido,5,l1),depend(ido,l1) :: ch
+            double precision dimension(1) :: wa1
+            double precision dimension(1) :: wa2
+            double precision dimension(1) :: wa3
+            double precision dimension(1) :: wa4
+        end subroutine dradf5
+        subroutine dradf3(ido,l1,cc,ch,wa1,wa2) ! in :bihar:bihar.f
+            integer, optional,check(shape(cc,0)==ido),depend(cc) :: ido=shape(cc,0)
+            integer, optional,check(shape(cc,1)==l1),depend(cc) :: l1=shape(cc,1)
+            double precision dimension(ido,l1,3) :: cc
+            double precision dimension(ido,3,l1),depend(ido,l1) :: ch
+            double precision dimension(1) :: wa1
+            double precision dimension(1) :: wa2
+        end subroutine dradf3
+        subroutine dradf2(ido,l1,cc,ch,wa1) ! in :bihar:bihar.f
+            integer, optional,check(shape(cc,0)==ido),depend(cc) :: ido=shape(cc,0)
+            integer, optional,check(shape(cc,1)==l1),depend(cc) :: l1=shape(cc,1)
+            double precision dimension(ido,l1,2) :: cc
+            double precision dimension(ido,2,l1),depend(ido,l1) :: ch
+            double precision dimension(1) :: wa1
+        end subroutine dradf2
+        subroutine dradf4(ido,l1,cc,ch,wa1,wa2,wa3) ! in :bihar:bihar.f
+            integer, optional,check(shape(cc,0)==ido),depend(cc) :: ido=shape(cc,0)
+            integer, optional,check(shape(cc,1)==l1),depend(cc) :: l1=shape(cc,1)
+            double precision dimension(ido,l1,4) :: cc
+            double precision dimension(ido,4,l1),depend(ido,l1) :: ch
+            double precision dimension(1) :: wa1
+            double precision dimension(1) :: wa2
+            double precision dimension(1) :: wa3
+        end subroutine dradf4
+        subroutine dsinti(n,wsave) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: wsave
+        end subroutine dsinti
+        subroutine drffti(n,wsave) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: wsave
+        end subroutine drffti
+        subroutine drfti1(n,wa,ifac) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(*) :: wa
+            integer dimension(*) :: ifac
+        end subroutine drfti1
+        subroutine dstart(m,n,alpha,beta,f,idf,bda,bdb,bdc,bdd,dx,dy,del) ! in :bihar:bihar.f
+            integer :: m
+            integer :: n
+            double precision :: alpha
+            double precision :: beta
+            double precision dimension(idf,*) :: f
+            integer, optional,check(shape(f,0)==idf),depend(f) :: idf=shape(f,0)
+            double precision dimension(*) :: bda
+            double precision dimension(*) :: bdb
+            double precision dimension(*) :: bdc
+            double precision dimension(*) :: bdd
+            double precision :: dx
+            double precision :: dy
+            double precision :: del
+        end subroutine dstart
+        subroutine dspfa(ap,n,kpvt,info) ! in :bihar:bihar.f
+            double precision dimension(*) :: ap
+            integer :: n
+            integer dimension(*) :: kpvt
+            integer :: info
+        end subroutine dspfa
+        subroutine dswap(n,dx,incx,dy,incy) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: dx
+            integer :: incx
+            double precision dimension(1) :: dy
+            integer :: incy
+        end subroutine dswap
+        function idamax(n,dx,incx) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: dx
+            integer :: incx
+            integer :: idamax
+        end function idamax
+        subroutine dspsl(ap,n,kpvt,b) ! in :bihar:bihar.f
+            double precision dimension(1) :: ap
+            integer :: n
+            integer dimension(1) :: kpvt
+            double precision dimension(1) :: b
+        end subroutine dspsl
+        subroutine dppfa(ap,n,info) ! in :bihar:bihar.f
+            double precision dimension(1) :: ap
+            integer :: n
+            integer :: info
+        end subroutine dppfa
+        subroutine dppsl(ap,n,b) ! in :bihar:bihar.f
+            double precision dimension(1) :: ap
+            integer :: n
+            double precision dimension(1) :: b
+        end subroutine dppsl
+        function ddot(n,dx,incx,dy,incy) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: dx
+            integer :: incx
+            double precision dimension(1) :: dy
+            integer :: incy
+            double precision :: ddot
+        end function ddot
+        subroutine daxpy(n,da,dx,incx,dy,incy) ! in :bihar:bihar.f
+            integer :: n
+            double precision :: da
+            double precision dimension(1) :: dx
+            integer :: incx
+            double precision dimension(1) :: dy
+            integer :: incy
+        end subroutine daxpy
+        subroutine dcopy(n,dx,incx,dy,incy) ! in :bihar:bihar.f
+            integer :: n
+            double precision dimension(1) :: dx
+            integer :: incx
+            double precision dimension(1) :: dy
+            integer :: incy
+        end subroutine dcopy
+        subroutine dscal(n,da,dx,incx) ! in :bihar:bihar.f
+            integer :: n
+            double precision :: da
+            double precision dimension(1) :: dx
+            integer :: incx
+        end subroutine dscal
+    end interface 
+end python module bihar
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
