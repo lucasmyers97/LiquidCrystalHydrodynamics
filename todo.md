@@ -3,7 +3,8 @@
 ## Code writing
 * ~~Write `.pyf` file for the `dbihar` subroutine to make it more pythonic.~~
 * ~~Write some compilation scripts for that.~~
-* Write higher order finite difference schemes.
+* Write higher order finite difference scheme for dx^4, dy^4, dx^2dy^2
+* Write the rest of the higher order finite difference schemes.
 * Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
 * Fit defect positions to a square root function (or parabola or whatever). 
 * ~~Write out a biharmonic solver in Python.~~
@@ -26,7 +27,7 @@
 * ~~Explicitly find the effect of $V$ and $V^\top$ on $U$~~
 * ~~Show explicitly that $VV^\top = B$~~
 * ~~Write out the Woodbury identity, show how it works in this case~~
-* Explain how the conjugate gradients method works
+* (Explain how the conjugate gradients method works)
 -----------
 ## Code refactoring
 * Rewrite finite difference scheme so it works with Dirichlet or Neumann BC
