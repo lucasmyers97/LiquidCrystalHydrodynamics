@@ -11,11 +11,11 @@
 * Figure out whether @jit works for scipy functions.
 ---------
 ## Testing
+* Test dx^4, dy^4, and dx^2dy^2 finite difference schemes. 
+* Write test script for the modified biharmonic solver
 * Figure out how to effectively test the methods in the `LiquidCrystalHelper` package.
 * Rewrite test files for the compiled versions of each of the packages.
-* Write test script for the biharmonic solver
 * Introduce sympy into the testing scheme.
-* Need to test higher order finite difference schemes.
 ---------
 ## Documentation
 * ~~Clean up explanation of the theory (and get rid of Fourier Transform stuff)~~
