@@ -351,7 +351,8 @@ class Biharm:
         CM = self.CapacitanceMatrix(self)
         
         r = self.A_Inv(F)
-        s, info = cg(CM, self.VT(r), tol=self.cg_tol, maxiter=self.cg_maxiter)
+        s, info = cg(CM, self.VT(r), tol=self.cg_tol, 
+                     atol='legacy', maxiter=self.cg_maxiter)
         
         return r - self.A_Inv( self.V(s) ), info, CM.calls
     

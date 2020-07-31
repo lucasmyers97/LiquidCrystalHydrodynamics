@@ -27,7 +27,7 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
         # Derivative needs to be zero at endpoints for this test
         def f1(x, y, m=1, n=1):
             return np.cos(m*x)*np.sin(n*y)
-        def d2x_f1(x, y, m=1, n=1):
+        def dx2_f1(x, y, m=1, n=1):
             return -m**2*np.cos(m*x)*np.sin(n*y)
         
         n_list = [10, 50, 100, 1000]
@@ -43,8 +43,8 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
                 X, Y = np.meshgrid(x, y, indexing='ij')
                 dx = X[1, 0] - X[0, 0]
         
-                error = np.abs( d2x_f1(X, Y) - fd.dx2(f1(X, Y), dx) )
-                rel_error = error/np.mean(np.abs(d2x_f1(X, Y)))
+                error = np.abs( dx2_f1(X, Y) - fd.dx2(f1(X, Y), dx) )
+                rel_error = error/np.mean(np.abs(dx2_f1(X, Y)))
                 
                 self.assertTrue(np.max(rel_error) < dx)
                 
@@ -61,7 +61,7 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
         # Derivative needs to be zero at endpoints for this test
         def f1(x, y, m=1, n=1):
             return np.sin(m*x)*np.cos(n*y)
-        def d2y_f1(x, y, m=1, n=1):
+        def dy2_f1(x, y, m=1, n=1):
             return -n**2*np.sin(m*x)*np.cos(n*y)
         
         n_list = [10, 50, 100, 1000]
@@ -77,10 +77,119 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
                 X, Y = np.meshgrid(x, y, indexing='ij')
                 dy = X[1, 0] - X[0, 0]
         
-                error = np.abs( d2y_f1(X, Y) - fd.dy2(f1(X, Y), dy) )
-                rel_error = error/np.mean(np.abs(d2y_f1(X, Y)))
+                error = np.abs( dy2_f1(X, Y) - fd.dy2(f1(X, Y), dy) )
+                rel_error = error/np.mean(np.abs(dy2_f1(X, Y)))
                 
                 self.assertTrue(np.max(rel_error) < dy)
                 
+    def test_dx4(self):
+        """
+        Tests the `dx4` finite difference method in `FiniteDifference.py`. This
+        Calculates the fourth partial derivative with respect to . Just
+        tests `cos(mx)sin(ny)` on a few different domains with a few different
+        grid spacings. Note that it is necessary to have the x-derivative of
+        this function be zero at the x-boundaries -- only implemented for
+        Neumann conditions.
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.cos(m*x)*np.sin(n*y)
+        def dx4_f1(x, y, m=1, n=1):
+            return m**4*np.cos(m*x)*np.sin(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                dx = X[1, 0] - X[0, 0]
+        
+                error = np.abs( dx4_f1(X, Y)[1:-1, 1:-1] 
+                                - fd.dx4(f1(X, Y), dx) )
+                rel_error = error/np.mean(np.abs(dx4_f1(X, Y)[1:-1, 1:-1]))
+                
+                self.assertTrue(np.max(rel_error) < dx, 
+                                msg="n=" + str(n) + " l=" + str(length))
+                
+    def test_dy4(self):
+        """
+        Tests the `dy4` finite difference method in `FiniteDifference.py`. This
+        Calculates the fourth partial derivative with respect to y. Just
+        tests `sin(mx)*cos(ny)` on a few different domains with a few different
+        grid spacings. Note that it is necessary to have the y-derivative of
+        this function be zero at the y-boundaries. 
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.sin(m*x)*np.cos(n*y)
+        def dy4_f1(x, y, m=1, n=1):
+            return n**4*np.sin(m*x)*np.cos(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                dy = Y[0, 1] - Y[0, 0]
+        
+                error = np.abs( dy4_f1(X, Y)[1:-1, 1:-1] 
+                                - fd.dy4(f1(X, Y), dy) )
+                rel_error = error/np.mean(np.abs(dy4_f1(X, Y)[1:-1, 1:-1]))
+                
+                self.assertTrue(np.max(rel_error) < dy,
+                                msg="n=" + str(n) + " l=" + str(length))
+                
+    def test_dx2dy2(self):
+        """
+        Tests the `dx2y2` finite difference method in `FiniteDifference.py`. 
+        This calculates \partial^4 f/\partial x^2 \partial y^2. Just
+        tests `cos(mx)*cos(ny)` on a few different domains with a few different
+        grid spacings. Note that it is necessary to have the y-derivative of
+        this function be zero at the y-boundaries, and the x-derivative to be
+        zero at the x-boundaries.
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.cos(m*x)*np.cos(n*y)
+        def dx2dy2_f1(x, y, m=1, n=1):
+            return m**2*n**2*np.cos(m*x)*np.cos(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                h = Y[0, 1] - Y[0, 0]
+        
+                error = np.abs( dx2dy2_f1(X, Y) - fd.dx2dy2(f1(X, Y), h) )
+                rel_error = error/np.mean(np.abs(dx2dy2_f1(X, Y)))
+                
+                self.assertTrue(np.max(rel_error) < h,
+                                msg="n=" + str(n) + " l=" + str(length))
+
 if __name__ == '__main__':
     unittest.main()
