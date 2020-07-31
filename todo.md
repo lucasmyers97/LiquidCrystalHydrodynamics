@@ -1,4 +1,4 @@
-# Miles to go before I sleep...
+# To do
 ---------
 ## Code writing
 * Figure out whether @jit works for scipy functions.
