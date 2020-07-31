@@ -7,6 +7,7 @@
 * Add Laplacian operator (and maybe other sums) to lower number of calculations
 * Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
 * Fit defect positions to a square root function (or parabola or whatever). 
+* Figure out why eigenvector function isn't working with Numba compilation
 * ~~Write `.pyf` file for the `dbihar` subroutine to make it more pythonic.~~
 * ~~Write some compilation scripts for that.~~
 * ~~Rewrite finite difference schemes to include "ghost point" method.~~
@@ -36,7 +37,7 @@
 * ~~Write out the Woodbury identity, show how it works in this case~~
 -----------
 ## Code refactoring
-* Rewrite simulation scripts, have them save things in a specific file.
+* ~~Rewrite simulation scripts, have them save things in a specific file.~~
 * Rewrite finite difference scheme so it works with Dirichlet or Neumann BC
   - Neumann conditions should include a whole array for the boundary.
 -----------
