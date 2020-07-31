@@ -2,7 +2,7 @@
 ---------
 ## Code writing
 * Figure out whether @jit works for scipy functions.
-* Rewrite compiled version of 
+* Rewrite compiled version of biharmonic solver
 * Write the rest of the higher order finite difference schemes.
 * Add Laplacian operator (and maybe other sums) to lower number of calculations
 * Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
