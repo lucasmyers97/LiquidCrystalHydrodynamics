@@ -20,7 +20,7 @@
   - Rewrite test for compiled biharmonic solver
 * Introduce sympy into the testing scheme.
 * Figure out how to effectively test the methods in the `LiquidCrystalHelper` package.
-* ~~Test dx^4, dy^4, and dx^2dy^2 finite difference schemes. ~~
+* ~~Test dx^4, dy^4, and dx^2dy^2 finite difference schemes.~~
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
