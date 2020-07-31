@@ -25,6 +25,7 @@
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
+* Update the readme to reflect the code organization
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
 * Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
