@@ -3,6 +3,7 @@
 ## Code writing
 * ~~Write `.pyf` file for the `dbihar` subroutine to make it more pythonic.~~
 * ~~Write some compilation scripts for that.~~
+* Rewrite finite difference schemes to include "ghost point" method.
 * Add Laplacian operator (and maybe other sums) to lower number of calculations
 * Write higher order finite difference scheme for dx^4, dy^4, dx^2dy^2
 * Write the rest of the higher order finite difference schemes.
