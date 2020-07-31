@@ -5,8 +5,9 @@
 import unittest
 
 import numpy as np
-import src.FiniteDifference as fd
-import src.biharm as bh
+import FiniteDifference as fd
+import biharm as bh
+import matplotlib.pyplot as plt
 
 class TestBiharmonicSolver(unittest.TestCase):
     
