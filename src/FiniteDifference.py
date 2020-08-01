@@ -218,8 +218,6 @@ def dx2dy2(f, h):
                           + f[-1, -1] - f[-1, -2] ) / h**4
     
     return dx2dy2f
-    
-    
 
 def forwardEuler(f, dt, S, *args, **kwargs):
     """
