@@ -222,14 +222,37 @@ def dx2dy2(f, h):
     
     return dx2dy2f
 
-def makeForwardEuler(S):  
+def makeForwardEuler(S):
+    """
+    Takes in a jitted function `S`, which is a function of `f` and `t` such
+    that S(f, t) = \partial f/\partial t, and returns a jitted function which
+    moves the configuration one step forward in the forwardEuler scheme.
+
+    Parameters
+    ----------
+    S : callable(f, a, b, dx, dy)
+        Function which takes arguments f, a, b, dx, dy. f is typically an
+        ndarray which holds the current configuration. a and b in this scheme
+        are typically also ndarrays which hold coupled configurations. dx and
+        dy are the gridpoint spacings. 
+
+    Returns
+    -------
+    callable(f, dt, a, b, dx, dy)
+        A function which takes in the current configuration f, the timestep
+        dt, and the other arguments discussed above, and returns f_n1, an
+        ndarray which represents the configuration moved one timestep forward.
+
+    """
 
     @jit(nopython=True, parallel=True)
     def forwardEuler(f, dt, a, b, dx, dy):
         """
         Takes one step of size `dt` for a forward euler scheme characterized by
         the equation f_{n + 1} = f + dt*S(f, *args) where *args are any other
-        arguments that the time evolution might depend on.
+        arguments that the time evolution might depend on. In this case,
+        because we are compiling this function it must take a, b, dx, dy as
+        arguments. 
     
         Parameters
         ----------
@@ -238,12 +261,9 @@ def makeForwardEuler(S):
             parameterized by time t.
         dt : double
             Finite time interval of a step in this method
-        S : function
-            Function which gives \partial f/\partial t. It takes f and any 
-            number of other arguments as parameters.
         *args : arguments of S
-            The arguments fed into S used to calculate \partial f/\partial t for
-            the forward euler method.
+            The arguments fed into S used to calculate \partial f/\partial t 
+            for the forward euler method.
     
         Returns
         -------
