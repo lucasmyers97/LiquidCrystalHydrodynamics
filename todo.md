@@ -1,6 +1,7 @@
 # To do
 ---------
 ## Code writing
+* Add flag to finite difference operators to ignore boundaries.
 * Write the rest of the higher order finite difference schemes.
 * Add Laplacian operator (and maybe other sums) to lower number of calculations
 * Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
