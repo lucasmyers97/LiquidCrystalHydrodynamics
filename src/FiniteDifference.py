@@ -84,6 +84,61 @@ def dy2(f, dy):
     
     return dy2f
 
+def d2(f, h):
+    """
+    Returns second order finite difference approximation for the 2D Laplacian
+    of a 2D field f.
+
+    Parameters
+    ----------
+    f : ndarray
+        An mxn array representing a smooth function f: R^2 -> R
+    h : float
+        specifies the x- and y-grid spacing.
+
+    Returns
+    -------
+    d2f : ndarray
+        mxn array representing the Laplacian of f, given normal derivative
+        zero Neumann boundary conditions.
+    
+    Notes
+    -----
+    We use the "ghost point" method, because we assume the normal derivatives 
+    are zero at the boundaries. This consists of defining new points outside 
+    the domain and setting their values equal to the set of first interior
+    points -- this is consistent with the second order central difference
+    approximation for first derivatives.
+
+    """
+    
+    d2f = np.zeros(f.shape)
+    
+    # Interior
+    d2f[1:-1, 1:-1] = ( f[1:-1, 2:] + f[1:-1, :-2] 
+                        + f[2:, 1:-1] + f[:-2, 1:-1] - 4*f[1:-1, 1:-1] ) / h**2
+    
+    # Edges 
+    d2f[0, 1:-1] = ( f[0, 2:] + f[0, :-2] 
+                     + f[1, 1:-1] + f[1, 1:-1] - 4*f[0, 1:-1] ) / h**2
+    d2f[-1, 1:-1] = ( f[-1, 2:] + f[-1, :-2] 
+                      + f[-2, 1:-1] + f[-2, 1:-1] - 4*f[-1, 1:-1] ) / h**2
+    d2f[1:-1, 0] = ( f[2:, 0] + f[:-2, 0] 
+                     + f[1:-1, 1] + f[1:-1, 1] - 4*f[1:-1, 0] ) / h**2
+    d2f[1:-1, -1] = ( f[2:, -1] + f[:-2, -1] 
+                      + f[1:-1, -2] + f[1:-1, -2] - 4*f[1:-1, -1] ) / h**2
+    
+    # Corners
+    d2f[0, 0] = ( f[0, 1] + f[0, 1] + f[1, 0] + f[1, 0] - 4*f[0, 0] ) / h**2
+    d2f[-1, 0] = ( f[-1, 1] + f[-1, 1] 
+                   + f[-2, 0] + f[-2, 0] - 4*f[-1, 0] ) / h**2
+    d2f[0, -1] = ( f[1, -1] + f[1, -1] 
+                   + f[0, -2] + f[0, -2] - 4*f[0, -1] ) / h**2
+    d2f[-1, -1] = ( f[-2, -1] + f[-2, -1] 
+                    + f[-1, -2] + f[-1, -2] - 4*f[-1, -1] ) / h**2
+    
+    return d2f
+
 def dx4(f, dx):
     """
     Returns second order finite difference approximation of d^4 f/dx^4 for

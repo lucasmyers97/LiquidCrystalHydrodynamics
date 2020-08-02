@@ -518,6 +518,8 @@ def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
                     
     return dnu_dt
 
+
+
 def findMinima(f):
     """
     Find indices of `f` where points are smaller than all of their neighbors.
@@ -529,10 +531,12 @@ def findMinima(f):
 
     Returns
     -------
-    ndarray
-        Holds indices of the maxima of `f`. They are arranged as a 2xk array,
-        with k as the number of maxima. First axis is (i, j) indices for a
-        given maximum. Can be used to index an array of the same size as f.
+    tuple
+        Holds indices of the minima of `f`. They are arranged as a 2-tuple of
+        length-k arrays, where k is the number of maxima. ith component of the
+        first array gives the first index of the ith minimum, ith component
+        of the second array gives the second index of the ith minimum. Can be
+        used to index an array of the same size as f.
         
     """
     

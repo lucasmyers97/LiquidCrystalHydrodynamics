@@ -45,6 +45,8 @@ def dx2(f, dx):
     dx2f[1:-1, :] = (f[2:, :] - 2*f[1:-1, :] + f[0:-2, :]) / dx**2
     dx2f[0, :] = 2*(f[1, :] - f[0, :]) / dx**2
     dx2f[-1, :] = 2*(f[-2, :] - f[-1, :]) / dx**2
+    
+    return dx2f
 
 @jit(nopython=True, parallel=True, cache=True)
 def dy2(f, dy):
@@ -80,7 +82,6 @@ def dy2(f, dy):
     dy2f[:, 1:-1] = (f[:, 2:] - 2*f[:, 1:-1] + f[:, 0:-2]) / dy**2
     dy2f[:, 0] = 2*(f[:, 1] - f[:, 0]) / dy**2
     dy2f[:, -1] = 2*(f[:, -2] - f[:, -1]) / dy**2
-    
     
     return dy2f
 
@@ -223,27 +224,6 @@ def dx2dy2(f, h):
     return dx2dy2f
 
 def makeForwardEuler(S):
-    """
-    Takes in a jitted function `S`, which is a function of `f` and `t` such
-    that S(f, t) = \partial f/\partial t, and returns a jitted function which
-    moves the configuration one step forward in the forwardEuler scheme.
-
-    Parameters
-    ----------
-    S : callable(f, a, b, dx, dy)
-        Function which takes arguments f, a, b, dx, dy. f is typically an
-        ndarray which holds the current configuration. a and b in this scheme
-        are typically also ndarrays which hold coupled configurations. dx and
-        dy are the gridpoint spacings. 
-
-    Returns
-    -------
-    callable(f, dt, a, b, dx, dy)
-        A function which takes in the current configuration f, the timestep
-        dt, and the other arguments discussed above, and returns f_n1, an
-        ndarray which represents the configuration moved one timestep forward.
-
-    """
 
     @jit(nopython=True, parallel=True)
     def forwardEuler(f, dt, a, b, dx, dy):

@@ -428,9 +428,9 @@ def etaEOM(eta, mu, nu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    deta_dt = fd.dx2(eta, dx) + fd.dy2(eta, dy) - A*eta \
-                - B*( (2/3)*eta**2 + (3/2)*nu**2 )\
-                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    deta_dt = fd.dx2(eta, dx) + fd.dy2(eta, dy) - ( A*eta 
+                + B*( (2/3)*eta**2 + (3/2)*nu**2 )
+                    + C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return deta_dt
 
@@ -473,9 +473,9 @@ def muEOM(mu, eta, nu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    dmu_dt = fd.dx2(mu, dx) + fd.dy2(mu, dy) - A*mu \
-                - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )\
-                    - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    dmu_dt = fd.dx2(mu, dx) + fd.dy2(mu, dy) - ( A*mu 
+                + B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
+                    + C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return dmu_dt
 
@@ -518,64 +518,54 @@ def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    dnu_dt = fd.dx2(nu, dx) + fd.dy2(nu, dy) - A*nu \
-                - B*( (1/3)*eta*nu + mu*nu )\
-                    - C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    dnu_dt = fd.dx2(nu, dx) + fd.dy2(nu, dy) - ( A*nu 
+                + B*( (1/3)*eta*nu + mu*nu )
+                    + C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return dnu_dt
 
 @jit(nopython=True, parallel=True, cache=True)
-def findDefectCenters(lambda_max, X, Y, n_defects=2):
+def findMinima(f):
     """
-    Finds the (x, y) coordinates of the defect centers in a nematic liquid
-    crystal based on the maximum eigenvalues (proportional to S). It does this
-    by (1) assuming that the defects lie along some constant y = C line, (2)
-    going through each 1D slice and using the SciPy `find_peaks` method. Then
-    it (3) finds the max eigenvalues associated with each peak at each slice,
-    and then (4) finds the slice at which each peak is maximized. This gives
-    the y-index at which each defect is located which we can plug into the
-    peak locations array to get the x-index. Plugging these indices into the
-    X and Y domain arrays gives the x- and y-locations of the defects.
+    Find indices of `f` where points are smaller than all of their neighbors.
 
     Parameters
     ----------
-    lambda_max : ndarray
-        mxn array holding the maximal eigenvalue of the Q-tensor evaluated at
-        each point on the domain.
-    X : ndarray
-        mxn array holding the x-value of the domain at each index.
-    Y : ndarray
-        mxn array holding the y-value of the domain at each index.
-    n_defects : int, optional
-        Number of defects. Default is 2 because we typically look at defect
-        annihilation.
+    f : ndarray
+        mxn array of values from which minima will be found.
 
     Returns
     -------
-    x_locs : ndarray
-        n_defects length array holding x-locations of the defects.
-    y_locs : ndarray
-        n_defects length array holding y-locations of the defects.
-
-    """
-
-    # (i, j) entry of `peaks` holds index of x-direction of the jth y = C slice
-    m, n = lambda_max.shape
-    peaks = np.zeros((n_defects, n), dtype='int')
-    for j in range(n):
-        peaks[:, j], _ = find_peaks(-lambda_max[:, j])
+    tuple
+        Holds indices of the minima of `f`. They are arranged as a 2-tuple of
+        length-k arrays, where k is the number of maxima. ith component of the
+        first array gives the first index of the ith minimum, ith component
+        of the second array gives the second index of the ith minimum. Can be
+        used to index an array of the same size as f.
         
-    # Find values of those peaks, find index in y-direction of maximal peaks
-    peak_vals = np.zeros((n_defects, n))
-    peak_args = np.zeros((n_defects), dtype='int')
-    for i in range(n_defects):
-        peak_vals[i, :] = np.diagonal(lambda_max[peaks[i, :], :])
-        peak_args[i] = np.argmin(peak_vals[i, :])
+    """
     
-    x_idx = np.diagonal(peaks[:, peak_args[:]])
-    y_idx = peak_args
+    # For interior points, check if they are less than their neighbors
+    lt_left = f[1:-1, 1:-1] <= f[:-2, 1:-1]
+    lt_right = f[1:-1, 1:-1] <= f[2:, 1:-1]
+    lt_down = f[1:-1, 1:-1] <= f[1:-1, :-2]
+    lt_up = f[1:-1, 1:-1] <= f[1:-1, 2:]
+    lt_leftdown = f[1:-1, 1:-1] <= f[:-2, :-2]
+    lt_leftup = f[1:-1, 1:-1] <= f[:-2, 2:]
+    lt_rightdown = f[1:-1, 1:-1] <= f[2:, :-2]
+    lt_rightup = f[1:-1, 1:-1] <= f[2:, 2:]
     
-    x_locs = X[x_idx, 0]
-    y_locs = Y[0, y_idx]
+    # Logical and all of them together
+    min_array = np.logical_and(lt_left, lt_right)
+    min_array = np.logical_and(min_array, lt_down)
+    min_array = np.logical_and(min_array, lt_up)
+    min_array = np.logical_and(min_array, lt_leftdown)
+    min_array = np.logical_and(min_array, lt_leftup)
+    min_array = np.logical_and(min_array, lt_rightdown)
+    min_array = np.logical_and(min_array, lt_rightup)
     
-    return x_locs, y_locs
+    # Want to find max indices of array which has same size as `f`
+    min_array_padded = np.zeros(f.shape, dtype=np.bool_)
+    min_array_padded[1:-1, 1:-1] = min_array
+    
+    return np.nonzero(min_array_padded)
