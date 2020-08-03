@@ -93,7 +93,6 @@ def dy(f, dy, calc_bds=True):
         dyf[1:-1, 1:-1] = ( f[1:-1, 2:] - f[1:-1, :-2] ) / (2*dy)
         
     return dyf
-    
 
 def dx2(f, dx, calc_bds=True):
     """
@@ -184,6 +183,43 @@ def dy2(f, dy, calc_bds=True):
                              - 2*f[1:-1, 1:-1] + f[1:-1, 0:-2] ) / dy**2
     
     return dy2f
+
+def dxdy(f, h):
+    """
+    Returns second order finite difference approximation of d^2f/dxdy for
+    a 2D field f.
+    
+
+    Parameters
+    ----------
+    f : ndarray
+        An mxn array representing a smooth function f: R^2 -> R. 
+    h: float
+        Specifies the spacing of grid-points. Note that this assumes the x-
+        and y-spacing is the same. For different grid-spacing, use
+        dx(dy(f, dy, False), dx, False).
+
+    Returns
+    -------
+    dxdyf : ndarray
+        mxn array representing d^2f/dxdy. Neumann boundary conditions used 
+        with normal derivatives at the boundaries set to zero. 
+        
+    Notes
+    -----
+    We use the "ghost point" method, because we assume the normal derivatives 
+    are zero at the boundaries. This consists of defining new points outside 
+    the domain and setting their values equal to the set of first interior
+    points -- this is consistent with the second order central difference
+    approximation for first derivatives.
+    """
+    
+    dxdyf = np.zeros(f.shape)
+    
+    dxdyf[1:-1, 1:-1] = ( f[:-2, :-2] + f[2:, 2:] 
+                          - f[2:, :-2] - f[:-2, 2:] ) / (4*h**2)
+    
+    return dxdyf
 
 def d2(f, h, calc_bds=True):
     """
