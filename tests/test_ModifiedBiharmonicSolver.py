@@ -5,9 +5,8 @@
 import unittest
 
 import numpy as np
-import FiniteDifference as fd
-import biharm as bh
-import matplotlib.pyplot as plt
+import src.FiniteDifference as fd
+import src.biharm as bh
 
 class TestBiharmonicSolver(unittest.TestCase):
     
@@ -21,8 +20,8 @@ class TestBiharmonicSolver(unittest.TestCase):
         
         origin = [0, 0]
         L = [3, 5]
-        shape = [300, 500]
-        alpha = 1e-100
+        shape = [512, 512]
+        alpha = 3
         maxiter = 500
         
         x = np.linspace(origin[0], origin[0] + L[0], num=(shape[0]-1))

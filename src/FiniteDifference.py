@@ -10,7 +10,92 @@ July 4, 2020
 import numpy as np
 import sympy as sy
 
-def dx2(f, dx):
+def dx(f, dx, calc_bds=True):
+    """
+    Returns second order finite difference approximation of df/dx for
+    a 2D field f.
+    
+
+    Parameters
+    ----------
+    f : ndarray
+        An mxn array representing a smooth function f: R^2 -> R. 
+    dx: float
+        Specifies the x-direction spacing of adjacent gridpoints. 
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        x-boundary.
+
+    Returns
+    -------
+    dxf : ndarray
+        mxn array representing the first partial of f with respect to x. 
+        Neumann boundary conditions used with normal derivatives at the
+        boundaries set to zero. 
+        
+    Notes
+    -----
+    We use the "ghost point" method, because we assume the normal derivatives 
+    are zero at the boundaries. This consists of defining new points outside 
+    the domain and setting their values equal to the set of first interior
+    points -- this is consistent with the second order central difference
+    approximation for first derivatives.
+    """
+    
+    dxf = np.zeros(f.shape)
+    
+    if calc_bds:
+        dxf[1:-1, :] = ( f[2:, :] - f[:-2, :] ) / (2*dx)
+    else:
+        dxf[1:-1, 1:-1] = ( f[2:, 1:-1] - f[:-2, 1:-1] ) / (2*dx)
+        
+    return dxf
+
+def dy(f, dy, calc_bds=True):
+    """
+    Returns second order finite difference approximation of df/dy for
+    a 2D field f.
+    
+
+    Parameters
+    ----------
+    f : ndarray
+        An mxn array representing a smooth function f: R^2 -> R. 
+    dy: float
+        Specifies the y-direction spacing of adjacent gridpoints. 
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        y-boundary.
+
+    Returns
+    -------
+    dyf : ndarray
+        mxn array representing the first partial of f with respect to y. 
+        Neumann boundary conditions used with normal derivatives at the
+        boundaries set to zero. 
+        
+    Notes
+    -----
+    We use the "ghost point" method, because we assume the normal derivatives 
+    are zero at the boundaries. This consists of defining new points outside 
+    the domain and setting their values equal to the set of first interior
+    points -- this is consistent with the second order central difference
+    approximation for first derivatives.
+    """
+    
+    dyf = np.zeros(f.shape)
+    
+    if calc_bds:
+        dyf[:, 1:-1] = ( f[:, 2:] - f[:, :-2] ) / (2*dy)
+    else:
+        dyf[1:-1, 1:-1] = ( f[1:-1, 2:] - f[1:-1, :-2] ) / (2*dy)
+        
+    return dyf
+    
+
+def dx2(f, dx, calc_bds=True):
     """
     Returns second order finite difference approximation of d^2 f/dx^2 for
     a 2D field f.
@@ -22,6 +107,10 @@ def dx2(f, dx):
         An mxn array representing a smooth function f: R^2 -> R. 
     dx: float
         Specifies the x-direction spacing of adjacent gridpoints. 
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        x-boundary.
 
     Returns
     -------
@@ -40,14 +129,18 @@ def dx2(f, dx):
     """
     
     dx2f = np.zeros(f.shape)
-    dx2f[1:-1, :] = (f[2:, :] - 2*f[1:-1, :] + f[0:-2, :]) / dx**2
-    dx2f[0, :] = 2*(f[1, :] - f[0, :]) / dx**2
-    dx2f[-1, :] = 2*(f[-2, :] - f[-1, :]) / dx**2
     
-    
+    if calc_bds:
+        dx2f[1:-1, :] = (f[2:, :] - 2*f[1:-1, :] + f[0:-2, :]) / dx**2
+        dx2f[0, :] = 2*(f[1, :] - f[0, :]) / dx**2
+        dx2f[-1, :] = 2*(f[-2, :] - f[-1, :]) / dx**2
+    else:
+        dx2f[1:-1, 1:-1] = ( f[2:, 1:-1] 
+                             - 2*f[1:-1, 1:-1] + f[0:-2, 1:-1] ) / dx**2
+
     return dx2f
 
-def dy2(f, dy):
+def dy2(f, dy, calc_bds=True):
     """
     Returns second order finite difference approximation of d^2 f/dx^2 for
     a 2D field f.
@@ -58,6 +151,10 @@ def dy2(f, dy):
         An mxn array representing a smooth function f: R^2 -> R. 
     dy: float
         Specifies the y-direction spacing of adjacent gridpoints. 
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        y-boundary.
 
     Returns
     -------
@@ -77,14 +174,18 @@ def dy2(f, dy):
     """
     
     dy2f = np.zeros(f.shape)
-    dy2f[:, 1:-1] = (f[:, 2:] - 2*f[:, 1:-1] + f[:, 0:-2]) / dy**2
-    dy2f[:, 0] = 2*(f[:, 1] - f[:, 0]) / dy**2
-    dy2f[:, -1] = 2*(f[:, -2] - f[:, -1]) / dy**2
     
+    if calc_bds:
+        dy2f[:, 1:-1] = (f[:, 2:] - 2*f[:, 1:-1] + f[:, 0:-2]) / dy**2
+        dy2f[:, 0] = 2*(f[:, 1] - f[:, 0]) / dy**2
+        dy2f[:, -1] = 2*(f[:, -2] - f[:, -1]) / dy**2
+    else:
+        dy2f[1:-1, 1:-1] = ( f[1:-1, 2:]
+                             - 2*f[1:-1, 1:-1] + f[1:-1, 0:-2] ) / dy**2
     
     return dy2f
 
-def d2(f, h):
+def d2(f, h, calc_bds=True):
     """
     Returns second order finite difference approximation for the 2D Laplacian
     of a 2D field f.
@@ -95,6 +196,10 @@ def d2(f, h):
         An mxn array representing a smooth function f: R^2 -> R
     h : float
         specifies the x- and y-grid spacing.
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        x- and y-boundaries.
 
     Returns
     -------
@@ -118,24 +223,25 @@ def d2(f, h):
     d2f[1:-1, 1:-1] = ( f[1:-1, 2:] + f[1:-1, :-2] 
                         + f[2:, 1:-1] + f[:-2, 1:-1] - 4*f[1:-1, 1:-1] ) / h**2
     
-    # Edges 
-    d2f[0, 1:-1] = ( f[0, 2:] + f[0, :-2] 
-                     + f[1, 1:-1] + f[1, 1:-1] - 4*f[0, 1:-1] ) / h**2
-    d2f[-1, 1:-1] = ( f[-1, 2:] + f[-1, :-2] 
-                      + f[-2, 1:-1] + f[-2, 1:-1] - 4*f[-1, 1:-1] ) / h**2
-    d2f[1:-1, 0] = ( f[2:, 0] + f[:-2, 0] 
-                     + f[1:-1, 1] + f[1:-1, 1] - 4*f[1:-1, 0] ) / h**2
-    d2f[1:-1, -1] = ( f[2:, -1] + f[:-2, -1] 
-                      + f[1:-1, -2] + f[1:-1, -2] - 4*f[1:-1, -1] ) / h**2
-    
-    # Corners
-    d2f[0, 0] = ( f[0, 1] + f[0, 1] + f[1, 0] + f[1, 0] - 4*f[0, 0] ) / h**2
-    d2f[-1, 0] = ( f[-1, 1] + f[-1, 1] 
-                   + f[-2, 0] + f[-2, 0] - 4*f[-1, 0] ) / h**2
-    d2f[0, -1] = ( f[1, -1] + f[1, -1] 
-                   + f[0, -2] + f[0, -2] - 4*f[0, -1] ) / h**2
-    d2f[-1, -1] = ( f[-2, -1] + f[-2, -1] 
-                    + f[-1, -2] + f[-1, -2] - 4*f[-1, -1] ) / h**2
+    if calc_bds:
+        # Edges 
+        d2f[0, 1:-1] = ( f[0, 2:] + f[0, :-2] 
+                         + f[1, 1:-1] + f[1, 1:-1] - 4*f[0, 1:-1] ) / h**2
+        d2f[-1, 1:-1] = ( f[-1, 2:] + f[-1, :-2] 
+                          + f[-2, 1:-1] + f[-2, 1:-1] - 4*f[-1, 1:-1] ) / h**2
+        d2f[1:-1, 0] = ( f[2:, 0] + f[:-2, 0] 
+                         + f[1:-1, 1] + f[1:-1, 1] - 4*f[1:-1, 0] ) / h**2
+        d2f[1:-1, -1] = ( f[2:, -1] + f[:-2, -1] 
+                          + f[1:-1, -2] + f[1:-1, -2] - 4*f[1:-1, -1] ) / h**2
+        
+        # Corners
+        d2f[0, 0] = ( f[0, 1] + f[0, 1] + f[1, 0] + f[1, 0] - 4*f[0, 0] ) / h**2
+        d2f[-1, 0] = ( f[-1, 1] + f[-1, 1] 
+                       + f[-2, 0] + f[-2, 0] - 4*f[-1, 0] ) / h**2
+        d2f[0, -1] = ( f[1, -1] + f[1, -1] 
+                       + f[0, -2] + f[0, -2] - 4*f[0, -1] ) / h**2
+        d2f[-1, -1] = ( f[-2, -1] + f[-2, -1] 
+                        + f[-1, -2] + f[-1, -2] - 4*f[-1, -1] ) / h**2
     
     return d2f
 
@@ -193,7 +299,7 @@ def dy4(f, dy):
     Returns
     -------
     dy4f : ndarray
-        (m - 1)x(n - 1) array representing the fourth partial of f with 
+        (m - 2)x(n - 2) array representing the fourth partial of f with 
         respect to y. Neumann boundary conditions used with normal derivatives
         at the boundaries set to zero. 
         
@@ -218,7 +324,7 @@ def dy4(f, dy):
     
     return dy4f
 
-def dx2dy2(f, h):
+def dx2dy2(f, h, calc_bds=True):
     """
     Returns second order finite difference approximation of d^4 f/dx^2 dy^2
     for a 2D field f.
@@ -230,7 +336,12 @@ def dx2dy2(f, h):
     h : float
         Specifies grid spacing. Note that this requires the x- and y- grid
         spacing to be the same. If you have different grid spacing, use
-        dx2(dy2(f, dy), dx). 
+        dx2(dy2(f, dy), dx).
+    calc_bds : bool
+        Specifies whether to calculate the derivative at the boundaries. If
+        `True`, the method assumes `f` has value-0 normal derivatives at the
+        x- and y-boundaries.
+    
 
     Returns
     -------
@@ -254,25 +365,77 @@ def dx2dy2(f, h):
     dx2dy2f[1:-1, 1:-1] = ( -2*(f[:-2, 1:-1] + f[2:, 1:-1] + f[1:-1, :-2] 
                             + f[1:-1, 2:]) + f[:-2, :-2] + f[:-2, 2:]
                             + f[2:, :-2] + f[2:, 2:] + 4*f[1:-1, 1:-1] ) / h**4
-     
-    # Edges
-    dx2dy2f[0, 1:-1] = 2*( f[1, :-2] + f[1, 2:] - f[0, :-2] - f[0, 2:]
-                            + 2*(f[0, 1:-1] - f[1, 1:-1]) ) / h**4
-    dx2dy2f[-1, 1:-1] = 2*( f[-2, :-2] + f[-2, 2:] - f[-1, :-2] - f[-1, 2:]
-                            + 2*(f[-1, 1:-1] - f[-2, 1:-1]) ) / h**4
-    dx2dy2f[1:-1, 0] = 2*( f[:-2, 1] + f[2:, 1] - f[:-2, 0] - f[2:, 0]
-                            + 2*(f[1:-1, 0] - f[1:-1, 1]) ) / h**4
-    dx2dy2f[1:-1, -1] = 2*( f[:-2, -2] + f[2:, -2] - f[:-2, -1] - f[2:, -1]
-                            + 2*(f[1:-1, -1] - f[1:-1, -2]) ) / h**4
-     
-    # Corners
-    dx2dy2f[0, 0] = 4*( f[1, 1] - f[0, 1] + f[0, 0] - f[1, 0] ) / h**4
-    dx2dy2f[-1, 0] = 4*( f[-2, 1] - f[-1, 1] + f[-1, 0] - f[-2, 0] ) / h**4
-    dx2dy2f[0, -1] = 4*( f[1, -2] - f[1, -1] + f[0, -1] - f[0, -2] ) / h**4
-    dx2dy2f[-1, -1] = 4*( f[-2, -2] - f[-2, -1] 
-                          + f[-1, -1] - f[-1, -2] ) / h**4
+    
+    if calc_bds:
+        # Edges
+        dx2dy2f[0, 1:-1] = 2*( f[1, :-2] + f[1, 2:] - f[0, :-2] - f[0, 2:]
+                                + 2*(f[0, 1:-1] - f[1, 1:-1]) ) / h**4
+        dx2dy2f[-1, 1:-1] = 2*( f[-2, :-2] + f[-2, 2:] - f[-1, :-2] - f[-1, 2:]
+                                + 2*(f[-1, 1:-1] - f[-2, 1:-1]) ) / h**4
+        dx2dy2f[1:-1, 0] = 2*( f[:-2, 1] + f[2:, 1] - f[:-2, 0] - f[2:, 0]
+                                + 2*(f[1:-1, 0] - f[1:-1, 1]) ) / h**4
+        dx2dy2f[1:-1, -1] = 2*( f[:-2, -2] + f[2:, -2] - f[:-2, -1] - f[2:, -1]
+                                + 2*(f[1:-1, -1] - f[1:-1, -2]) ) / h**4
+         
+        # Corners
+        dx2dy2f[0, 0] = 4*( f[1, 1] - f[0, 1] + f[0, 0] - f[1, 0] ) / h**4
+        dx2dy2f[-1, 0] = 4*( f[-2, 1] - f[-1, 1] + f[-1, 0] - f[-2, 0] ) / h**4
+        dx2dy2f[0, -1] = 4*( f[1, -2] - f[1, -1] + f[0, -1] - f[0, -2] ) / h**4
+        dx2dy2f[-1, -1] = 4*( f[-2, -2] - f[-2, -1] 
+                              + f[-1, -1] - f[-1, -2] ) / h**4
     
     return dx2dy2f
+
+def dyd2(f, h):
+    """
+    Calculate second order finite difference approximation of
+    \partial/\partial y (\laplacian(f)) of a 2D field f.
+
+    Parameters
+    ----------
+    f : ndarray
+        mxn array representing a smooth function f:R^2 -> R
+    h : float
+        Specifies grid-spacing. Note that this requires the x- and y-grid
+        spacing to be equal. If you have unequal spacing in the x- and 
+        y-direction, use `dy(dx2(f, dx) + dy2(f, dy), dy, calc_bds=False)`
+
+    Returns
+    -------
+    dyd2f : ndarray
+        (m - 2)x(n - 2) array representing d/dy (d^2 f/dx^2 + d^2 f/dy^2).
+        Neumann boundary conditions used with normal derivatives set to 0 at
+        the boundary. 
+        
+    Notes
+    -----
+    We use the "ghost point" method, because we assume the normal derivatives 
+    are zero at the boundaries. This consists of defining new points outside 
+    the domain and setting their values equal to the set of first interior
+    points -- this is consistent with the second order central difference
+    approximation for first derivatives.
+
+    """
+    
+    m, n = f.shape
+    dyd2f = np.zeros((m - 2, n - 2))
+    
+    # Interior
+    dyd2f[:, 1:-1] = ( 4*(f[1:-1, 1:-3] - f[1:-1, 3:-1]) + f[:-2, 3:-1] 
+                      + f[2:, 3:-1] - f[:-2, 1:-3] - f[2:, 1:-3] 
+                      - f[1:-1, :-4] + f[1:-1, 4:] )  / (2*h**2)
+    
+    # Edges
+    dyd2f[:, 0] = ( 4*(f[1:-1, 0] - f[1:-1, 2]) + f[:-2, 2] 
+                      + f[2:, 2] - f[:-2, 0] - f[2:, 0] 
+                      - f[1:-1, 1] + f[1:-1, 3] )  / (2*h**2)
+    dyd2f[:, -1] = ( 4*(f[1:-1, -3] - f[1:-1, -1]) + f[:-2, -1] 
+                      + f[2:, -1] - f[:-2, -3] - f[2:, -3] 
+                      - f[1:-1, -4] + f[1:-1, -2] )  / (2*h**2)
+    
+    return dyd2f
+
+
 
 def forwardEuler(f, dt, S, *args, **kwargs):
     """
@@ -394,11 +557,6 @@ def genFDStencil(template, diff, order, boundary_diff=None):
     m, n = template.shape
     k = diff_degree + order # total expansion degree
     x, y = sy.symbols('x y')
-    
-    # if not m % 2 or not n % 2:
-    #     raise ValueError("Template dimensions must be odd")     
-    # if m is not n:
-    #     raise ValueError("Template matrix must be square")
         
     # Find center of template, marked by -1
     center = None
