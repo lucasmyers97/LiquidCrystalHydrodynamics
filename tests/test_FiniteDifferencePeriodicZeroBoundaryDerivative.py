@@ -14,6 +14,66 @@ import src.FiniteDifference as fd
 
 class TestFiniteDifferenceMethods(unittest.TestCase):
     
+    def test_dx(self):
+        """
+        Tests 'dx' finite difference method in 'FiniteDifference.py'.
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.cos(m*x)*np.sin(n*y)
+        def dx_f1(x, y, m=1, n=1):
+            return -m*np.sin(m*x)*np.sin(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                dx = X[1, 0] - X[0, 0]
+                
+                error = np.abs( dx_f1(X, Y) - fd.dx(f1(X, Y), dx) )
+                rel_error = error/np.mean(np.abs(dx_f1(X, Y)))
+                
+                self.assertTrue(np.max(rel_error) < dx)
+                
+    def test_dy(self):
+        """
+        Tests the `dy` finite difference method in `FiniteDifference.py`. 
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.sin(m*x)*np.cos(n*y)
+        def dy_f1(x, y, m=1, n=1):
+            return -n*np.sin(m*x)*np.sin(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                dy = X[1, 0] - X[0, 0]
+        
+                error = np.abs( dy_f1(X, Y) - fd.dy(f1(X, Y), dy) )
+                rel_error = error/np.mean(np.abs(dy_f1(X, Y)))
+                
+                self.assertTrue(np.max(rel_error) < dy)
+    
     def test_dx2(self):
         """
         Tests the `dx2` finite difference method in `FiniteDifference.py`. This
