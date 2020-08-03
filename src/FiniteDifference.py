@@ -386,57 +386,6 @@ def dx2dy2(f, h, calc_bds=True):
     
     return dx2dy2f
 
-def dyd2(f, h):
-    """
-    Calculate second order finite difference approximation of
-    \partial/\partial y (\laplacian(f)) of a 2D field f.
-
-    Parameters
-    ----------
-    f : ndarray
-        mxn array representing a smooth function f:R^2 -> R
-    h : float
-        Specifies grid-spacing. Note that this requires the x- and y-grid
-        spacing to be equal. If you have unequal spacing in the x- and 
-        y-direction, use `dy(dx2(f, dx) + dy2(f, dy), dy, calc_bds=False)`
-
-    Returns
-    -------
-    dyd2f : ndarray
-        (m - 2)x(n - 2) array representing d/dy (d^2 f/dx^2 + d^2 f/dy^2).
-        Neumann boundary conditions used with normal derivatives set to 0 at
-        the boundary. 
-        
-    Notes
-    -----
-    We use the "ghost point" method, because we assume the normal derivatives 
-    are zero at the boundaries. This consists of defining new points outside 
-    the domain and setting their values equal to the set of first interior
-    points -- this is consistent with the second order central difference
-    approximation for first derivatives.
-
-    """
-    
-    m, n = f.shape
-    dyd2f = np.zeros((m - 2, n - 2))
-    
-    # Interior
-    dyd2f[:, 1:-1] = ( 4*(f[1:-1, 1:-3] - f[1:-1, 3:-1]) + f[:-2, 3:-1] 
-                      + f[2:, 3:-1] - f[:-2, 1:-3] - f[2:, 1:-3] 
-                      - f[1:-1, :-4] + f[1:-1, 4:] )  / (2*h**2)
-    
-    # Edges
-    dyd2f[:, 0] = ( 4*(f[1:-1, 0] - f[1:-1, 2]) + f[:-2, 2] 
-                      + f[2:, 2] - f[:-2, 0] - f[2:, 0] 
-                      - f[1:-1, 1] + f[1:-1, 3] )  / (2*h**2)
-    dyd2f[:, -1] = ( 4*(f[1:-1, -3] - f[1:-1, -1]) + f[:-2, -1] 
-                      + f[2:, -1] - f[:-2, -3] - f[2:, -3] 
-                      - f[1:-1, -4] + f[1:-1, -2] )  / (2*h**2)
-    
-    return dyd2f
-
-
-
 def forwardEuler(f, dt, S, *args, **kwargs):
     """
     Takes one step of size `dt` for a forward euler scheme characterized by

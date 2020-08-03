@@ -108,6 +108,37 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
                 
                 self.assertTrue(np.max(rel_error) < dx)
                 
+    def test_d2f(self):
+        """
+        Tests the `d2f` finite difference method in `FiniteDifference.py`.
+        """
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.cos(m*x)*np.cos(n*y)
+        def d2_f1(x, y, m=1, n=1):
+            return -(m**2 + n**2)*np.cos(m*x)*np.cos(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                h = Y[0, 1] - Y[0, 0]
+        
+                error = np.abs( d2_f1(X, Y) - fd.d2(f1(X, Y), h) )
+                rel_error = error/np.mean(np.abs(d2_f1(X, Y)))
+                
+                self.assertTrue(np.max(rel_error) < h,
+                                msg="n=" + str(n) + " l=" + str(length))
+        
+                
     def test_dy2(self):
         """
         Tests the `dy2` finite difference method in `FiniteDifference.py`. This
