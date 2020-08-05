@@ -6,7 +6,6 @@ Lucas Myers
 July 4, 2020
 """
 import numpy as np
-from scipy.signal import find_peaks
 import FiniteDifference as fd
 
 # Default dimensionless A, B, C values given in Svensek and Zumer
@@ -517,8 +516,6 @@ def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
                     - C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
                     
     return dnu_dt
-
-
 
 def findMinima(f):
     """

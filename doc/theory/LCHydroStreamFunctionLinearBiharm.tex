@@ -383,7 +383,7 @@
 		\left( \partial_1\partial^2 Q_{kl}\right)\partial_2 Q_{kl} = \tfrac23\left( \partial_1\partial^2 \eta \right)\partial_2\eta + 2\left( \partial_1\partial^2\nu \right)\partial_2 \nu + 2\left( \partial_1\partial^2 \mu \right)\partial_2\mu
 	\end{equation}
 	Then written out explicitly, we have that
-	\begin{multline}
+	\begin{multline}\label{eq:f1}
 		f_1(\eta, \mu, \nu) = 2L \bigg[ \tfrac13 \left( \partial_2\partial^2 \eta \right) \partial_1 \eta - \tfrac13 \left( \partial_1\partial^2 \eta\right)\partial_2 \eta + \left(\partial_2 \partial^2 \nu\right)\partial_1 \nu \\ - \left(\partial_1 \partial^2 \nu\right)\partial_2 \nu + \left(\partial_2 \partial^2 \mu\right)\partial_1 \mu - \left(\partial_1 \partial^2 \mu\right)\partial_2 \mu \bigg]
 	\end{multline}
 	Additionally, we'd like to plug in for the time derivatives of $Q_{ij}$ so that we have everything in terms of $\psi_3$, $Q_{ij}$ and spatial derivatives of those two. This will allow us to get rid of $\psi_3$ in our time evolution equation for $Q_{ij}$ using Fourier Transforms.  Let's go term by term. First term reads:
@@ -420,7 +420,7 @@
 		\biggl.- \partial_1\partial_2 \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right] \biggr)
 	\end{multline}
 	One thing we might do in order to make this more tidy is to organize the $\partial_1\partial_2$ terms together. This yields:
-	\begin{multline}
+	\begin{multline}\label{eq:f2}
 		f_2(\eta, \mu, \nu) \equiv \frac12 \frac{\mu_2}{\mu_1} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
 		\biggl. + \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \eta \right) - A\left( \mu - \eta \right) - B\left( -\tfrac19 \eta^2 - \tfrac23 \eta\mu + \mu^2 \right) - C\left( \mu - \eta\right) \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2 \right)\right] \biggr) 
 	\end{multline}
@@ -507,7 +507,7 @@
 		\xi \equiv \sqrt{\frac32 \frac{L}{\left.\phi''\right|_{S_0}}}
 	\end{equation}
 	where $\left.\phi''\right|_{S_0}$ is the second derivative of \eqref{eq:LdG} with respect to the scalar order parameter $S$ evaluated at equilibrium. We also define a characteristic timescale as
-	\begin{equation}
+	\begin{equation}\label{eq:tau}
 		\tau \equiv \mu_1 \xi^2/L
 	\end{equation}
 	Finally, we define the dimensionless quantities:
@@ -521,17 +521,21 @@
 		\frac{\partial^2}{\partial x^2} = \frac{\partial}{\partial x}\frac{\partial}{\partial x} = \frac{\partial}{\partial x} \frac{\partial \bar{x}}{\partial x} \frac{\partial}{\partial \bar{x}} = \frac{1}{\xi^2}\frac{\partial^2}{\partial \bar{x}^2}
 	\end{equation}
 	A similar equation holds for $y$ and $t$. Then our equations of motion for $\psi = 0$ are given by
-	\begin{align}
+	\begin{equation}\label{eq:dimensionless-eoms}
+	\begin{split}
 		\frac{\partial \eta}{\partial \bar{t}} &= \partial^2 \eta - \bar{A}\eta - \bar{B}\left( \tfrac 23 \eta^2 + \tfrac 32 \nu^2\right) - \bar{C} \eta \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) \\
 		\frac{\partial \mu}{\partial \bar{t}} &= \partial^2 \mu - \bar{A}\mu - \bar{B}\left( \tfrac13 \eta^2 + \mu^2 + \tfrac32 \nu^2 - \tfrac23 \eta \mu \right) - \bar{C}\mu\left(\tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) \\
 		\frac{\partial \nu}{\partial \bar{t}} &= \partial^2 \nu - \bar{A}\nu - \bar{B}\left( \tfrac13\eta\nu + \mu\nu \right) - \bar{C}\nu\left(\tfrac23\eta^2 + 2\nu^2 + 2\mu^2\right)
-	\end{align}
+	\end{split}
+	\end{equation}
 	Where we have defined dimensionless Landau coefficients:
-	\begin{align}
+	\begin{equation}\label{eq:ABC}
+	\begin{split}
 		\bar{A} &\equiv \frac{A \xi^2}{L} \approx -0.064 \\
 		\bar{B} &\equiv \frac{B \xi^2}{L} \approx -1.57 \\
 		\bar{C} &\equiv \frac{C \xi^2}{L} \approx 1.29
-	\end{align}
+	\end{split}
+	\end{equation}
 	where we have gotten the numerical values from Svensek and Zumer. Finally, we give numerical values for the characteristic length and time scales:
 	\begin{align}
 		\xi &\approx 2.11\text{nm} \\
@@ -1047,4 +1051,83 @@
 	\end{split}
 	\end{equation}
 	Note that $x^T x$ and $(\mathbb{F}V x)^\top (\mathbb{F} Vx)$ are just inner products of vectors, so they must be positive by definition. Additionally, every $\lambda_k$ is positive. Hence, the matrix is symmetric positive definite. 
-	\end{document}
+	
+	\subsection{Dimensionless form of the flow equation}
+	When we wrote down equations \eqref{eq:dimensionless-eoms}, we multiplied both sides by $\tau/\mu_1$. Applying this to the last term of \eqref{eq:mueq} and non-dimensionalizing the derivatives yields:
+	\begin{equation}
+		\frac{1}{2} \mu_2 \partial_1 \partial_2 \psi \to \frac{1}{2} \mu_2 \frac{\tau}{\mu_1 \xi^2} \partial_1 \partial_2 \psi = \partial_1 \partial_2 \overline{\psi}
+	\end{equation}
+	where we have defined the dimensionless stream function:
+	\begin{equation}
+		\overline{\psi} \equiv \frac12 \mu_2 \frac{\tau}{\mu_1 \xi^2} \psi
+	\end{equation}
+	If we introduce this definition into \eqref{eq:streamfuncsimp} and invoke the dimensionless derivatives, we get:
+	\begin{equation}
+	\begin{split}
+		&\frac{\beta_4}{\xi^4} \frac{2}{\mu_2} \frac{\mu_1 \xi^2}{\tau} \partial^4 \overline{\psi}
+		- \frac{\mu_2^2}{\mu_1 \xi^4} \frac{2}{\mu_2} \frac{\mu_1 \xi^2}{\tau} \partial_1^2 \partial_2^2 \overline{\psi}
+		= f_1(Q) + f_2(Q) \\
+		\implies &\partial^4 \overline{\psi}
+		- \frac{\mu_2}{\mu_1} \frac{\mu_2}{\beta_4} \partial_1^2 \partial_2^2 \overline{\psi}
+		= 
+		\frac{\xi^2 \tau \mu_2}{2\beta_4 \mu_1} \left( f_1(Q) + f_2(Q) \right)
+	\end{split}
+	\end{equation}
+	To simplify further, let's non-dimensionalize \eqref{eq:f1} and \eqref{eq:f2}:
+	\begin{multline}
+		f_1(\eta, \mu, \nu) = \frac{2L}{\xi^4} \bigg[ \tfrac13 \left( \partial_2\partial^2 \eta \right) \partial_1 \eta - \tfrac13 \left( \partial_1\partial^2 \eta\right)\partial_2 \eta + \left(\partial_2 \partial^2 \nu\right)\partial_1 \nu \\ - \left(\partial_1 \partial^2 \nu\right)\partial_2 \nu + \left(\partial_2 \partial^2 \mu\right)\partial_1 \mu - \left(\partial_1 \partial^2 \mu\right)\partial_2 \mu \bigg]
+	\end{multline}
+	Define $\overline{f_1}(\eta, \mu, \nu)$ as the thing in brackets so that
+	\begin{equation}
+		f_1(\eta, \mu, \nu) = \frac{2L}{\xi^4} \overline{f_1}(\eta, \mu, \nu)
+	\end{equation}
+	Additionally, we have
+	\begin{multline}
+		f_2(\eta, \mu, \nu) = \frac12 \frac{\mu_2}{\mu_1} \frac{L}{\xi^4} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ \partial^2 \nu - \overline{A}\nu - \overline{B}\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - \overline{C}\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
+		\biggl. + \partial_1\partial_2 \left[ \partial^2 \left( \mu - \eta \right) - \overline{A}\left( \mu - \eta \right) - \overline{B}\left( -\tfrac19 \eta^2 - \tfrac23 \eta\mu + \mu^2 \right) - \overline{C}\left( \mu - \eta\right) \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2 \right)\right] \biggr) 
+	\end{multline}
+	where we have used \eqref{eq:ABC} to simplify. Define $\overline{f_2}(\eta, \mu, \nu)$ as the thing in the big parentheses so that
+	\begin{equation}
+		f_2(\eta, \mu, \nu) = \frac12 \frac{\mu_2}{\mu_1} \frac{L}{\xi^4} \overline{f_2}(\eta, \mu, \nu)
+	\end{equation}
+	Then the non-dimensional flow equation becomes
+	\begin{equation}
+	\begin{split}
+		\partial^4 \overline{\psi}
+		- \frac{\mu_2}{\mu_1} \frac{\mu_2}{\beta_4} \partial_1^2 \partial_2^2 \overline{\psi}
+		&= \frac{\xi^2 \tau \mu_2}{2\beta_4 \mu_1} \left( \frac{2L}{\xi^4} \overline{f_1}(Q) + \frac12 \frac{\mu_2}{\mu_1} \frac{L}{\xi^4} \overline{f_2}(Q) \right) \\
+		&= \frac{\mu_2}{\beta_4} \overline{f_1}(Q) + \frac14 \frac{\mu_2}{\beta_4} \frac{\mu_2}{\mu_1} \overline{f_2}(Q)
+	\end{split}
+	\end{equation}
+	where we have used \eqref{eq:tau} to simplify. Now define
+	\begin{equation}
+		\beta \equiv \frac{\mu_2}{\beta_4},
+		\quad
+		\alpha \equiv \frac{\mu_2}{\mu_1} \beta
+	\end{equation}
+	Note that in Svensek and Zumer they give the typical values:
+	\begin{equation}
+		\mu_2/\mu_1 \approx -1.92,
+		\quad \beta_4/\mu_1 \approx 1.99
+	\end{equation}
+	Hence, we get that
+	\begin{equation}
+		\beta \approx -0.96,
+		\quad \alpha \approx 1.85
+	\end{equation}
+	Our final, dimensionless flow equation becomes
+	\begin{equation}
+		\partial_4 \overline{\psi}
+		- \alpha \partial_1^2 \partial_2^2 \overline{\psi}
+		= \beta \overline{f_1}(Q) + \frac14 \alpha \overline{f_2}(Q)
+	\end{equation}
+	Additionally, the new equations of motion for $\eta$, $\mu$ and $\nu$ become:
+	\begin{equation}\label{eq:dimensionless-flow-eoms}
+	\begin{split}
+		\frac{\partial \eta}{\partial \bar{t}} &= \partial^2 \eta - \bar{A}\eta - \bar{B}\left( \tfrac 23 \eta^2 + \tfrac 32 \nu^2\right) - \bar{C} \eta \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) - 3\,\partial_1 \partial_2 \overline{\psi} \\
+		\frac{\partial \mu}{\partial \bar{t}} &= \partial^2 \mu - \bar{A}\mu - \bar{B}\left( \tfrac13 \eta^2 + \mu^2 + \tfrac32 \nu^2 - \tfrac23 \eta \mu \right) - \bar{C}\mu\left(\tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) + \partial_1 \partial_2 \overline{\psi} \\
+		\frac{\partial \nu}{\partial \bar{t}} &= \partial^2 \nu - \bar{A}\nu - \bar{B}\left( \tfrac13\eta\nu + \mu\nu \right) - \bar{C}\nu\left(\tfrac23\eta^2 + 2\nu^2 + 2\mu^2\right)
+	\end{split}
+	\end{equation}
+	
+\end{document}
