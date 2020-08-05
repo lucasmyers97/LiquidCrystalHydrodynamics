@@ -385,7 +385,7 @@ def makeMultiDisclination(X, Y, S_val=1,
     
     
 
-def etaEOM(eta, mu, nu, dx, dy, A=A, B=B, C=C):
+def etaEOM(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for eta. Returns LdG equation for 
     \partial \eta/\partial t.
@@ -403,8 +403,9 @@ def etaEOM(eta, mu, nu, dx, dy, A=A, B=B, C=C):
         whole domain.
     dx : double
         Spacing between gridpoints in the x-direction.
-    dy : double
-        Spacing between gridpoints in the y-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
     A : double, optional
         Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
         default.
@@ -423,13 +424,17 @@ def etaEOM(eta, mu, nu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    deta_dt = fd.dx2(eta, dx) + fd.dy2(eta, dy) - A*eta \
-                - B*( (2/3)*eta**2 + (3/2)*nu**2 )\
-                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    if dy:
+        deta_dt = ( fd.dx2(eta, dx) + fd.dy2(eta, dy) 
+                    - A*eta - B*( (2/3)*eta**2 + (3/2)*nu**2 )
+                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+    else:
+        deta_dt = ( fd.d2(eta, dx) - A*eta - B*( (2/3)*eta**2 + (3/2)*nu**2 )
+                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return deta_dt
 
-def muEOM(mu, eta, nu, dx, dy, A=A, B=B, C=C):
+def muEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for mu. Returns LdG equation for 
     \partial \mu/\partial t.
@@ -448,7 +453,8 @@ def muEOM(mu, eta, nu, dx, dy, A=A, B=B, C=C):
     dx : double
         Spacing between gridpoints in the x-direction.
     dy : double
-        Spacing between gridpoints in the y-direction.
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
     A : double, optional
         Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
         default.
@@ -467,13 +473,18 @@ def muEOM(mu, eta, nu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    dmu_dt = fd.dx2(mu, dx) + fd.dy2(mu, dy) - A*mu \
-                - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )\
-                    - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    if dy:
+        dmu_dt = ( fd.dx2(mu, dx) + fd.dy2(mu, dy) - A*mu
+                   - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+    else:
+        dmu_dt = ( fd.d2(mu, dx) - A*mu 
+                   - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return dmu_dt
 
-def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
+def nuEOM(nu, eta, mu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for nu. Returns LdG equation for 
     \partial \nu/\partial t.
@@ -492,7 +503,8 @@ def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
     dx : double
         Spacing between gridpoints in the x-direction.
     dy : double
-        Spacing between gridpoints in the y-direction.
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
     A : double, optional
         Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
         default.
@@ -511,11 +523,119 @@ def nuEOM(nu, eta, mu, dx, dy, A=A, B=B, C=C):
 
     """
     
-    dnu_dt = fd.dx2(nu, dx) + fd.dy2(nu, dy) - A*nu \
-                - B*( (1/3)*eta*nu + mu*nu )\
-                    - C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+    if dy:
+        dnu_dt = ( fd.dx2(nu, dx) + fd.dy2(nu, dy) 
+                   - A*nu - B*( (1/3)*eta*nu + mu*nu )
+                   - C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+    else:
+        dnu_dt = ( fd.d2(nu, dx) - A*nu - B*( (1/3)*eta*nu + mu*nu )
+                   - C*nu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return dnu_dt
+
+def etaFlowEOM(eta, mu, nu, psi, dx, dy=None, A=A, B=B, C=C):
+    """
+    Equation of motion for eta, with hydrodynamic effects from flow included.
+    Returns LdG + flow equation for \partial \eta/\partial t.
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    psi : ndarray
+        mxn array holding the value of the stream function psi accors the whole
+        domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+    A : double, optional
+        Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
+        default.
+    B : double, optional
+        Dimensionless LdG free energy coefficient B_bar. Set to -1.57 by
+        default.
+    C : TYPE, optional
+        Dimensionless LdG free energy coefficient C_bar. Set to 1.29 by
+        default.
+
+    Returns
+    -------
+    deta_dt : ndarray
+        mxn array holding the value of \partial \eta/\partial t as calculated
+        from the LdG free energy + flow effects.
+
+    """
+    
+    if dy:
+        deta_dt = ( fd.dx2(eta, dx) + fd.dy2(eta, dy) 
+                    - A*eta - B*( (2/3)*eta**2 + (3/2)*nu**2 )
+                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+                    - 3*fd.dx2(fd.dy2(psi, dy), dx) )
+    else:
+        deta_dt = ( fd.d2(eta, dx) - A*eta - B*( (2/3)*eta**2 + (3/2)*nu**2 )
+                    - C*eta*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+                    - 3*fd.dx2dy2(psi, dx) )
+                    
+    return deta_dt
+
+def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
+    """
+    Equation of motion for mu, with hydrodynamic effects from flow included. 
+    Returns LdG + flow equation for \partial \mu/\partial t.
+
+    Parameters
+    ----------
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+    A : double, optional
+        Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
+        default.
+    B : double, optional
+        Dimensionless LdG free energy coefficient B_bar. Set to -1.57 by
+        default.
+    C : TYPE, optional
+        Dimensionless LdG free energy coefficient C_bar. Set to 1.29 by
+        default.
+
+    Returns
+    -------
+    dmu_dt : ndarray
+        mxn array holding the value of \partial \mu/\partial t as calculated
+        from the LdG free energy + flow effects.
+
+    """
+    
+    if dy:
+        dmu_dt = ( fd.dx2(mu, dx) + fd.dy2(mu, dy) - A*mu
+                   - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+    else:
+        dmu_dt = ( fd.d2(mu, dx) - A*mu 
+                   - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+                    
+    return dmu_dt
 
 def findMinima(f):
     """
