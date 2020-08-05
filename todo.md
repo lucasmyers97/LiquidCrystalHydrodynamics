@@ -1,8 +1,6 @@
 # To do
 ---------
 ## Code writing
-
-* Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).
 * Fit defect positions to a square root function (or parabola or whatever). 
 * Figure out why eigenvector function isn't working with Numba compilation
   - I think it's because numba doesn't do boolean array indexing.
@@ -11,6 +9,7 @@
   - This is actually probably not going to provide a significant speedup
     since basically all of the legwork is done by pre-compiled functions (FFT, cg, etc.).
   - Would want to rewrite this in C++/Cuda and then wrap in a python function. 
+* ~~Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).~~
 * ~~Add flag to finite difference operators to ignore boundaries.~~
 * ~~Write the rest of the higher order finite difference schemes.~~
 * ~~Add Laplacian operator (and maybe other sums) to lower number of calculations~~
