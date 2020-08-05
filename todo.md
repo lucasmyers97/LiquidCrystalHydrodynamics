@@ -21,15 +21,16 @@
 * ~~Write out a biharmonic solver in Python.~~
 ---------
 ## Testing
-* Rewrite test files for the compiled versions of each of the packages.
-  - Rewrite tests for compiled FiniteDifference methods
-  - Rewrite test for compile ForwardEuler
 * Introduce sympy into the testing scheme.
 * Figure out how to effectively test the methods in the `LiquidCrystalHelper` package.
+* ~~Rewrite test files for the compiled versions of each of the packages.~~
+  - ~~Rewrite tests for compiled FiniteDifference methods~~
+  - ~~Rewrite test for compile ForwardEuler~~
 * ~~Test dx^4, dy^4, and dx^2dy^2 finite difference schemes.~~
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
+* Nondimensionalize the hydrodynamic equations.
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
 * Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
