@@ -452,7 +452,7 @@ def muEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
         whole domain.
     dx : double
         Spacing between gridpoints in the x-direction.
-    dy : double
+    dy : double, optional
         Spacing between gridpoints in the y-direction. If not included, it is
         assumed that the grid-spacings are equal. 
     A : double, optional
@@ -502,7 +502,7 @@ def nuEOM(nu, eta, mu, dx, dy=None, A=A, B=B, C=C):
         whole domain.
     dx : double
         Spacing between gridpoints in the x-direction.
-    dy : double
+    dy : double, optional
         Spacing between gridpoints in the y-direction. If not included, it is
         assumed that the grid-spacings are equal. 
     A : double, optional
@@ -605,7 +605,7 @@ def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
         whole domain.
     dx : double
         Spacing between gridpoints in the x-direction.
-    dy : double
+    dy : double, optional
         Spacing between gridpoints in the y-direction. If not included, it is
         assumed that the grid-spacings are equal. 
     A : double, optional
@@ -636,6 +636,124 @@ def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
                    - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
                     
     return dmu_dt
+
+def f1(eta, mu, nu, dx, dy=None):
+    """
+    Returns the first of two terms in the source term of the (modified)
+    biharmonic equation for the flow. See 
+    doc/theory/LCHydroStreamFunctionLinearBiharm.pdf for more info on where
+    this function comes from. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    f1 : ndarray
+        mxn array holding the value of f_1(eta, mu, nu) across the whole
+        domain. Note that the boundary values are zero, for they cannot be
+        easily calculated using the ghost point method.
+
+    """
+    
+    if dy:
+        f1 = ( (1/3)*fd.dy(fd.dx2(eta, dx) + fd.dy2(eta, dy), dy, 0)
+               * fd.dx(eta, dx, 0)
+               - (1/3)*fd.dx(fd.dx2(eta, dx) + fd.dy2(eta, dy), dx, 0)
+               * fd.dy(eta, dy, 0)
+               + fd.dy(fd.dx2(mu, dx) + fd.dy2(mu, dy), dy, 0)*fd.dx(mu, dx, 0)
+               - fd.dx(fd.dx2(mu, dx) + fd.dy2(mu, dy), dx, 0)*fd.dy(mu, dy, 0)
+               + fd.dy(fd.dx2(nu, dx) + fd.dy2(nu, dy), dy, 0)*fd.dx(nu, dx, 0)
+               - fd.dx(fd.dx2(nu, dx) + fd.dy2(nu, dy), dx, 0)*fd.dy(nu, dy, 0)
+               )
+    else:
+        f1 = ( (1/3) * fd.dy(fd.d2(eta, dx), dx, 0) * fd.dx(eta, dx, 0)
+               - (1/3) * fd.dx(fd.d2(eta, dx), dx, 0) * fd.dy(eta, dx, 0)
+               + fd.dy(fd.d2(mu, dx), dx, 0) * fd.dx(mu, dx, 0)
+               - fd.dx(fd.d2(mu, dx), dx, 0) * fd.dy(mu, dx, 0)
+               + fd.dy(fd.d2(nu, dx), dx, 0) * fd.dx(nu, dx, 0)
+               - fd.dx(fd.d2(nu, dx), dx, 0) * fd.dy(nu, dx, 0) )
+    
+    return f1
+
+def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
+    """
+    Returns the second of two terms in the source term of the (modified)
+    biharmonic equation for the flow. See 
+    doc/theory/LCHydroStreamFunctionLinearBiharm.pdf for more info on where
+    this function comes from. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+    A : double, optional
+        Dimensionless LdG free energy coefficient A_bar. Set to -0.064 by
+        default.
+    B : double, optional
+        Dimensionless LdG free energy coefficient B_bar. Set to -1.57 by
+        default.
+    C : TYPE, optional
+        Dimensionless LdG free energy coefficient C_bar. Set to 1.29 by
+        default.
+
+    Returns
+    -------
+    f2 : ndarray
+        mxn array holding the value of f_2(eta, mu, nu) across the whole
+        domain. Note that the boundary values are zero, for they cannot be
+        easily calculated using the ghost point method.
+
+    """
+    
+    if dy:
+        bracket_term1 = ( fd.dx2(nu, dx) + fd.dy2(nu, dy) 
+                         - A*nu - B*((1/3)*eta*nu + mu*nu) 
+                         - C*nu*((2/3)*eta**2 + 2*nu**2 + 2*mu**2) )
+        bracket_term2 = ( fd.dx2(mu - eta, dx) + fd.dy2(mu - eta, dy) 
+                         - A*(mu - eta) 
+                         - B*(-(1/9)*eta**2 - (2/3)*eta*mu + mu**2)
+                         - C*(mu - eta)*((2/3)*eta**2 + 2*nu**2 + 2*mu**2) )
+        f2 = ( fd.dx2(bracket_term1, dx, 0) 
+               - fd.dy2(bracket_term1, dy, 0)
+               + fd.dx(fd.dy(bracket_term2, dy, 0), dx, 0) )
+    else:
+        f2 = ( fd.dx2_dy2(fd.d2(nu, dx) 
+                          - A*nu - B*((1/3)*eta*nu + mu*nu) 
+                          - C*nu*((2/3)*eta**2 + 2*nu**2 + 2*mu**2), dx, 0)
+               + fd.dxdy(fd.d2(mu - eta, dx) 
+                         - A*(mu - eta) 
+                         - B*(-(1/9)*eta**2 - (2/3)*eta*mu + mu**2)
+                         - C*(mu - eta)*((2/3)*eta**2 
+                                         + 2*nu**2 + 2*mu**2), dx, 0) )
+        
+    return f2
 
 def findMinima(f):
     """

@@ -8,7 +8,6 @@ Updated: July 8, 2020
 """
 import numpy as np
 from numba import jit
-from scipy.signal import find_peaks
 import FiniteDifferenceCompiled as fd
 
 # Default dimensionless A, B, C values given in Svensek and Zumer
