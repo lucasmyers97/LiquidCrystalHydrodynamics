@@ -30,11 +30,11 @@
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
-* Nondimensionalize the hydrodynamic equations.
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
 * Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
 * (Explain how the conjugate gradients method works)
+* ~~Nondimensionalize the hydrodynamic equations.~~
 * ~~Clean up explanation of the theory (and get rid of Fourier Transform stuff)~~
 * ~~Explicitly write down the effect of $B$ on $U$~~
 * ~~Figure out how to think of a horizontal concatenation of a tensor product~~
