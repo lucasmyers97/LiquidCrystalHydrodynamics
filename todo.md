@@ -1,6 +1,7 @@
 # To do
 ---------
 ## Code writing
+* Write more robust peak-finding algorithm
 * Fit defect positions to a square root function (or parabola or whatever). 
 * Figure out why eigenvector function isn't working with Numba compilation
   - I think it's because numba doesn't do boolean array indexing.
