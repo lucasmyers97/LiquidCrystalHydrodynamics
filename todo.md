@@ -2,6 +2,14 @@
 ---------
 ## Code writing
 * Write more robust peak-finding algorithm
+  - For finding peaks, want to filter out noise.
+  - To do this, get rid of pixels below some threshold relative to the mean.
+  - Then use a simple comparison with neighbors to find the peaks.
+  - Actually, neighbor comparison probably would give peaks where it's actually constant.
+  - Might need to do a convolution to see whether the peak is significantly larger than the neighbors. 
+* Write sub-pixel peak-location finding.
+  - To do this, Taylor expand the peak function around neighboring grid-points.
+  - Then do a linear least squares fit 
 * Fit defect positions to a square root function (or parabola or whatever). 
 * Figure out why eigenvector function isn't working with Numba compilation
   - I think it's because numba doesn't do boolean array indexing.
