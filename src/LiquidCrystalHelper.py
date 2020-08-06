@@ -12,6 +12,8 @@ import FiniteDifference as fd
 A = -0.064
 B=-1.57
 C=1.29
+alpha = 1.85
+beta = -0.96
 
 def uniaxialQ(S, phi):
     """
@@ -587,7 +589,7 @@ def etaFlowEOM(eta, mu, nu, psi, dx, dy=None, A=A, B=B, C=C):
                     
     return deta_dt
 
-def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
+def muFlowEOM(mu, eta, nu, psi, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for mu, with hydrodynamic effects from flow included. 
     Returns LdG + flow equation for \partial \mu/\partial t.
@@ -603,6 +605,9 @@ def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
     nu : ndarray
         mxn array holding value of the auxiliary variable nu across the
         whole domain.
+    psi : ndarray
+        mxn array holding the value of the stream function psi accors the whole
+        domain.
     dx : double
         Spacing between gridpoints in the x-direction.
     dy : double, optional
@@ -629,11 +634,13 @@ def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
     if dy:
         dmu_dt = ( fd.dx2(mu, dx) + fd.dy2(mu, dy) - A*mu
                    - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
-                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+                   + fd.dx2(fd.dy2(psi, dy), dx) )
     else:
         dmu_dt = ( fd.d2(mu, dx) - A*mu 
                    - B*( (1/3)*eta**2 + mu**2 + (3/2)*nu**2 - (2/3)*eta*mu )
-                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 ) )
+                   - C*mu*( (2/3)*eta**2 + 2*nu**2 + 2*mu**2 )
+                   + fd.dx2dy2(psi, dx) )
                     
     return dmu_dt
 
@@ -751,7 +758,7 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
                          - A*(mu - eta) 
                          - B*(-(1/9)*eta**2 - (2/3)*eta*mu + mu**2)
                          - C*(mu - eta)*((2/3)*eta**2 
-                                         + 2*nu**2 + 2*mu**2), dx, 0) )
+                                         + 2*nu**2 + 2*mu**2), dx) )
         
     return f2
 
