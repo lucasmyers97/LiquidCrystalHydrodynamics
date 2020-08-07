@@ -702,7 +702,7 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
     Returns the second of two terms in the source term of the (modified)
     biharmonic equation for the flow. See 
     doc/theory/LCHydroStreamFunctionLinearBiharm.pdf for more info on where
-    this function comes from. 
+    this function comes from.
 
     Parameters
     ----------
@@ -783,14 +783,14 @@ def findMinima(f):
     """
     
     # For interior points, check if they are less than their neighbors
-    lt_left = f[1:-1, 1:-1] <= f[:-2, 1:-1]
-    lt_right = f[1:-1, 1:-1] <= f[2:, 1:-1]
-    lt_down = f[1:-1, 1:-1] <= f[1:-1, :-2]
-    lt_up = f[1:-1, 1:-1] <= f[1:-1, 2:]
-    lt_leftdown = f[1:-1, 1:-1] <= f[:-2, :-2]
-    lt_leftup = f[1:-1, 1:-1] <= f[:-2, 2:]
-    lt_rightdown = f[1:-1, 1:-1] <= f[2:, :-2]
-    lt_rightup = f[1:-1, 1:-1] <= f[2:, 2:]
+    lt_left = f[1:-1, 1:-1] < f[:-2, 1:-1]
+    lt_right = f[1:-1, 1:-1] < f[2:, 1:-1]
+    lt_down = f[1:-1, 1:-1] < f[1:-1, :-2]
+    lt_up = f[1:-1, 1:-1] < f[1:-1, 2:]
+    lt_leftdown = f[1:-1, 1:-1] < f[:-2, :-2]
+    lt_leftup = f[1:-1, 1:-1] < f[:-2, 2:]
+    lt_rightdown = f[1:-1, 1:-1] < f[2:, :-2]
+    lt_rightup = f[1:-1, 1:-1] < f[2:, 2:]
     
     # Logical and all of them together
     min_array = np.logical_and(lt_left, lt_right)
