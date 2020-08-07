@@ -1,7 +1,15 @@
 # To do
 ---------
+## Simulation tasks
+* Need to recover the original flow catastropher simulation, including flow plots.
+* See how much defects hold initial size in smaller simulations.
+* Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.
+* Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.
+  - See if you can find formula in de Gennes about that.
+* Write code to estimate how long it will take simulations to run.
+* Make sure to always record how much time $t/\tau$ has passed in simulations. 
+* See how the overall size of the system affects the flow catastrophe.
 ## Code writing
-* Write something to extract the flow from the stream function.
 * Plot the flow and see if it matches up with the Svensek and Zumer paper.
 * Write more robust peak-finding algorithm
   - For finding peaks, want to filter out noise.
@@ -20,6 +28,7 @@
   - This is actually probably not going to provide a significant speedup
     since basically all of the legwork is done by pre-compiled functions (FFT, cg, etc.).
   - Would want to rewrite this in C++/Cuda and then wrap in a python function. 
+* ~~Write something to extract the flow from the stream function.~~
 * ~~Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).~~
 * ~~Add flag to finite difference operators to ignore boundaries.~~
 * ~~Write the rest of the higher order finite difference schemes.~~
