@@ -54,6 +54,7 @@
 * ~~Update the readme to reflect the code organization~~
 -----------
 ## Code refactoring
+* Change all instances of grid-spacing to be `hx` or `hy`, rather than `dx` or `dy`.
 * Rewrite finite difference scheme so it works with Dirichlet or Neumann BC
   - Neumann conditions should include a whole array for the boundary.
   - This will probably be significantly less efficient, just because there
