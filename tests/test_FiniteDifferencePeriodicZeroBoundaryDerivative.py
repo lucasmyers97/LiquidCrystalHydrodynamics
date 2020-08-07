@@ -73,6 +73,40 @@ class TestFiniteDifferenceMethods(unittest.TestCase):
                 rel_error = error/np.mean(np.abs(dy_f1(X, Y)))
                 
                 self.assertTrue(np.max(rel_error) < dy)
+                
+    def test_curl(self):
+        """
+        Tests the `curl` finite difference method in `FiniteDifference.py`. 
+        """
+        
+        # Function and its analytic derivative to test against finite diff
+        # Derivative needs to be zero at endpoints for this test
+        def f1(x, y, m=1, n=1):
+            return np.cos(m*x)*np.cos(n*y)
+        def curl_f1(x, y, m=1, n=1):
+            return -n*np.cos(m*x)*np.sin(n*y), m*np.sin(m*x)*np.cos(n*y)
+        
+        n_list = [10, 50, 100, 1000]
+        length_list = [2*np.pi, 4*np.pi, 16*np.pi, 32*np.pi]
+        
+        for n in n_list:
+            for length in length_list:
+                x_domain = [-length, length]
+                y_domain = [-length, length]
+                
+                x = np.linspace(x_domain[0], x_domain[1], num=n)
+                y = np.linspace(y_domain[0], y_domain[1], num=n)
+                X, Y = np.meshgrid(x, y, indexing='ij')
+                dx = X[1, 0] - X[0, 0]
+        
+                error_x = np.abs( curl_f1(X, Y)[0] - fd.curl(f1(X, Y), dx)[0] )
+                rel_error_x = error_x/np.mean(np.abs(curl_f1(X, Y)[0]))
+                
+                error_y = np.abs( curl_f1(X, Y)[1] - fd.curl(f1(X, Y), dx)[1] )
+                rel_error_y = error_y/np.mean(np.abs(curl_f1(X, Y)[1]))
+                
+                self.assertTrue(np.max(rel_error_x) < dx)
+                self.assertTrue(np.max(rel_error_y) < dx)
     
     def test_dx2(self):
         """
