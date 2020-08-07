@@ -1,6 +1,8 @@
 # To do
 ---------
 ## Code writing
+* Write something to extract the flow from the stream function.
+* Plot the flow and see if it matches up with the Svensek and Zumer paper.
 * Write more robust peak-finding algorithm
   - For finding peaks, want to filter out noise.
   - To do this, get rid of pixels below some threshold relative to the mean.
