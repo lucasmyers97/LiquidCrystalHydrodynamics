@@ -94,6 +94,43 @@ def dy(f, dy, calc_bds=True):
         
     return dyf
 
+def curl(f, hx, hy=None, calc_bds=True):
+    """
+    Returns a second order finite difference approximation for the x- and
+    y-components of the curl for a 2D field f.
+
+    Parameters
+    ----------
+    f : ndarray
+        An mxn array representing a smooth function f: R^2 -> R
+    hx : double
+        Specifies the x-direction spacing of adjacent grid-points.
+    hy : double, optional
+        Specifies the y-direction spacing of adjacent grid-points. If no value
+        is entered, it is assumed that dy = dx. The default is None.
+    calc_bds : bool, optional
+        Specifies whether to calculate the curl at the boundaries. The default
+        is True.
+
+    Returns
+    -------
+    curl_fx : ndarray
+        mxn array representing the x-component of the curl of f. If calc_bds
+        is `False`, the value at the boundaries is 0.
+    curl_fy : ndarray
+        mxn array representing the y-component of the curl of f. If calc_bds
+        is `False`, the value at the boundaries is 0.
+
+    """
+    
+    curl_fy = -dx(f, hx, calc_bds)
+    if hy:
+        curl_fx = dy(f, hy, calc_bds)
+    else:
+        curl_fx = dy(f, hx, calc_bds)
+        
+    return curl_fx, curl_fy
+
 def dx2(f, dx, calc_bds=True):
     """
     Returns second order finite difference approximation of d^2 f/dx^2 for
