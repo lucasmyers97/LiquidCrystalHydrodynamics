@@ -15,6 +15,11 @@ C=1.29
 alpha = 1.85
 beta = -0.96
 
+# Fit parameters for square root defect position fit
+a = -0.4166
+b = 0.0
+c = 1.7172
+
 def uniaxialQ(S, phi):
     """
     Generate a Q-tensor corresponding to a uniaxial configuration
@@ -806,3 +811,17 @@ def findMinima(f):
     min_array_padded[1:-1, 1:-1] = min_array
     
     return np.nonzero(min_array_padded)
+
+def estAnnihilationTime():
+    """
+    Estimates how much time t/tau it takes for the defects to annihilate based
+    on the square root fitting of the flow-less 2-defect simulation.
+
+    Returns
+    -------
+    double
+        Approximate time for annihilation
+
+    """
+    
+    return a*b**2 + c
