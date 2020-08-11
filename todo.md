@@ -2,13 +2,13 @@
 ---------
 ## Simulation tasks
 * Need to recover the original flow catastropher simulation, including flow plots.
-* See how much defects hold initial size in smaller simulations.
 * Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.
-* ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
-  - See if you can find formula in de Gennes about that.
 * Write code to estimate how long it will take simulations to run.
 * Make sure to always record how much time $t/\tau$ has passed in simulations. 
 * See how the overall size of the system affects the flow catastrophe.
+* ~~See how much defects hold initial size in smaller simulations.~~
+* ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
+  - See if you can find formula in de Gennes about that.
 ## Code writing
 * Plot the flow and see if it matches up with the Svensek and Zumer paper.
 * Write more robust peak-finding algorithm
