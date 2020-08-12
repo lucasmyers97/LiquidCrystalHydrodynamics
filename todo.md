@@ -1,13 +1,13 @@
 # To do
 ---------
 ## Simulation tasks
-* Fit defect trajectories for different starting parameters.
 * Need to recover the original flow catastropher simulation, including flow plots.
 * Write code to estimate how long it will take simulations to run.
-* Make sure to always record how much time $t/\tau$ has passed in simulations. 
 * See how the overall size of the system affects the flow catastrophe.
+* ~~Fit defect trajectories for different starting parameters.~~
 * ~~Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.~~
 * ~~See how much defects hold initial size in smaller simulations.~~
+* ~~Make sure to always record how much time $t/\tau$ has passed in simulations. ~~
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
 ## Code writing
