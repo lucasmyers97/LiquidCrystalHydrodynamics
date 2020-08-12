@@ -1,6 +1,8 @@
 # To do
 ---------
 ## Simulation tasks
+* Need to save defect position data into .csv files so that I can access them later.
+  - This would separate out simulation and annihilation data.
 * Need to recover the original flow catastropher simulation, including flow plots.
 * Write code to estimate how long it will take simulations to run.
 * Run a full flow simulation for the 70-correlation-lengths
