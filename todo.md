@@ -3,7 +3,6 @@
 ## Simulation tasks
 * Need to save defect position data into .csv files so that I can access them later.
   - This would separate out simulation and annihilation data.
-* Need to recover the original flow catastropher simulation, including flow plots.
 * Write code to estimate how long it will take simulations to run.
 * Run a full flow simulation for the 70-correlation-lengths
   - Has 3/20 defect separation vs. computational area
@@ -14,6 +13,7 @@
   - Include defect position vs. time
   - Include defect velocity vs. position
   - Include defect velocity vs. time
+* ~~Need to recover the original flow catastrophe simulation, including flow plots.~~
 * ~~See how the overall size of the system affects the flow catastrophe.~~
 * ~~Fit defect trajectories for different starting parameters.~~
 * ~~Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.~~
