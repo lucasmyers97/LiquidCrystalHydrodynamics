@@ -3,7 +3,14 @@
 ## Simulation tasks
 * Need to recover the original flow catastropher simulation, including flow plots.
 * Write code to estimate how long it will take simulations to run.
-* See how the overall size of the system affects the flow catastrophe.
+* Run a full flow simulation for the 70-correlation-lengths
+  - Has 3/20 defect separation vs. computational area
+  - Will need to figure out what the grid spacing ought to be.
+  - Include flow plot simulations
+  - Include defect position vs. time
+  - Include defect velocity vs. position
+  - Include defect velocity vs. time
+* ~~See how the overall size of the system affects the flow catastrophe.~~
 * ~~Fit defect trajectories for different starting parameters.~~
 * ~~Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.~~
 * ~~See how much defects hold initial size in smaller simulations.~~
