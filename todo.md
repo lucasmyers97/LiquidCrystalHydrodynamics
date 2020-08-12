@@ -1,11 +1,12 @@
 # To do
 ---------
 ## Simulation tasks
+* Fit defect trajectories for different starting parameters.
 * Need to recover the original flow catastropher simulation, including flow plots.
-* Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.
 * Write code to estimate how long it will take simulations to run.
 * Make sure to always record how much time $t/\tau$ has passed in simulations. 
 * See how the overall size of the system affects the flow catastrophe.
+* ~~Increase the size of flowless simulations (x2, x4, etc.) to see if that effects results.~~
 * ~~See how much defects hold initial size in smaller simulations.~~
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
@@ -63,6 +64,12 @@
 * ~~Update the readme to reflect the code organization~~
 -----------
 ## Code refactoring
+* Come up with some way to package simulation initialization.
+  - Pretty long and lots of repeated code in notebooks.
+  - Might consider using a dictionary to hold default parameter values
+  - Then you could just change one or two to suit the need.
+* Could also just pass in the parameter dictionary to generate initial configuration.
+* Want to package simulation, but that might preclude the loading bar.
 * Change all instances of grid-spacing to be `hx` or `hy`, rather than `dx` or `dy`.
 * Rewrite finite difference scheme so it works with Dirichlet or Neumann BC
   - Neumann conditions should include a whole array for the boundary.
