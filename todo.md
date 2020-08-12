@@ -7,6 +7,8 @@
   - Has 3/20 defect separation vs. computational area
   - Will need to figure out what the grid spacing ought to be.
   - Include flow plot simulations
+    - For this I can break up contributions from f_1(Q) and f_2(Q)
+    - These will correspond to elastic and mu_2 terms respectively
   - Include defect position vs. time
   - Include defect velocity vs. position
   - Include defect velocity vs. time
