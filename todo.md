@@ -1,6 +1,7 @@
 # To do
 ---------
 ## Simulation tasks
+* Need to, for the beginning of the flow simulation, plot the contributtions to eta, mu, and nu from flow-less and then just from flow to see whether there should be a major contribution.
 * Need to save defect position data into .csv files so that I can access them later.
   - This would separate out simulation and annihilation data.
 * Write code to estimate how long it will take simulations to run.
