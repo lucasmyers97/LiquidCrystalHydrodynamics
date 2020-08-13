@@ -769,7 +769,8 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
 
 def findMinima(f):
     """
-    Find indices of `f` where points are smaller than all of their neighbors.
+    Find indices of `f` where points are smaller than all of their neighbors,
+    and smaller than the mean.
 
     Parameters
     ----------
@@ -797,6 +798,9 @@ def findMinima(f):
     lt_rightdown = f[1:-1, 1:-1] < f[2:, :-2]
     lt_rightup = f[1:-1, 1:-1] < f[2:, 2:]
     
+    # Check that the interior points are less than the mean
+    lt_mean = f[1:-1, 1:-1] < np.mean(f)
+    
     # Logical and all of them together
     min_array = np.logical_and(lt_left, lt_right)
     min_array = np.logical_and(min_array, lt_down)
@@ -805,6 +809,7 @@ def findMinima(f):
     min_array = np.logical_and(min_array, lt_leftup)
     min_array = np.logical_and(min_array, lt_rightdown)
     min_array = np.logical_and(min_array, lt_rightup)
+    min_array = np.logical_and(min_array, lt_mean)
     
     # Want to find max indices of array which has same size as `f`
     min_array_padded = np.zeros(f.shape, dtype=bool)
