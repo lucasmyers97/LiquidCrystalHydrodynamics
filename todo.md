@@ -1,9 +1,6 @@
 # To do
 ---------
 ## Simulation tasks
-* Improve peak-finding function
-  - Expand to 5x5 grid
-  - Set mean as cutoff
 * Should do a couple of steps with the 512x512 size grid to see ~how long a simulation might take.
 * Need to, for the beginning of the flow simulation, plot the contributtions to eta, mu, and nu from flow-less and then just from flow to see whether there should be a major contribution.
 * Need to save defect position data into .csv files so that I can access them later.
@@ -18,6 +15,9 @@
   - Include defect position vs. time
   - Include defect velocity vs. position
   - Include defect velocity vs. time
+* ~~Improve peak-finding function~~
+  - ~~Expand to 5x5 grid~~
+  - ~~Set mean as cutoff~~
 * ~~Need to recover the original flow catastrophe simulation, including flow plots.~~
 * ~~See how the overall size of the system affects the flow catastrophe.~~
 * ~~Fit defect trajectories for different starting parameters.~~
