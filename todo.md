@@ -35,6 +35,7 @@
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
 ## Code writing
+* Write `findDefects` function which finds the minima, finds the smallest `num_defects` minima of those, and then sorts them according to x-position then y-position
 * Plot the flow and see if it matches up with the Svensek and Zumer paper.
 * Write more robust peak-finding algorithm
   - For finding peaks, want to filter out noise.
