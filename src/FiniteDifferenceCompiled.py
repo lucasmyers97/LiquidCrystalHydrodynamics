@@ -11,7 +11,7 @@ Updated: July 8, 2020
 import numpy as np
 from numba import jit
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dx(f, dx, calc_bds=True):
     """
     Returns second order finite difference approximation of df/dx for
@@ -54,7 +54,7 @@ def dx(f, dx, calc_bds=True):
         
     return dxf
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dy(f, dy, calc_bds=True):
     """
     Returns second order finite difference approximation of df/dy for
@@ -97,7 +97,7 @@ def dy(f, dy, calc_bds=True):
         
     return dyf
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dx2(f, dx):
     """
     Returns second order finite difference approximation of d^2 f/dx^2 for
@@ -134,7 +134,7 @@ def dx2(f, dx):
     
     return dx2f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dy2(f, dy):
     """
     Returns second order finite difference approximation of d^2 f/dx^2 for
@@ -171,7 +171,7 @@ def dy2(f, dy):
     
     return dy2f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dxdy(f, h):
     """
     Returns second order finite difference approximation of d^2f/dxdy for
@@ -209,7 +209,7 @@ def dxdy(f, h):
     
     return dxdyf
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def d2(f, h, calc_bds=True):
     """
     Returns second order finite difference approximation for the 2D Laplacian
@@ -267,7 +267,7 @@ def d2(f, h, calc_bds=True):
     
     return d2f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dx2_dy2(f, h, calc_bds=True):
     """
     Returns second order finite difference approximation for 
@@ -322,7 +322,7 @@ def dx2_dy2(f, h, calc_bds=True):
         
     return dx2_dy2f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dx4(f, dx):
     """
     Returns second order finite difference approximation of d^4 f/dx^4 for
@@ -362,7 +362,7 @@ def dx4(f, dx):
     
     return dx4f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dy4(f, dy):
     """
     Returns second order finite difference approximation of d^4 f/dy^4 for
@@ -403,7 +403,7 @@ def dy4(f, dy):
     
     return dy4f
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def dx2dy2(f, h):
     """
     Returns second order finite difference approximation of d^4 f/dx^2 dy^2
