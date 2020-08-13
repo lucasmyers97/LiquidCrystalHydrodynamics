@@ -788,35 +788,31 @@ def findMinima(f):
         used to index an array of the same size as f.
         
     """
+    relative_idx = [-2, -1, 0, 1, 2]
     
-    # For interior points, check if they are less than their neighbors
-    lt_left = f[1:-1, 1:-1] < f[:-2, 1:-1]
-    lt_right = f[1:-1, 1:-1] < f[2:, 1:-1]
-    lt_down = f[1:-1, 1:-1] < f[1:-1, :-2]
-    lt_up = f[1:-1, 1:-1] < f[1:-1, 2:]
-    lt_leftdown = f[1:-1, 1:-1] < f[:-2, :-2]
-    lt_leftup = f[1:-1, 1:-1] < f[:-2, 2:]
-    lt_rightdown = f[1:-1, 1:-1] < f[2:, :-2]
-    lt_rightup = f[1:-1, 1:-1] < f[2:, 2:]
+    m, n = f.shape
     
-    # Check that the interior points are less than the mean
-    lt_mean = f[1:-1, 1:-1] < np.mean(f)
+    # Start index and end indices (in each dimension) for min-finding area
+    s = relative_idx[-1]
+    em = m + relative_idx[0]
+    en = n + relative_idx[0]
     
-    # Logical and all of them together
-    min_array = np.logical_and(lt_left, lt_right)
-    min_array = np.logical_and(min_array, lt_down)
-    min_array = np.logical_and(min_array, lt_up)
-    min_array = np.logical_and(min_array, lt_leftdown)
-    min_array = np.logical_and(min_array, lt_leftup)
-    min_array = np.logical_and(min_array, lt_rightdown)
-    min_array = np.logical_and(min_array, lt_rightup)
-    min_array = np.logical_and(min_array, lt_mean)
+    # Look through neighbors as dictated by `relative_idx` to find whether
+    # points are less than all their neighbors
+    min_array = np.zeros(f.shape, dtype=np.bool)
+    min_array[s:em, s:en] = True
+    for i in relative_idx:
+        for j in relative_idx:
+            if i != 0 or j != 0:
+                
+                min_array[s:em, s:en] = np.logical_and(min_array[s:em, s:en],
+                                                       f[s:em, s:en] 
+                                                       < f[s+i:em+i, s+j:en+j])
+                
+    min_array[s:em, s:en] = np.logical_and(min_array[s:em, s:en], 
+                                           f[s:em, s:en] < np.mean(f))
     
-    # Want to find max indices of array which has same size as `f`
-    min_array_padded = np.zeros(f.shape, dtype=bool)
-    min_array_padded[1:-1, 1:-1] = min_array
-    
-    return np.nonzero(min_array_padded)
+    return np.nonzero(min_array)
 
 def estAnnihilationTime():
     """

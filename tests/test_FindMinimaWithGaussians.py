@@ -52,3 +52,6 @@ class TestFindMinima(unittest.TestCase):
         
         # Test whether sets are equal
         self.assertTrue(minima_set >= ctrs_set and minima_set <= ctrs_set)
+        
+if __name__ == "__main__":
+    unittest.main()
