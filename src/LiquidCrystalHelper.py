@@ -5,6 +5,7 @@ manipulating, and plotting nematic liquid crystal configurations.
 Lucas Myers
 July 4, 2020
 """
+
 import numpy as np
 import FiniteDifference as fd
 
