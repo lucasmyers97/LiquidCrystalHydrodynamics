@@ -15,6 +15,14 @@
   - Include defect position vs. time
   - Include defect velocity vs. position
   - Include defect velocity vs. time
+  - These are the parameters:
+    - defect separation is always 70
+    - length: 70x70, dims: 257x257
+    - length: 140x140, dims: 257x257
+    - length: 70x70, dims: 513x513
+    - length: 140x140, dims: 513x513
+    - length: 140x140, dims: 1025x1025
+  - Will probably only be able to run first 4 (if that)
 * ~~Improve peak-finding function~~
   - ~~Expand to 5x5 grid~~
   - ~~Set mean as cutoff~~
