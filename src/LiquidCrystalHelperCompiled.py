@@ -131,7 +131,7 @@ def sparseIdx(shape, sparse_shape):
     
     return sparse_idx
     
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def calcQEigenvals(eta, mu, nu):
     """
     Calculate maximal eigenvalues of the Q-tensor across the domain. 
@@ -167,7 +167,7 @@ def calcQEigenvals(eta, mu, nu):
     
     return lambda_max
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def calcQEigenvecs(eta, mu, nu, lambda_pm, S_cutoff):
     """
     Calculate the x- and y-components of the maximal eigenvectors of the 
@@ -388,7 +388,7 @@ def makeMultiDisclination(X, Y, S_val=1,
     return S, phi
     
     
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def etaEOM(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for eta. Returns LdG equation for 
@@ -438,7 +438,7 @@ def etaEOM(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
                     
     return deta_dt
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def muEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for mu. Returns LdG equation for 
@@ -489,7 +489,7 @@ def muEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
                     
     return dmu_dt
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def nuEOM(nu, eta, mu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for nu. Returns LdG equation for 
@@ -539,7 +539,7 @@ def nuEOM(nu, eta, mu, dx, dy=None, A=A, B=B, C=C):
                     
     return dnu_dt
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def etaFlowEOM(eta, mu, nu, psi, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for eta, with hydrodynamic effects from flow included.
@@ -594,7 +594,7 @@ def etaFlowEOM(eta, mu, nu, psi, dx, dy=None, A=A, B=B, C=C):
                     
     return deta_dt
 
-@jit(nopython=True, parallel=True, cache=True)
+@jit(nopython=True, parallel=True)
 def muFlowEOM(mu, eta, nu, dx, dy=None, A=A, B=B, C=C):
     """
     Equation of motion for mu, with hydrodynamic effects from flow included. 
@@ -690,3 +690,29 @@ def findMinima(f):
     min_array_padded[1:-1, 1:-1] = min_array
     
     return np.nonzero(min_array_padded)
+
+def findDefects(lambda_max, X, Y, num_defects):
+    
+    # Pick out minima in lambda_max
+    min_idx = findMinima(lambda_max)
+    min_vals = lambda_max[min_idx]
+    min_x = X[min_idx]
+    min_y = Y[min_idx]
+    
+    # Sort by value, only take first `num_defects` defects
+    val_sort_idx = np.argsort(min_vals, kind='stable')[:num_defects]
+    min_vals = min_vals[val_sort_idx]
+    min_x = min_x[val_sort_idx]
+    min_y = min_y[val_sort_idx]
+    
+    # Sort by y then x
+    y_sort_idx = np.argsort(min_y, kind='stable')
+    min_vals = min_vals[y_sort_idx]
+    min_x = min_x[y_sort_idx]
+    min_y = min_y[y_sort_idx]
+    x_sort_idx = np.argsort(min_x, kind='stable')
+    min_vals = min_vals[x_sort_idx]
+    min_x = min_x[x_sort_idx]
+    min_y = min_y[x_sort_idx]
+    
+    return min_vals, min_x, min_y

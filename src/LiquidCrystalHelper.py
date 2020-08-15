@@ -788,7 +788,7 @@ def findMinima(f):
         used to index an array of the same size as f.
         
     """
-    relative_idx = [-2, -1, 0, 1, 2]
+    relative_idx = [-3, -2, -1, 0, 1, 2, 3]
     
     m, n = f.shape
     
@@ -799,7 +799,7 @@ def findMinima(f):
     
     # Look through neighbors as dictated by `relative_idx` to find whether
     # points are less than all their neighbors
-    min_array = np.zeros(f.shape, dtype=np.bool)
+    min_array = np.zeros(f.shape, dtype=np.bool_)
     min_array[s:em, s:en] = True
     for i in relative_idx:
         for j in relative_idx:
@@ -813,6 +813,32 @@ def findMinima(f):
                                            f[s:em, s:en] < np.mean(f))
     
     return np.nonzero(min_array)
+
+def findDefects(lambda_max, X, Y, num_defects):
+    
+    # Pick out minima in lambda_max
+    min_idx = findMinima(lambda_max)
+    min_vals = lambda_max[min_idx]
+    min_x = X[min_idx]
+    min_y = Y[min_idx]
+    
+    # Sort by value, only take first `num_defects` defects
+    val_sort_idx = np.argsort(min_vals, kind='stable')[:num_defects]
+    min_vals = min_vals[val_sort_idx]
+    min_x = min_x[val_sort_idx]
+    min_y = min_y[val_sort_idx]
+    
+    # Sort by y then x
+    y_sort_idx = np.argsort(min_y, kind='stable')
+    min_vals = min_vals[y_sort_idx]
+    min_x = min_x[y_sort_idx]
+    min_y = min_y[y_sort_idx]
+    x_sort_idx = np.argsort(min_x, kind='stable')
+    min_vals = min_vals[x_sort_idx]
+    min_x = min_x[x_sort_idx]
+    min_y = min_y[x_sort_idx]
+    
+    return min_vals, min_x, min_y
 
 def estAnnihilationTime():
     """
