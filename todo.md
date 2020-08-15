@@ -1,9 +1,6 @@
 # To do
 ---------
 ## Simulation tasks
-* Improve peak-finding function
-  - Expand to 5x5 grid
-  - Set mean as cutoff
 * Should do a couple of steps with the 512x512 size grid to see ~how long a simulation might take.
 * Need to, for the beginning of the flow simulation, plot the contributtions to eta, mu, and nu from flow-less and then just from flow to see whether there should be a major contribution.
 * Need to save defect position data into .csv files so that I can access them later.
@@ -18,6 +15,17 @@
   - Include defect position vs. time
   - Include defect velocity vs. position
   - Include defect velocity vs. time
+  - These are the parameters:
+    - defect separation is always 70
+    - length: 70x70, dims: 257x257
+    - length: 140x140, dims: 257x257
+    - length: 70x70, dims: 513x513
+    - length: 140x140, dims: 513x513
+    - length: 140x140, dims: 1025x1025
+  - Will probably only be able to run first 4 (if that)
+* ~~Improve peak-finding function~~
+  - ~~Expand to 5x5 grid~~
+  - ~~Set mean as cutoff~~
 * ~~Need to recover the original flow catastrophe simulation, including flow plots.~~
 * ~~See how the overall size of the system affects the flow catastrophe.~~
 * ~~Fit defect trajectories for different starting parameters.~~
@@ -27,6 +35,7 @@
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
 ## Code writing
+* Write `findDefects` function which finds the minima, finds the smallest `num_defects` minima of those, and then sorts them according to x-position then y-position
 * Plot the flow and see if it matches up with the Svensek and Zumer paper.
 * Write more robust peak-finding algorithm
   - For finding peaks, want to filter out noise.
