@@ -1052,6 +1052,158 @@
 	\end{equation}
 	Note that $x^T x$ and $(\mathbb{F}V x)^\top (\mathbb{F} Vx)$ are just inner products of vectors, so they must be positive by definition. Additionally, every $\lambda_k$ is positive. Hence, the matrix is symmetric positive definite. 
 	
+	\subsection{Preconditioning the conjugate gradient method solver}
+	One way to speed up the conjugate gradient method is to precondition the solver with a judiciously chosen preconditioning matrix. A typical choice (labeled ``Jacobi preconditioning'') is just to take the diagonal elements of the linear operator that we are hoping to invert. The linear operator which we hope to invert is:
+	\begin{equation}
+		L = (I + V^\top A^{-1} V)
+	\end{equation}
+	Clearly we know the diagonal of $I$, so we just need to find the diagonal elements of $V^\top A^{-1} V$. To begin, note that $V = \left[ V_1 V_2 \right]$ and $V^\top = \left[ V_1^\top V_2^\top \right]^\top$ so that
+	\begin{equation}
+		V^\top A^{-1} V =
+		\begin{bmatrix}
+			V_1^\top \\
+			V_2^\top
+		\end{bmatrix}
+		A^{-1}
+		\begin{bmatrix}
+			V_1 & V_2
+		\end{bmatrix}
+		= \begin{bmatrix}
+			V_1^\top A^{-1} V_1 & V_1^\top A^{-1} V_2 \\
+			V_2^\top A^{-1} V_1 & V_2^\top A^{-1} V_2
+		\end{bmatrix}
+	\end{equation}
+	In order to simplify these, we need to dig into $V_1$ and $V_2$:
+	\begin{equation}
+	\begin{split}
+		V_1 &= \frac{\sqrt{2}}{h_x^2}
+		\begin{pmatrix}
+		1 & 0 \\
+		0 & 0 \\
+		\vdots & \vdots \\
+		0 & 0 \\
+		0 & 1
+		\end{pmatrix}
+		\otimes I \\
+		&= \frac{\sqrt{2}}{h_x^2}
+		\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_x - 1}
+		\end{bmatrix}
+		\begin{bmatrix}
+			Z^1 & Z^{N_x - 1}
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_y - 1}
+		\end{bmatrix}
+		\begin{bmatrix}
+			Z^1 & Z^2 &\cdots & Z^{N_y - 1}
+		\end{bmatrix} \\
+		&= \frac{\sqrt{2}}{h_x^2}
+		\left( 
+		\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_x - 1}
+		\end{bmatrix}
+		\otimes\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_y - 1}
+		\end{bmatrix}
+		\right)
+		\left(
+		\begin{bmatrix}
+			Z^1 & Z^{N_x - 1}
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			Z^1 & Z^2 &\cdots &Z^{N_y - 1}
+		\end{bmatrix}
+		\right) \\
+		&= \frac{\sqrt{2}}{h_x^2}
+		\left(\mathbb{F}
+		\otimes\mathbb{F}\right)
+		\left(
+		\begin{bmatrix}
+			Z^1 & Z^{N_x - 1}
+		\end{bmatrix}
+		\otimes \mathbb{F}
+		\right)
+	\end{split}
+	\end{equation}
+	where $Z^k$ and $Z_l$ are the columns and rows of $\mathbb{F}$ respectively -- note that this works out because $Z_k Z_l = \delta_{kl}$ as we have shown before. Similarly, we have that:
+	\begin{equation}
+	\begin{split}
+		V_1^\top &= \frac{\sqrt{2}}{h_x^2}
+		\begin{pmatrix}
+			1 &0 &\cdots &0 &0 \\
+			0 &0 &\cdots &0 &1
+		\end{pmatrix}
+		\otimes I \\
+		&= \frac{\sqrt{2}}{h_x^2} 
+		\begin{bmatrix}
+			Z_1 \\
+			Z_{N_x - 1}
+		\end{bmatrix}
+		\begin{bmatrix}
+			Z^1 & Z^2 &\cdots & Z^{N_x - 1}
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_y - 1}
+		\end{bmatrix}
+		\begin{bmatrix}
+			Z^1 & Z^2 &\cdots & Z^{N_y - 1}
+		\end{bmatrix} \\
+		&= \frac{\sqrt{2}}{h_x^2} 
+		\left(
+		\begin{bmatrix}
+			Z_1 \\
+			Z_{N_x - 1}
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			Z_1 \\
+			Z_2 \\
+			\vdots \\
+			Z_{N_y - 1}
+		\end{bmatrix}
+		\right)
+		\left(
+		\begin{bmatrix}
+			Z^1 &Z^2 &\cdots &Z^{N_x - 1}
+		\end{bmatrix}
+		\otimes
+		\begin{bmatrix}
+			Z^1 &Z^2 &\cdots &Z^{N_y - 1}
+		\end{bmatrix}
+		\right) \\
+		&= \frac{\sqrt{2}}{h_x^2}
+		\left(
+		\begin{bmatrix}
+			Z_1 \\
+			Z_{N_x - 1}
+		\end{bmatrix}
+		\otimes \mathbb{F}
+		\right)
+		\left( \mathbb{F}\otimes\mathbb{F}
+		\right)
+	\end{split}
+	\end{equation}
+	
+	
 	\subsection{Dimensionless form of the flow equation}
 	When we wrote down equations \eqref{eq:dimensionless-eoms}, we multiplied both sides by $\tau/\mu_1$. Applying this to the last term of \eqref{eq:mueq} and non-dimensionalizing the derivatives yields:
 	\begin{equation}

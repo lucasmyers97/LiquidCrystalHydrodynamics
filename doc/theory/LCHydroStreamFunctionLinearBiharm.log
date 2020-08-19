@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.7.21)  5 AUG 2020 11:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.6.29) (preloaded format=pdflatex 2020.7.21)  18 AUG 2020 11:28
 entering extended mode
 **./LCHydroStreamFunctionLinearBiharm.tex
 (LCHydroStreamFunctionLinearBiharm.tex
@@ -832,22 +832,22 @@ Overfull \hbox (15.85698pt too wide) detected at line 799
  []
 
 [16] [17] [18] [19] [20] [21]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1133.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1133.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1284.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1284.
  (LCHydroStreamFunctionLinearBiharm.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1133.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1133.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1284.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1284.
 
 Package rerunfilecheck Info: File `LCHydroStreamFunctionLinearBiharm.out' has n
 ot changed.
-(rerunfilecheck)             Checksum: 96DCF808B2DBD735F10C08CCC68387C3;1460.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1133.
+(rerunfilecheck)             Checksum: 3F2C3A611680B5EAD9AB2D22B560C571;1562.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1284.
  ) 
 Here is how much of TeX's memory you used:
- 17503 strings out of 492961
- 339808 string characters out of 3124677
+ 17509 strings out of 492961
+ 339894 string characters out of 3124677
  412800 words of memory out of 3000000
- 20784 multiletter control sequences out of 15000+200000
+ 20785 multiletter control sequences out of 15000+200000
  16934 words of font info for 75 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  48i,23n,54p,1074b,339s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -872,10 +872,10 @@ lic/amsfonts/cm/cmsy7.pfb><C:/Users/lucas/AppData/Local/Programs/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/lucas/AppData/Local/Programs/M
 iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/lucas/AppData/Loc
 al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on LCHydroStreamFunctionLinearBiharm.pdf (21 pages, 311133 bytes
+Output written on LCHydroStreamFunctionLinearBiharm.pdf (21 pages, 315718 bytes
 ).
 PDF statistics:
- 465 PDF objects out of 1000 (max. 8388607)
- 202 named destinations out of 1000 (max. 500000)
- 149 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 474 PDF objects out of 1000 (max. 8388607)
+ 207 named destinations out of 1000 (max. 500000)
+ 157 words of extra memory for PDF output out of 10000 (max. 10000000)
 
