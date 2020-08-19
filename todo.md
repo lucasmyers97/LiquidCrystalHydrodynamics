@@ -1,7 +1,6 @@
 # To do
 ---------
 ## Simulation tasks
-* Implement a profiler in the main simulation cell.
 * Should do a couple of steps with the 512x512 size grid to see ~how long a simulation might take.
 * Need to, for the beginning of the flow simulation, plot the contributtions to eta, mu, and nu from flow-less and then just from flow to see whether there should be a major contribution.
 * Write code to estimate how long it will take simulations to run.
@@ -22,6 +21,7 @@
     - length: 140x140, dims: 513x513
     - length: 140x140, dims: 1025x1025
   - Will probably only be able to run first 4 (if that)
+* ~~Implement a profiler in the main simulation cell.~~
 * ~~Need to save defect position data into .csv files so that I can access them later.~~
   - ~~This would separate out simulation and annihilation data.~~
   - Instead of saving the data into .csv files, I've just pickled them for space efficiency and to prevent roundoff errors.
@@ -77,6 +77,7 @@
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
+* Figure out problem with elastic flow term (why so small?)
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
 * Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
