@@ -1,0 +1,22 @@
+         38 function calls in 0.000 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        2    0.000    0.000    0.000    0.000 iostream.py:386(write)
+        3    0.000    0.000    0.000    0.000 iostream.py:197(schedule)
+        2    0.000    0.000    0.000    0.000 iostream.py:323(_schedule_flush)
+        3    0.000    0.000    0.000    0.000 threading.py:1092(is_alive)
+        3    0.000    0.000    0.000    0.000 threading.py:1050(_wait_for_tstate_lock)
+        3    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+        3    0.000    0.000    0.000    0.000 socket.py:342(send)
+        2    0.000    0.000    0.000    0.000 iostream.py:310(_is_master_process)
+        3    0.000    0.000    0.000    0.000 iostream.py:93(_event_pipe)
+        2    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+        3    0.000    0.000    0.000    0.000 threading.py:507(is_set)
+        3    0.000    0.000    0.000    0.000 {method 'append' of 'collections.deque' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
