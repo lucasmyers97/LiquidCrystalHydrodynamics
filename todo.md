@@ -77,6 +77,7 @@
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
+* Check calculations from entire paper.
 * Nondimensionalize the velocity field hydrodynamics equations in the same way as the stream function formulation.
 * Figure out problem with elastic flow term (why so small?)
 * Document where I got the stuff relevant for the biharmonic solver
