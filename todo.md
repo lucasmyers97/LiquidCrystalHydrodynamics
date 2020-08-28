@@ -82,8 +82,9 @@
   - ~~Viscous force~~
   - ~~Elastic stress tensor~~
   - ~~Viscous stress tensor~~
-  - Fluid equation of motion
+  - ~~Fluid equation of motion~~
   - Rewriting in terms of eta, mu, nu
+    - Error in first equation in section 2.1 -- should just be \eta in B term.
   - Rewriting force equations
   - Rewriting velocity equations
   - Nondimensionalizing flowless equation
