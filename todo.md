@@ -78,6 +78,18 @@
 ---------
 ## Documentation
 * Check calculations from entire paper.
+  - ~~Homogeneous and elastic generalized force~~
+  - Viscous force
+  - Elastic stress tensor
+  - Viscous stress tensor
+  - Fluid equation of motion
+  - Rewriting in terms of eta, mu, nu
+  - Rewriting force equations
+  - Rewriting velocity equations
+  - Nondimensionalizing flowless equation
+  - Nondimensionalizing stream function flow
+  - Writing velocity equations of motion
+  - Nondimensionalizing velocity equations of motion
 * Nondimensionalize the velocity field hydrodynamics equations in the same way as the stream function formulation.
 * Figure out problem with elastic flow term (why so small?)
 * Document where I got the stuff relevant for the biharmonic solver
