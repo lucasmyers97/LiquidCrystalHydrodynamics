@@ -79,9 +79,9 @@
 ## Documentation
 * Check calculations from entire paper.
   - ~~Homogeneous and elastic generalized force~~
-  - Viscous force
-  - Elastic stress tensor
-  - Viscous stress tensor
+  - ~~Viscous force~~
+  - ~~Elastic stress tensor~~
+  - ~~Viscous stress tensor~~
   - Fluid equation of motion
   - Rewriting in terms of eta, mu, nu
   - Rewriting force equations
