@@ -85,6 +85,7 @@
   - ~~Fluid equation of motion~~
   - Rewriting in terms of eta, mu, nu
     - Error in first equation in section 2.1 -- should just be \eta in B term.
+    - (I think) error in \nu equation (hydro part) is incorrect -- doesn't evaluate to 0.
   - Rewriting force equations
   - Rewriting velocity equations
   - Nondimensionalizing flowless equation
