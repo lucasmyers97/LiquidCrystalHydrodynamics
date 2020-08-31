@@ -97,7 +97,7 @@
 	\end{split}
 	\end{equation}
 	Thus, the total homogeneous and elastic force reads:
-	\begin{equation}
+	\begin{equation}\label{eq:hom-el-force}
 		h^{he}_{ij} = L\partial^2 Q_{ij} - A Q_{ij} - BQ_{ik}Q_{kj} - C Q_{ij} (Q_{kl}Q_{lk}) + \lambda\delta_{ij} + \lambda_k \epsilon_{kij}
 	\end{equation}
 	
@@ -150,7 +150,7 @@
 		v_1 = \int \frac{\partial v_2}{\partial y} dx + \frac{df}{dy}
 	\end{equation}
 	We may solve this equation by integrating in $y$. Thus, for any $v_1$ and $v_2$ we may produce a $\psi_i = (0, 0, \psi_3)$ which describes the 2D flow. Then the expression for the complete viscous force is
-	\begin{equation}
+	\begin{equation}\label{eq:visc-force}
 	\begin{split}
 		-h^v_{ij} &= \frac{1}{2}\mu_2 (\partial_i v_j + \partial_j v_i) + \mu_1 \frac{\partial Q_{ij}}{\partial t} \\
 		&= \frac{1}{2}\mu_2 (\epsilon_{jkl} \partial_i \partial_k \psi_l +  \epsilon_{ikl} \partial_j \partial_k \psi_l) + \mu_1 \frac{\partial Q_{ij}}{\partial t}
@@ -182,7 +182,7 @@
 	\end{split}
 	\end{equation}
 	Then the elastic stress tensor is given by
-	\begin{equation}
+	\begin{equation}\label{eq:elastic-stress}
 		\sigma^e_{ij} = -L\partial_i Q_{kl} \partial_j Q_{kl}
 	\end{equation}
 	
@@ -196,13 +196,13 @@
 		\sigma^v_{ij} \approx \beta_4 A_{ij} + \frac{1}{2} \mu_2 N_{ij}
 	\end{equation}
 	Again, plugging in for $A_{ij}$ and $N_{ij}$ as we did for the viscous force, we get
-	\begin{equation}
+	\begin{equation}\label{eq:visc-stress}
 		\sigma^v_{ij} \approx \beta_4 (\partial_i v_j + \partial_j v_i) + \frac{1}{2} \mu_2  \frac{\partial Q_{ij}}{\partial t}
 	\end{equation}
 	
 	\subsection{Computing the fluid equation of motion}
 	The equation of motion for the fluid is given by
-	\begin{equation}
+	\begin{equation}\label{eq:fluid-eom}
 		\rho \frac{\partial v_i}{\partial t} = -\partial_i p + \partial_j (\sigma^v_{ji} + \sigma^{e}_{ji})
 	\end{equation}
 	We've made the assumption that $\partial v_i/\partial t \approx 0$. Plugging in for $\sigma^v_{ji}$ and $\sigma^e_{ji}$ yields
@@ -316,8 +316,20 @@
 	Begin with $\eta$. Note that $\eta = \frac{3}{2}Q_{11}$ so that
 	\begin{equation} \label{eq:etaeq}
 	\begin{split}
-		\mu_1 \frac{\partial \eta}{\partial t} &= \frac{3}{2}\left( L\partial^2 Q_{11} - A Q_{11} - B Q_{1k}Q_{k1} - C Q_{11}\left( Q_{kl}Q_{lk} \right) - \frac{1}{2}\mu_2 \left( \epsilon_{1kl}\partial_1\partial_k \psi_l + \epsilon_{1kl}\partial_1 \partial_k \psi_l \right) \right) \\
-		&= L\partial^2 \eta - A\eta - B\left( \frac{2}{3}\eta^2 + \frac{3}{2}\nu^2 \right) - C\eta\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) - \frac{3}{2}\mu_2\left( \partial_1\partial_2 \psi_3 \right)
+		\mu_1 \frac{\partial \eta}{\partial t} 
+		&= \frac{3}{2}\left( L\partial^2 Q_{11} 
+		- A Q_{11} 
+		- B Q_{1k}Q_{k1} 
+		- C Q_{11}\left( Q_{kl}Q_{lk} \right) 
+		- \frac{1}{2}\mu_2 \left( 
+		\epsilon_{1kl}\partial_1\partial_k \psi_l + \epsilon_{1kl}\partial_1 \partial_k \psi_l 
+		\right) 
+		\right) \\
+		&= L\partial^2 \eta 
+		- A\eta 
+		- B\left( \frac23 \eta^2 + \frac32 \nu^2 \right) 
+		- C\eta\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) 
+		- \frac{3}{2}\mu_2\left( \partial_1\partial_2 \psi_3 \right)
 	\end{split}
 	\end{equation}
 	Now for $\mu$. Note that $\mu = Q_{22} + \frac{1}{2} Q_{11}$. Then we have
@@ -331,10 +343,22 @@
 	\end{split}
 	\end{equation}
 	Now for $\nu$. Note that $\nu = Q_{12}$, so that
+	% Changed so that stream function term is nonzero now
 	\begin{equation}\label{eq:nueq}
 	\begin{split}
-		\mu_1 \frac{\partial \nu}{\partial t} &= L\partial^2 Q_{12} - A Q_{12} - B Q_{1k}Q_{k2} - C Q_{12}\left( Q_{kl}Q_{lk} \right) - \frac{1}{2}\mu_2 \left( \epsilon_{1kl}\partial_2\partial_k \psi_l + \epsilon_{2kl}\partial_1 \partial_k \psi_l \right) \\
-		&= L\partial^2\nu - A\nu - B\left( \frac{1}{3}\eta\nu + \mu\nu \right) - C\nu\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right)
+		\mu_1 \frac{\partial \nu}{\partial t} 
+		&= L\partial^2 Q_{12} 
+		- A Q_{12} 
+		- B Q_{1k}Q_{k2} 
+		- C Q_{12}\left( Q_{kl}Q_{lk} \right) 
+		- \frac{1}{2}\mu_2 \left( 
+		\epsilon_{1kl}\partial_2\partial_k \psi_l + \epsilon_{2kl}\partial_1 \partial_k \psi_l 
+		\right) \\
+		&= L\partial^2\nu 
+		- A\nu 
+		- B\left( \frac{1}{3}\eta\nu + \mu\nu \right) 
+		- C\nu\left( \frac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right)
+		- \frac12 \mu_2 \left( \partial_2^2 - \partial_1^2 \right) \psi_3
 	\end{split}
 	\end{equation}
 	
@@ -387,15 +411,32 @@
 		f_1(\eta, \mu, \nu) = 2L \bigg[ \tfrac13 \left( \partial_2\partial^2 \eta \right) \partial_1 \eta - \tfrac13 \left( \partial_1\partial^2 \eta\right)\partial_2 \eta + \left(\partial_2 \partial^2 \nu\right)\partial_1 \nu \\ - \left(\partial_1 \partial^2 \nu\right)\partial_2 \nu + \left(\partial_2 \partial^2 \mu\right)\partial_1 \mu - \left(\partial_1 \partial^2 \mu\right)\partial_2 \mu \bigg]
 	\end{multline}
 	Additionally, we'd like to plug in for the time derivatives of $Q_{ij}$ so that we have everything in terms of $\psi_3$, $Q_{ij}$ and spatial derivatives of those two. This will allow us to get rid of $\psi_3$ in our time evolution equation for $Q_{ij}$ using Fourier Transforms.  Let's go term by term. First term reads:
+	% Changed this to include flow term 
 	\begin{equation}
-		\frac{\partial Q_{12}}{\partial t} = \frac{\partial \nu}{\partial t} = \frac{1}{\mu_1} \left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]
+		\frac{\partial Q_{12}}{\partial t} 
+		= \frac{\partial \nu}{\partial t}
+		= \frac{1}{\mu_1} \left[ 
+		L\partial^2 \nu 
+		- A\nu 
+		- B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) 
+		- C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right)
+		- \tfrac12 \mu_2 \left( \partial_2^2 - \partial_1^2 \right) \psi_3
+		 \right]
 	\end{equation}
 	Second term reads:
 	\begin{equation}
 	\begin{split}
-		\frac{\partial Q_{22}}{\partial t} &= \frac{1}{\mu_1}\left[ L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) - A\left( \mu - \tfrac{1}{3}\eta \right) - B\left( \nu^2 + 
-		\left( \tfrac{1}{3}\eta - \mu \right)^2 \right)\right. \\
-		&\qquad\qquad\left.\vphantom{\frac13^2}- C\left( \mu - \tfrac{1}{3}\eta \right)\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) + \mu_2 \partial_1\partial_2 \psi_3 \right]
+		\frac{\partial Q_{22}}{\partial t} 
+		&= \frac{1}{\mu_1}\left[ 
+		L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) 
+		- A\left( \mu - \tfrac{1}{3}\eta \right) 
+		- B\left( \nu^2 + \left( \tfrac13 \eta - \mu \right)^2 \right)
+		\right. \\
+		&\qquad\qquad\left.\vphantom{\frac13^2} 
+		- C\left( \mu - \tfrac{1}{3}\eta \right)
+		\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) 
+		+ \mu_2 \partial_1\partial_2 \psi_3 
+		\right]
 	\end{split}
 	\end{equation}
 	Third term reads:
@@ -403,13 +444,14 @@
 		\frac{\partial Q_{11}}{\partial t} = \frac{1}{\mu_1} \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) - \mu_2 \partial_1\partial_2 \psi_3 \right]
 	\end{equation}
 	We may plug these into \eqref{eq:biharmexplcit} to get
+	% Changed this so that it includes the stream function term for nu
 	\begin{multline}
 		\beta_4 \partial^4 \psi_3 = \frac12 \frac{\mu_2}{\mu_1} \biggl( \left( \partial_1^2 - \partial_2^2\right)\left[ L\partial^2 \nu - A\nu - B\left(\tfrac{1}{3}\eta\nu + \mu\nu\right) - C\nu\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right]\biggr. \\
 		+ \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \tfrac{1}{3}\eta \right) - A\left( \mu - \tfrac{1}{3}\eta \right) - B\left( \nu^2 + 
 		\left( \tfrac{1}{3}\eta - \mu \right)^2 \right)\right. \\
 		\Bigl.- C\left( \mu - \tfrac{1}{3}\eta \right)\left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \Bigr] \\
 		- \partial_1\partial_2 \left[L\partial^2 \left( \tfrac{2}{3}\eta \right) - A \tfrac{2}{3}\eta - B\left( \tfrac{4}{9}\eta^2 + \nu^2 \right) - C \tfrac{2}{3}\eta \left( \tfrac{2}{3}\eta^2 + 2\nu^2 + 2\mu^2 \right) \right] \\
-		\biggl. + 2\mu_2 \partial_1^2\partial_2^2 \psi_3 \biggr) + f_1(Q) \\
+		\biggl. + \tfrac12 \mu_2 \partial^4 \psi_3 \biggr) + f_1(Q) \\
 	\end{multline}
 	To simplify this equation, define:
 	\begin{multline} \label{eq:f2-1}
@@ -425,8 +467,15 @@
 		\biggl. + \partial_1\partial_2 \left[ L\partial^2 \left( \mu - \eta \right) - A\left( \mu - \eta \right) - B\left( -\tfrac19 \eta^2 - \tfrac23 \eta\mu + \mu^2 \right) - C\left( \mu - \eta\right) \left( \tfrac23 \eta^2 + 2\nu^2 + 2\mu^2 \right)\right] \biggr) 
 	\end{multline}
 	Making this substitution in the stream function equation yields:
+	% Changed this to include the stream function term from nu
 	\begin{equation} \label{eq:streamfuncsimp}
-		\beta_4 \partial^4 \psi_3 - \frac{\mu_2^2}{\mu_1} \partial_1^2\partial_2^2 \psi_3 = f_1(Q) + f_2(Q)
+		\partial^4 \psi_3 
+		= \alpha \left( f_1(Q) + f_2(Q) \right)
+	\end{equation}
+	where
+	\begin{equation}
+		\alpha 
+		= \left( \beta_4 - \tfrac14 \tfrac{\mu_2^2}{\mu_1} \right)^{-1}
 	\end{equation}
 	
 	\section{Computationial Scheme}
@@ -1280,6 +1329,279 @@
 		\frac{\partial \mu}{\partial \bar{t}} &= \partial^2 \mu - \bar{A}\mu - \bar{B}\left( \tfrac13 \eta^2 + \mu^2 + \tfrac32 \nu^2 - \tfrac23 \eta \mu \right) - \bar{C}\mu\left(\tfrac23 \eta^2 + 2\nu^2 + 2\mu^2\right) + \partial_1 \partial_2 \overline{\psi} \\
 		\frac{\partial \nu}{\partial \bar{t}} &= \partial^2 \nu - \bar{A}\nu - \bar{B}\left( \tfrac13\eta\nu + \mu\nu \right) - \bar{C}\nu\left(\tfrac23\eta^2 + 2\nu^2 + 2\mu^2\right)
 	\end{split}
+	\end{equation}
+	
+	\section{Checking the code using velocity formulation}
+	\subsection{Writing velocity equations of motion}
+	From \eqref{eq:hom-el-force} and \eqref{eq:visc-force}, we have that:
+	\begin{equation}
+		\frac{\partial Q_{ij}}{\partial t} = 
+		L\partial^2 Q_{ij} 
+		- AQ_{ij} - BQ_{ik}Q_{kj} 
+		- C Q_{ij} \left( Q_{kl}Q_{lk} \right) 
+		- \frac12 \mu_2 \left(\partial_i v_j + \partial_j v_i\right)
+	\end{equation}
+	Plugging this into \eqref{eq:visc-stress}, we get
+	\begin{equation}
+		\sigma^v_{ij} \approx 
+		\beta_4 \left(\partial_i v_j + \partial_j v_i\right)
+		+ \frac12 \frac{\mu_2}{\mu_1} \left[
+		L\partial^2 Q_{ij}
+		- A Q_{ij}
+		- B Q_{ik} Q_{kj}
+		- C Q_{ij} \left( Q_{kl} Q_{lk} \right)
+		- \frac12 \mu_2 \left( \partial_i v_j + \partial_j v_i \right)
+		\right]
+	\end{equation}
+	We may plug this into \eqref{eq:fluid-eom}, along with our assumption that $\partial v_i/\partial t \approx 0$ to get:
+	\begin{multline}
+		\partial_i p = 
+		\left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)
+		\left( \partial_i \partial_j v_j + \partial^2 v_i \right) \\
+		+ \frac12 \frac{\mu_2}{\mu_1}
+		\left[
+		L \partial^2 \partial_j Q_{ij} 
+		- A \partial_j Q_{ij}
+		- B \partial_j \left( Q_{ik} Q_{kj} \right)
+		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right]
+		\right]\\
+		- L\partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right)
+	\end{multline}
+	Note that, by incompressibility, $\partial_i v_i = 0$ so a term in parentheses goes away. Now define:
+	\begin{align}
+		&f_{\mu_2, i}(Q) = 
+		L \partial^2 \partial_j Q_{ij} 
+		- A \partial_j Q_{ij}
+		- B \partial_j \left( Q_{ik} Q_{kj} \right)
+		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
+		&f_{L, i} (Q) = \partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right) \\
+		&f_i (Q) = -\frac12 \frac{\mu_2}{\mu_1} f_{\mu_2, i} (Q) + L f_{L, i} (Q) \\
+		&\alpha = \left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)^{-1}
+	\end{align}
+	Then the fluid equation of motion becomes:
+	\begin{equation}\label{eq:fluid-laplace-equation}
+		\partial^2 v_i = \alpha \left( \partial_i p + f_i \right)
+	\end{equation}
+	In order to solve this, we'll assume periodic boundary conditions. 
+	To actually use this to check our stream function formulation, we'll have to choose $f_i$ such that $v_i$ turns out to be zero along the boundaries. 
+	Given periodic boundary conditions, we may write:
+	\begin{align}
+		v_i (x, y) &= \sum_{k_x, k_y} \hat{v}_{i, k_x k_y} 
+		e^{ i \left( k_x x + k_y y \right) } \\
+		f_i (x, y) &= \sum_{k_x, k_y} \hat{f}_{i, k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) } \\
+		p (x, y) &= \sum_{k_x, k_y} \hat{p}_{k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) }
+	\end{align}
+	where $k_x = 2\pi m/L_x$ and $k_y = 2\pi n/L_y$ with $m = ..., -1, 0, 1, ...$ and $n = ..., -1, 0, 1, ...$.
+	Plugging this into the equation of motion yields:
+	\begin{equation}
+		\sum_{k_x, k_y} - \left( k_x^2 + k_y^2 \right) \hat{v}_{i, k_x k_y} =
+		\alpha \left( 
+		\sum_{k_x, k_y} i k_i \hat{p}_{k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) }
+		+ \sum_{k_x, k_y} \hat{f}_{i, k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) }
+		\right)
+	\end{equation}
+	By orthogonality of the exponentials, we get that:
+	\begin{equation}
+	\begin{split}
+		- \left( k_x^2 + k_y^2 \right) \hat{v}_{i, k_x k_y} 
+		&= \alpha \left( 
+		i k_i \hat{p}_{k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) }
+		+ \hat{f}_{i, k_x k_y}
+		e^{ i \left( k_x x + k_y y \right) }
+		\right) \\
+		\implies
+		\hat{v}_{i, k_x k_y}
+		&= \frac{ \alpha \left(
+		i k_i \hat{p}_{k_x k_y}
+		+ \hat{f}_{i, k_x k_y} 
+		\right) }
+		{ - \left( k_x^2 + k_y^2 \right) }
+	\end{split}
+	\end{equation}
+	for all $k_x$ and $k_y$. 
+	In order to get rid of the contribution from pressure, we need to take the divergence of the original equation.
+	This yields:
+	\begin{equation}
+		\partial^2 \partial_i v_i
+		= \alpha \left(
+		\partial^2 p + \partial_i f_i
+		\right)
+		= 0
+	\end{equation}
+	This is just a Poisson equation in $p$ with periodic boundary conditions.
+	Again rewriting as a Fourier series and using the orthogonality condition, we get:
+	\begin{equation}
+	\begin{split}
+		-\left( k_x^2 + k_y^2 \right) \hat{p}_{k_x k_y}
+		&= i k_i \hat{f}_{i, k_x k_y} \\
+		\implies \hat{p}_{k_x k_y}
+		&= \frac{ -i k_i }{ k_x^2 + k_y^2 } \hat{f}_{i, k_x k_y}
+	\end{split}
+	\end{equation}
+	Plugging this back into the original equation yields:
+	\begin{equation}
+		v(x, y) 
+		= \sum_{k_x, k_y} \frac{ -\alpha }{ k^2 } \left(
+		\frac{ k_i k_j \hat{f}_{j, k_x k_y} }{k^2}
+		+ \hat{f}_{i, k_x k_y}
+		\right)
+		e^{ i \left( k_x x + k_y y \right) }
+	\end{equation}
+	Now, we would like to choose $f_i$ to be something which is just a sum of sines.
+	These terminate at the endpoints, so we will fulfill our no slip condition if we do that.
+	Since we need to actually choose $Q_{ij}$ to do that (so that we can use the same scenario for the stream function formulation), we will have to just guess and check.
+	Note that many of the terms involved in $f_i$ have third derivatives, so we will want to choose a $\cos$ to be the important term. 
+	Recall that:
+	\begin{equation}
+		Q_{ij} 
+		= \frac{S}{2} \left( 3 n_i n_j - \delta_{ij} \right)
+	\end{equation}
+	Choose $S$ to be constant. 
+	Plugging $Q_{ij}$ into the expression for $f_{mu_2, i}$ yields:
+	\begin{multline}
+		f_{\mu_2, i} (Q)
+		= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{S^2}{4} B \partial_j 
+		\left( 3 n_i n_k - \delta_{ik} \right)
+		\left( 3 n_k n_j - \delta_{kj} \right)\\
+		- \frac{S^3}{8} C \partial_j
+		\left[
+		\left( 3 n_i n_j - \delta_{ij} \right)
+		\left( 3 n_k n_l - \delta_{kl} \right)
+		\left( 3 n_l n_k - \delta_{lk} \right)
+		\right]
+	\end{multline}
+	This simplifies to:
+	\begin{equation}
+	\begin{split}
+		f_{\mu_2, i} (Q)
+		&= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{3 S^2}{2} B \partial_j \left( n_i n_j \right)
+		- \frac{9 S^3}{4} C \partial_j
+		\left( n_i n_j \right) \\
+		&= \frac{3 S}{2} 
+		\left(
+		L \partial^2 - A - S B - \frac{3 S^2}{2} C
+		\right)
+		\partial_j \left( n_i n_j \right)
+	\end{split}
+	\end{equation}
+	Do the same for $f_{L, i}$ to get:
+	\begin{equation}
+		f_{L, i} (Q) = \frac{9 S^2}{4} \partial_j 
+		\left[
+		\partial_i \left( n_k n_l \right)
+		\partial_j \left( n_l n_k \right)
+		\right]
+	\end{equation}
+	Our first guess will be:
+	\begin{equation}
+		\hat{n} = \left( \cos k_x x, \sin k_x x, 0 \right)
+	\end{equation}
+	Note that this expression is independent of $y$ so that any $y$-derivatives will be zero by default.
+	We will do pieces at a time:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left( n_x n_j \right)
+		&= \partial_x \cos^2 k_x x \\
+		&= 2 \cos k_x x \left( -k_x \sin k_x x \right) \\
+		&= -k_x \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Great, this still terminates at the endpoints.
+	Now taking the Laplacian of this:
+	\begin{equation}
+	\begin{split}
+		\partial^2 \partial_j \left( n_x n_j \right)
+		&= \partial_x^2 \left( -k_x \sin \left( 2 k_x x \right) \right) \\
+		&= - 4 k_x^2 \partial_x \cos \left( 2 k_x x \right) \\
+		&= 8 k_x ^3 \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Cool, this also terminates at the endpoints. 
+	So far so good.
+	Now for the last term:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left[ 
+		\partial_x \left( n_k n_l \right) 
+		\partial_j \left( n_l n_k \right) 
+		\right] 
+		&= \partial_x
+		\left[
+		\left( \partial_x \cos^2 k_x x \right)^2
+		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+		+ \left( \partial_x \sin^2 k_x x \right)^2
+		\right] \\
+		&= \partial_x
+		\left[
+		k_x^2 \sin^2 \left( 2 k_x x \right)
+		+ 2 \left( \partial_x \frac12 \sin 2 k_x x \right)^2
+		+ k_x^2 \sin^2 \left( 2 k_x x \right)
+		\right] \\
+		&= \partial_x
+		\left[
+		2 k_x^2 \sin^2 \left( 2 k_x x \right)
+		+ 2 k_x^2 \cos^2 \left( 2 k_x x \right)
+		\right] \\
+		&= 0
+	\end{split}
+	\end{equation}
+	Well this is not actually helpful to understanding why the elastic piece is so small -- here it is actually zero.
+	However, we can check the rest of the configuration with this scheme. 
+	In this case, we get:
+	\begin{equation}
+		f_{i} (x, y) = - \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+		\left[
+		8 k_x^3 L 
+		+ \left( A + S B + \frac{3 S^2}{2} C \right)
+		k_x 
+		\right] \sin \left( 2 k_x x \right)
+	\end{equation}
+	Clearly we have that for all $k_y \neq 0$, we have $\hat{f}_{i, k_x k_y} = 0$ (since there is no $y$-dependence).
+	Additionally, the only nonzero Fourier term is for $k_x = 4 \pi / L_x$, and is completely imaginary since only sine is involved. 
+	This comes out to be:
+	\begin{equation}
+		f_{x, 4 \pi / L_x, 0} = - i \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+		\left[
+		8 k_x^3 L 
+		+ \left( A + S B + \frac{3 S^2}{2} C \right)
+		k_x 
+		\right]
+	\end{equation}
+	Note that we only have nonzero $\hat{f}$ for $i = x$ -- we see this in previous calculations.
+	
+	\subsection{Nondimensionalizing velocity equations of motion}
+	We want to nondimensionalize the velocity field in the same way that we nondimmensionalized the stream function.
+	Note that the velocity is derived from the stream function as
+	\begin{equation}
+		v_i = \epsilon_{ij} \partial_j \psi
+	\end{equation}
+	Now we will rewrite $\psi$ in terms of $\overline{\psi}$ and rewrite $\partial/\partial x_j$ in terms of $\partial/\partial \overline{x}_j$. 
+	This yields:
+	\begin{equation}
+		v_i 
+		= \frac{1}{\xi} \epsilon_{ij} \partial_j \frac{2 \mu_2 \mu_1 \xi^2}{\tau} \overline{\psi}
+		= \frac{2 \mu_2 L}{\xi} \epsilon_{ij} \partial_j \overline{\psi}
+	\end{equation}
+	From this, we define the dimensionless variable $\overline{v}_i$ to be
+	\begin{equation}
+		\overline{v}_i = \frac{\xi}{2 \mu_2 L} v_i
+	\end{equation}
+	We can plug this back into the Poisson equation for the velocity to yield:
+	\begin{equation}
+		\frac{2 \mu_2 L}{\xi^3} \partial^2 \overline{v}_i
+		= \alpha \left(
+		\frac{1}{\xi} \partial_i p + f_i
+		\right)
 	\end{equation}
 	
 \end{document}

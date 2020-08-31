@@ -16,3 +16,6 @@
 \BOOKMARK [2][-]{subsection.3.6}{Solving the modified biharmonic equation}{section.3}% 16
 \BOOKMARK [2][-]{subsection.3.7}{Preconditioning the conjugate gradient method solver}{section.3}% 17
 \BOOKMARK [2][-]{subsection.3.8}{Dimensionless form of the flow equation}{section.3}% 18
+\BOOKMARK [1][-]{section.4}{Checking the code using velocity formulation}{}% 19
+\BOOKMARK [2][-]{subsection.4.1}{Writing velocity equations of motion}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.2}{Nondimensionalizing velocity equations of motion}{section.4}% 21
