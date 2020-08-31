@@ -37,18 +37,15 @@
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
 ## Code writing
-* Write `findDefects` function which finds the minima, finds the smallest `num_defects` minima of those, and then sorts them according to x-position then y-position
-* Plot the flow and see if it matches up with the Svensek and Zumer paper.
+* Write sub-pixel peak-location finding.
+  - To do this, Taylor expand the peak function around neighboring grid-points.
+  - Then do a linear least squares fit 
 * Write more robust peak-finding algorithm
   - For finding peaks, want to filter out noise.
   - To do this, get rid of pixels below some threshold relative to the mean.
   - Then use a simple comparison with neighbors to find the peaks.
   - Actually, neighbor comparison probably would give peaks where it's actually constant.
   - Might need to do a convolution to see whether the peak is significantly larger than the neighbors. 
-* Write sub-pixel peak-location finding.
-  - To do this, Taylor expand the peak function around neighboring grid-points.
-  - Then do a linear least squares fit 
-* Fit defect positions to a square root function (or parabola or whatever). 
 * Figure out why eigenvector function isn't working with Numba compilation
   - I think it's because numba doesn't do boolean array indexing.
 * (Figure out whether @jit works for scipy functions)
@@ -56,6 +53,9 @@
   - This is actually probably not going to provide a significant speedup
     since basically all of the legwork is done by pre-compiled functions (FFT, cg, etc.).
   - Would want to rewrite this in C++/Cuda and then wrap in a python function. 
+* ~~Fit defect positions to a square root function (or parabola or whatever). ~~
+* ~~Plot the flow and see if it matches up with the Svensek and Zumer paper.~~
+* ~~Write `findDefects` function which finds the minima, finds the smallest `num_defects` minima of those, and then sorts them according to x-position then y-position~~
 * ~~Write something to extract the flow from the stream function.~~
 * ~~Write driving function for biharmonic equation (i.e. $f_1(Q)$ and $f_2(Q)$).~~
 * ~~Add flag to finite difference operators to ignore boundaries.~~
@@ -77,11 +77,28 @@
 * ~~Write test script for the modified biharmonic solver~~
 ---------
 ## Documentation
+* Check calculations from entire paper.
+  - ~~Homogeneous and elastic generalized force~~
+  - ~~Viscous force~~
+  - ~~Elastic stress tensor~~
+  - ~~Viscous stress tensor~~
+  - ~~Fluid equation of motion~~
+  - ~~Rewriting in terms of eta, mu, nu~~
+  - ~~Rewriting force equations~~
+    - Error in first equation in section 2.1 -- should just be \eta in B term.
+    - (I think) error in \nu equation (hydro part) is incorrect -- doesn't evaluate to 0.
+  - Rewriting velocity equations
+  - Nondimensionalizing flowless equation
+  - Nondimensionalizing stream function flow
+  - Writing velocity equations of motion
+  - Nondimensionalizing velocity equations of motion
+* Nondimensionalize the velocity field hydrodynamics equations in the same way as the stream function formulation.
 * Figure out problem with elastic flow term (why so small?)
 * Document where I got the stuff relevant for the biharmonic solver
 * Include link to documentation of Fortran stuff, as well as my own repo
 * Explicitly show that $\mathbb{F}$ diagonalizes $\Lambda_2$ and $\Lambda_4^c$
 * (Explain how the conjugate gradients method works)
+* ~~Write out equations only in terms of velocity fields.~~
 * ~~Nondimensionalize the hydrodynamic equations.~~
 * ~~Clean up explanation of the theory (and get rid of Fourier Transform stuff)~~
 * ~~Explicitly write down the effect of $B$ on $U$~~
