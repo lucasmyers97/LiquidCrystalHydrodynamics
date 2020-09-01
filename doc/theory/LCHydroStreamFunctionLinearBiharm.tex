@@ -1335,8 +1335,8 @@
 	\subsection{Writing velocity equations of motion}
 	From \eqref{eq:hom-el-force} and \eqref{eq:visc-force}, we have that:
 	\begin{equation}
-		\frac{\partial Q_{ij}}{\partial t} = 
-		L\partial^2 Q_{ij} 
+		\mu_1 \frac{\partial Q_{ij}}{\partial t}
+		= L\partial^2 Q_{ij} 
 		- AQ_{ij} - BQ_{ik}Q_{kj} 
 		- C Q_{ij} \left( Q_{kl}Q_{lk} \right) 
 		- \frac12 \mu_2 \left(\partial_i v_j + \partial_j v_i\right)
@@ -1503,16 +1503,17 @@
 	\end{equation}
 	Our first guess will be:
 	\begin{equation}
-		\hat{n} = \left( \cos k_x x, \sin k_x x, 0 \right)
+		\hat{n} = \left( \epsilon \cos k_x x, 0, 1 \right)
 	\end{equation}
+	for some small $\epsilon$. 
 	Note that this expression is independent of $y$ so that any $y$-derivatives will be zero by default.
 	We will do pieces at a time:
 	\begin{equation}
 	\begin{split}
 		\partial_j \left( n_x n_j \right)
-		&= \partial_x \cos^2 k_x x \\
-		&= 2 \cos k_x x \left( -k_x \sin k_x x \right) \\
-		&= -k_x \sin \left( 2 k_x x \right)
+		&= \partial_x \epsilon^2 \cos^2 k_x x \\
+		&= 2 \epsilon^2 \cos k_x x \left( -k_x \sin k_x x \right) \\
+		&= -k_x \epsilon^2 \sin \left( 2 k_x x \right)
 	\end{split}
 	\end{equation}
 	Great, this still terminates at the endpoints.
@@ -1520,13 +1521,14 @@
 	\begin{equation}
 	\begin{split}
 		\partial^2 \partial_j \left( n_x n_j \right)
-		&= \partial_x^2 \left( -k_x \sin \left( 2 k_x x \right) \right) \\
-		&= - 4 k_x^2 \partial_x \cos \left( 2 k_x x \right) \\
-		&= 8 k_x ^3 \sin \left( 2 k_x x \right)
+		&= \partial_x^2 \left( -k_x \epsilon^2 \sin \left( 2 k_x x \right) \right) \\
+		&= - 2 k_x^2 \epsilon^2 \partial_x \cos \left( 2 k_x x \right) \\
+		&= 4 k_x ^3 \epsilon^2 \sin \left( 2 k_x x \right)
 	\end{split}
 	\end{equation}
 	Cool, this also terminates at the endpoints. 
 	So far so good.
+	Clearly there will be no $y$-component because $n_y = 0$.
 	Now for the last term:
 	\begin{equation}
 	\begin{split}
@@ -1536,48 +1538,24 @@
 		\right] 
 		&= \partial_x
 		\left[
-		\left( \partial_x \cos^2 k_x x \right)^2
-		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
-		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
-		+ \left( \partial_x \sin^2 k_x x \right)^2
+		\left( \partial_x \epsilon^2 \cos^2 k_x x \right)^2
+		+ \left( \partial_x \epsilon \cos k_x x \right)^2
+		+ \left( \partial_x \epsilon \cos k_x x \right)^2
 		\right] \\
 		&= \partial_x
 		\left[
-		k_x^2 \sin^2 \left( 2 k_x x \right)
-		+ 2 \left( \partial_x \frac12 \sin 2 k_x x \right)^2
-		+ k_x^2 \sin^2 \left( 2 k_x x \right)
+		k_x^2 \epsilon^4 \sin^2 \left( 2 k_x x \right)
+		+ 2 k_x^2 \epsilon^2 \sin^2 \left( k_x x \right) 
 		\right] \\
-		&= \partial_x
-		\left[
-		2 k_x^2 \sin^2 \left( 2 k_x x \right)
-		+ 2 k_x^2 \cos^2 \left( 2 k_x x \right)
-		\right] \\
-		&= 0
+		&= 2 k_x^2 \epsilon^4 \sin \left( 2 k_x x \right)
+		\cos \left( 2 k_x x \right) 2 k_x
+		+ 4 k_x^2 \epsilon^2 \sin \left( k_x x \right)
+		\cos \left( k_x x \right) k_x \\
+		&= 2 k_x^3 \epsilon^4 \sin \left( 4 k_x x \right)
+		+ 2 k_x^2 \epsilon^2 \sin \left( 2 k_x x \right)
 	\end{split}
 	\end{equation}
-	Well this is not actually helpful to understanding why the elastic piece is so small -- here it is actually zero.
-	However, we can check the rest of the configuration with this scheme. 
-	In this case, we get:
-	\begin{equation}
-		f_{i} (x, y) = - \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
-		\left[
-		8 k_x^3 L 
-		+ \left( A + S B + \frac{3 S^2}{2} C \right)
-		k_x 
-		\right] \sin \left( 2 k_x x \right)
-	\end{equation}
-	Clearly we have that for all $k_y \neq 0$, we have $\hat{f}_{i, k_x k_y} = 0$ (since there is no $y$-dependence).
-	Additionally, the only nonzero Fourier term is for $k_x = 4 \pi / L_x$, and is completely imaginary since only sine is involved. 
-	This comes out to be:
-	\begin{equation}
-		f_{x, 4 \pi / L_x, 0} = - i \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
-		\left[
-		8 k_x^3 L 
-		+ \left( A + S B + \frac{3 S^2}{2} C \right)
-		k_x 
-		\right]
-	\end{equation}
-	Note that we only have nonzero $\hat{f}$ for $i = x$ -- we see this in previous calculations.
+	This also terminates at the endpoints, so it works with our no-slip condition. Note that, again, there is no $y$-component because the director field is independent of $y$. 
 	
 	\subsection{Nondimensionalizing velocity equations of motion}
 	We want to nondimensionalize the velocity field in the same way that we nondimmensionalized the stream function.

@@ -1,0 +1,471 @@
+\documentclass[reqno]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{relsize}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{pgf, tikz}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usetikzlibrary{graphs}
+
+\setlength{\textheight}{9truein}
+\setlength{\topmargin}{-0.5truein}
+\setlength{\textwidth}{6truein}
+\setlength{\oddsidemargin}{.25truein}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\setlength{\parindent}{40pt}
+
+\begin{document}
+	\title{LC Flow Velocity Eqs}
+	\author{Lucas Myers}
+	\maketitle
+	
+	\section{Elastic generalized force}
+	From Svensek and Zumer, the free energy density is given by
+	\begin{equation}
+		f = \phi(Q) + \frac{1}{2} L \partial_i Q_{jk} \partial_i Q_{jk}
+	\end{equation}
+	so that the homogeneous elastic part of the generalized force is given by:
+	\begin{equation}
+		h^{he}_{ij} 
+		= L\partial_k^2 Q_{ij} 
+		- \frac{\partial \phi}{\partial Q_{ij}} 
+		+ \lambda \delta_{ij} 
+		+ \lambda_k\epsilon_{kij}
+	\end{equation}
+	where $\phi$ is the Landau de Gennes bulk free energy:
+	\begin{equation} \label{eq:LdG}
+		\phi(Q) 
+		= \frac{1}{2}A Q_{ij}Q_{ji} 
+		+ \frac{1}{3}B Q_{ij}Q_{jk}Q_{ki} 
+		+ \frac{1}{4} C(Q_{ij}Q_{ji})^2
+	\end{equation}
+	We begin by explicitly calculating the second term in terms of $Q_{ij}$, one term at a time in $\phi$:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}} 
+		\left(\frac{1}{2}AQ_{ij}Q_{ji}\right) 
+		&= \frac{1}{2}A \left(
+		\delta_{im}\delta_{jn}Q_{ji} + 
+		Q_{ij}\delta_{jm}\delta_{in}
+		\right) \\
+		&= \frac{1}{2}A (Q_{nm} + Q_{nm}) \\
+		&= A Q_{mn}
+	\end{split}
+	\end{equation}
+	where in the last step we've used symmetry of $Q_{ij}$.
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}} \left( \frac{1}{3}BQ_{ij}Q_{jk}Q_{ki} \right) &= \frac{1}{3}B ( \delta_{im}\delta_{jn}Q_{jk}Q_{ki} + Q_{ij}\delta_{jm}\delta_{kn}Q_{ki} + Q_{ij}Q_{jk}\delta_{mk}\delta_{ni} ) \\
+		&= \frac{1}{3}B(Q_{nk}Q_{km} + Q_{im}Q_{ni} + Q_{nj}Q_{jm}) \\
+		&= BQ_{ni}Q_{im}
+	\end{split}
+	\end{equation}
+	And the final term gives:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial}{\partial Q_{mn}}\left( \frac{1}{4} C(Q_{ij}Q_{ji})^2 \right) &= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \frac{\partial(Q_{kl}Q_{lk})}{\partial Q_{mn}} \\
+		&= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \cdot (\delta_{mk}\delta_{nl}Q_{lk} + Q_{kl}\delta_{lm}\delta_{kn}) \\
+		&= \frac{1}{4}C \cdot 2(Q_{ij}Q_{ji}) \cdot (Q_{nm} + Q_{nm}) \\
+		&= C Q_{mn} (Q_{ij}Q_{ji})
+	\end{split}
+	\end{equation}
+	Thus, the total homogeneous and elastic force reads:
+	\begin{equation}\label{eq:hom-el-force}
+		h^{he}_{ij} = L\partial^2 Q_{ij} - A Q_{ij} - BQ_{ik}Q_{kj} - C Q_{ij} (Q_{kl}Q_{lk}) + \lambda\delta_{ij} + \lambda_k \epsilon_{kij}
+	\end{equation}
+	
+	\section{Viscous generalized force}
+	Now we need the viscous force on the liquid crystals. From Svensek and Zumer, the viscous force is given by:
+	\begin{equation}
+		-h^v_{ij} = \frac{1}{2} \mu_2 A_{ij} + \mu_1 N_{ij}
+	\end{equation}
+	with 
+	\begin{equation}
+		N_{ij} = \frac{d Q_{ij}}{dt} + W_{ik} Q_{kj} - Q_{ik} W_{kj}
+	\end{equation}
+	and
+	\begin{equation}
+		\frac{d Q_{ij}}{dt} = \frac{\partial Q_{ij}}{\partial t} + (v\cdot \nabla)Q_{ij}
+	\end{equation}
+	where
+	\begin{equation}
+		W_{ij} = \tfrac12 \left( \partial_i v_j - \partial_j v_i \right)
+	\end{equation}
+	The second two terms in the expression for $N_{ij}$ are quadratic in $v_i$ and $Q_{ij}$ so we may drop them, and $(v\cdot \nabla)Q_{ij}$ is clearly quadratic. Hence, we make the approximation
+	\begin{equation}
+		N_{ij} \approx \frac{\partial Q_{ij}}{\partial t}
+	\end{equation}
+	We also have the definition
+	\begin{equation}
+		A_{ij} = (\partial_i v_j + \partial_j v_i)
+	\end{equation}
+	Plugging this into the viscous force yields:
+	\begin{equation}
+		-h^v_{ij} = \frac{1}{2}\mu_2 (\partial_i v_j + \partial_j v_i) + \mu_1 \frac{\partial Q_{ij}}{\partial t} 
+	\end{equation}
+	Balancing the forces gives the equation:
+	\begin{equation}
+		h^e_{ij} = -h^v_{ij}
+	\end{equation}
+	Which yields:
+	\begin{equation}
+		\mu_1 \frac{\partial Q_{ij}}{\partial t}
+		= L\partial^2 Q_{ij} 
+		- AQ_{ij} - BQ_{ik}Q_{kj} 
+		- C Q_{ij} \left( Q_{kl}Q_{lk} \right) 
+		- \frac12 \mu_2 \left(\partial_i v_j + \partial_j v_i\right)
+	\end{equation}
+	(here we have dropped the Lagrange multipliers because we are going to explicitly ensure that $Q_{ij}$ is traceless and symmetric).
+	
+	\section{Elastic stress tensor}
+	The elastic stress tensor is obtained via
+	\begin{equation}
+	\sigma^{e}_{ij} = -\frac{\partial f}{\partial (\partial_i Q_{kl})} \partial_j Q_{kl}
+	\end{equation}
+	Note that only the elastic part of the free energy make references to derivatives:
+	\begin{equation}
+	\begin{split}
+		\frac{\partial f}{\partial (\partial_i Q_{kl})} &= \frac{\partial}{\partial (\partial_i Q_{kl})} \frac{1}{2} L \partial_j Q_{mn} \partial_j Q_{mn} \\
+		&= \frac{1}{2} L (\delta_{ij}\delta_{km}\delta_{ln} \partial_j Q_{mn} + \partial_j Q_{mn} \delta_{ij}\delta_{km}\delta_{ln}) \\
+		&= \frac{1}{2} L (\partial_i Q_{kl} + \partial_i Q_{kl}) \\
+		&= L\partial_i Q_{kl}
+	\end{split}
+	\end{equation}
+	Then the elastic stress tensor is given by
+	\begin{equation}\label{eq:elastic-stress}
+		\sigma^e_{ij} = -L\partial_i Q_{kl} \partial_j Q_{kl}
+	\end{equation}
+	
+	\section{Viscous stress tensor}
+	The viscous stress tensor is given by
+	\begin{equation}
+	\sigma^v_{ij} = \beta_1 Q_{ij}Q_{kl}A_{kl} + \beta_4 A_{ij} + \beta_5 Q_{ik} A_{ki} + \frac{1}{2} \mu_2 N_{ij} - \mu_1 Q_{ik}N_{kj} + \mu_1 Q_{jk}N_{ki}
+	\end{equation}
+	However, only the $\beta_4$ and $\mu_2$ are linear in $Q_{ij}$ and $v_i$. Hence, this simplifies to
+	\begin{equation}
+	\sigma^v_{ij} \approx \beta_4 A_{ij} + \frac{1}{2} \mu_2 N_{ij}
+	\end{equation}
+	Again, plugging in for $A_{ij}$ and $N_{ij}$ as we did for the viscous force, we get
+	\begin{equation}\label{eq:visc-stress}
+	\sigma^v_{ij} \approx \beta_4 (\partial_i v_j + \partial_j v_i) + \frac{1}{2} \mu_2  \frac{\partial Q_{ij}}{\partial t}
+	\end{equation}
+	Plugging in for the time evolution of $Q_{ij}$ gives:
+	\begin{equation}
+		\sigma^v_{ij} \approx 
+		\beta_4 \left(\partial_i v_j + \partial_j v_i\right)
+		+ \frac12 \frac{\mu_2}{\mu_1} \left[
+		L\partial^2 Q_{ij}
+		- A Q_{ij}
+		- B Q_{ik} Q_{kj}
+		- C Q_{ij} \left( Q_{kl} Q_{lk} \right)
+		- \frac12 \mu_2 \left( \partial_i v_j + \partial_j v_i \right)
+		\right]
+	\end{equation}
+	
+	\section{Fluid equation of motion}
+	The equation of motion for the fluid is given by
+	\begin{equation}\label{eq:fluid-eom}
+		\rho \frac{\partial v_i}{\partial t} = -\partial_i p + \partial_j (\sigma^v_{ji} + \sigma^{e}_{ji})
+	\end{equation}
+	We can make the assumption that $\partial v_i/\partial t \approx 0$. Using this and plugging in for $\sigma^v_{ji}$ and $\sigma^e_{ji}$, we get:
+	\begin{multline}
+		\partial_i p = 
+		\left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)
+		\left( \partial_i \partial_j v_j + \partial^2 v_i \right) \\
+		+ \frac12 \frac{\mu_2}{\mu_1}
+		\left[
+		L \partial^2 \partial_j Q_{ij} 
+		- A \partial_j Q_{ij}
+		- B \partial_j \left( Q_{ik} Q_{kj} \right)
+		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right]
+		\right]\\
+		- L\partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right)
+	\end{multline}
+	Note that, by incompressibility, $\partial_i v_i = 0$ so a term in parentheses goes away. Now define:
+	\begin{align}
+		&f_{\mu_2, i}(Q) = 
+		L \partial^2 \partial_j Q_{ij} 
+		- A \partial_j Q_{ij}
+		- B \partial_j \left( Q_{ik} Q_{kj} \right)
+		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
+		&f_{L, i} (Q) = \partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right) \\
+		&f_i (Q) = -\frac12 \frac{\mu_2}{\mu_1} f_{\mu_2, i} (Q) + L f_{L, i} (Q) \\
+		&\alpha = \left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)^{-1}
+	\end{align}
+	Then the fluid equation of motion becomes:
+	\begin{equation}\label{eq:fluid-laplace-equation}
+		\partial^2 v_i = \alpha \left( \partial_i p + f_i \right)
+	\end{equation}
+	
+	\section{Choosing a specific $Q_{ij}$}
+	Now, we would like to choose $f_i$ to be something which is just a sum of sines.
+	These terminate at the endpoints, so it happens that we will fulfill our no slip condition ($v_i = 0$ at the boundary).
+	Since we need to actually choose $Q_{ij}$ to do that (so that we can use the same scenario for the stream function formulation), we will have to just guess and check.
+	Note that many of the terms involved in $f_i$ have third derivatives, so we will want to choose a $\cos$ to be the important term. 
+	Recall that, in the uniaxial case:
+	\begin{equation}
+	Q_{ij} 
+	= \frac{S}{2} \left( 3 n_i n_j - \delta_{ij} \right)
+	\end{equation}
+	Choose $S$ to be constant. 
+	Plugging $Q_{ij}$ into the expression for $f_{\mu_2, i}$ yields:
+	\begin{multline}
+		f_{\mu_2, i} (Q)
+		= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{S^2}{4} B \partial_j 
+		\left( 3 n_i n_k - \delta_{ik} \right)
+		\left( 3 n_k n_j - \delta_{kj} \right)\\
+		- \frac{S^3}{8} C \partial_j
+		\left[
+		\left( 3 n_i n_j - \delta_{ij} \right)
+		\left( 3 n_k n_l - \delta_{kl} \right)
+		\left( 3 n_l n_k - \delta_{lk} \right)
+		\right]
+	\end{multline}
+	This simplifies to:
+	\begin{equation}
+	\begin{split}
+		f_{\mu_2, i} (Q)
+		&= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{3 S^2}{2} B \partial_j \left( n_i n_j \right)
+		- \frac{9 S^3}{4} C \partial_j
+		\left( n_i n_j \right) \\
+		&= \frac{3 S}{2} 
+		\left(
+		L \partial^2 - A - S B - \frac{3 S^2}{2} C
+		\right)
+		\partial_j \left( n_i n_j \right)
+	\end{split}
+	\end{equation}
+	Do the same for $f_{L, i}$ to get:
+	\begin{equation}
+	f_{L, i} (Q) = \frac{9 S^2}{4} \partial_j 
+	\left[
+	\partial_i \left( n_k n_l \right)
+	\partial_j \left( n_l n_k \right)
+	\right]
+	\end{equation}
+	Our first guess will be:
+	\begin{equation}
+	\hat{n} = \left( \cos k_x x, \sin k_x x, 0 \right)
+	\end{equation}
+	Note that this expression is independent of $y$ so that any $y$-derivatives will be zero by default.
+	We will do pieces at a time:
+	\begin{equation}
+	\begin{split}
+	\partial_j \left( n_x n_j \right)
+		&= \partial_x \cos^2 k_x x \\
+		&= 2 \cos k_x x \left( -k_x \sin k_x x \right) \\
+		&= -k_x \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Great, this still terminates at the endpoints.
+	Now taking the Laplacian of this:
+	\begin{equation}
+	\begin{split}
+		\partial^2 \partial_j \left( n_x n_j \right)
+		&= \partial_x^2 \left( -k_x \sin \left( 2 k_x x \right) \right) \\
+		&= - 4 k_x^2 \partial_x \cos \left( 2 k_x x \right) \\
+		&= 8 k_x ^3 \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Cool, this also terminates at the endpoints. 
+	So far so good.
+	Let's look at the $y$-component:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left( n_y n_j \right)
+		&= \partial_x \left( \cos k_x x \sin k_x x \right) \\
+		&= \partial_x \tfrac12 \sin 2 k_x x \\
+		&= - k_x \cos 2 k_x x
+	\end{split} 
+	\end{equation}
+	This certainly does not go to zero at the endpoints, so we have not met our no-slip condition. Dang.
+	Now for the last term:
+	\begin{equation}
+	\begin{split}
+	\partial_j \left[ 
+	\partial_x \left( n_k n_l \right) 
+	\partial_j \left( n_l n_k \right) 
+	\right] 
+	&= \partial_x
+	\left[
+	\left( \partial_x \cos^2 k_x x \right)^2
+	+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+	+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+	+ \left( \partial_x \sin^2 k_x x \right)^2
+	\right] \\
+	&= \partial_x
+	\left[
+	k_x^2 \sin^2 \left( 2 k_x x \right)
+	+ 2 \left( \partial_x \frac12 \sin 2 k_x x \right)^2
+	+ k_x^2 \sin^2 \left( 2 k_x x \right)
+	\right] \\
+	&= \partial_x
+	\left[
+	2 k_x^2 \sin^2 \left( 2 k_x x \right)
+	+ 2 k_x^2 \cos^2 \left( 2 k_x x \right)
+	\right] \\
+	&= 0
+	\end{split}
+	\end{equation}
+	Well this is not actually helpful to understanding why the elastic piece is so small -- here it is actually zero.
+	However, we can check the rest of the configuration with this scheme. 
+	In this case, we get:
+	\begin{equation}
+	f_{i} (x, y) = - \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+	\left[
+	8 k_x^3 L 
+	+ \left( A + S B + \frac{3 S^2}{2} C \right)
+	k_x 
+	\right] \sin \left( 2 k_x x \right)
+	\end{equation}
+	Clearly we have that for all $k_y \neq 0$, we have $\hat{f}_{i, k_x k_y} = 0$ (since there is no $y$-dependence).
+	Additionally, the only nonzero Fourier term is for $k_x = 4 \pi / L_x$, and is completely imaginary since only sine is involved. 
+	This comes out to be:
+	\begin{equation}
+	f_{x, 4 \pi / L_x, 0} = - i \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+	\left[
+	8 k_x^3 L 
+	+ \left( A + S B + \frac{3 S^2}{2} C \right)
+	k_x 
+	\right]
+	\end{equation}
+	Now, we would like to choose $f_i$ to be something which is just a sum of sines.
+	These terminate at the endpoints, so we will fulfill our no slip condition ($v_i = 0$ at the boundaries) if we do that.
+	Since we need to actually choose $Q_{ij}$ to do that (so that we can use the same scenario for the stream function formulation), we will have to just guess and check.
+	Note that many of the terms involved in $f_i$ have third derivatives, so we will want to choose a $\cos$ to be the important term. 
+	Recall that:
+	\begin{equation}
+		Q_{ij} 
+		= \frac{S}{2} \left( 3 n_i n_j - \delta_{ij} \right)
+	\end{equation}
+	Choose $S$ to be constant. 
+	Plugging $Q_{ij}$ into the expression for $f_{mu_2, i}$ yields:
+	\begin{multline}
+		f_{\mu_2, i} (Q)
+		= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{S^2}{4} B \partial_j 
+		\left( 3 n_i n_k - \delta_{ik} \right)
+		\left( 3 n_k n_j - \delta_{kj} \right)\\
+		- \frac{S^3}{8} C \partial_j
+		\left[
+		\left( 3 n_i n_j - \delta_{ij} \right)
+		\left( 3 n_k n_l - \delta_{kl} \right)
+		\left( 3 n_l n_k - \delta_{lk} \right)
+		\right]
+	\end{multline}
+	This simplifies to:
+	\begin{equation}
+	\begin{split}
+		f_{\mu_2, i} (Q)
+		&= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
+		- \frac{3 S}{2} A \partial_j \left( n_i n_j \right)
+		- \frac{3 S^2}{2} B \partial_j \left( n_i n_j \right)
+		- \frac{9 S^3}{4} C \partial_j
+		\left( n_i n_j \right) \\
+		&= \frac{3 S}{2} 
+		\left(
+		L \partial^2 - A - S B - \frac{3 S^2}{2} C
+		\right)
+		\partial_j \left( n_i n_j \right)
+	\end{split}
+	\end{equation}
+	Do the same for $f_{L, i}$ to get:
+	\begin{equation}
+		f_{L, i} (Q) = \frac{9 S^2}{4} \partial_j 
+		\left[
+		\partial_i \left( n_k n_l \right)
+		\partial_j \left( n_l n_k \right)
+		\right]
+	\end{equation}
+	Our first guess will be:
+	\begin{equation}
+		\hat{n} = \left( \cos k_x x, \sin k_x x, 0 \right)
+	\end{equation}
+	Note that this expression is independent of $y$ so that any $y$-derivatives will be zero by default.
+	We will do pieces at a time:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left( n_x n_j \right)
+		&= \partial_x \cos^2 k_x x \\
+		&= 2 \cos k_x x \left( -k_x \sin k_x x \right) \\
+		&= -k_x \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Great, this still terminates at the endpoints.
+	Now taking the Laplacian of this:
+	\begin{equation}
+	\begin{split}
+		\partial^2 \partial_j \left( n_x n_j \right)
+		&= \partial_x^2 \left( -k_x \sin \left( 2 k_x x \right) \right) \\
+		&= - 4 k_x^2 \partial_x \cos \left( 2 k_x x \right) \\
+		&= 8 k_x ^3 \sin \left( 2 k_x x \right)
+	\end{split}
+	\end{equation}
+	Cool, this also terminates at the endpoints. 
+	So far so good.
+	Now for the last term:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left[ 
+		\partial_x \left( n_k n_l \right) 
+		\partial_j \left( n_l n_k \right) 
+		\right] 
+		&= \partial_x
+		\left[
+		\left( \partial_x \cos^2 k_x x \right)^2
+		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+		+ \left( \partial_x \cos k_x x \sin k_x x \right)^2
+		+ \left( \partial_x \sin^2 k_x x \right)^2
+		\right] \\
+		&= \partial_x
+		\left[
+		k_x^2 \sin^2 \left( 2 k_x x \right)
+		+ 2 \left( \partial_x \frac12 \sin 2 k_x x \right)^2
+		+ k_x^2 \sin^2 \left( 2 k_x x \right)
+		\right] \\
+		&= \partial_x
+		\left[
+		2 k_x^2 \sin^2 \left( 2 k_x x \right)
+		+ 2 k_x^2 \cos^2 \left( 2 k_x x \right)
+		\right] \\
+		&= 0
+	\end{split}
+	\end{equation}
+	Well this is not actually helpful to understanding why the elastic piece is so small -- here it is actually zero.
+	However, we can check the rest of the configuration with this scheme. 
+	In this case, we get:
+	\begin{equation}
+		f_{i} (x, y) = - \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+		\left[
+		8 k_x^3 L 
+		+ \left( A + S B + \frac{3 S^2}{2} C \right)
+		k_x 
+		\right] \sin \left( 2 k_x x \right)
+	\end{equation}
+	Clearly we have that for all $k_y \neq 0$, we have $\hat{f}_{i, k_x k_y} = 0$ (since there is no $y$-dependence).
+	Additionally, the only nonzero Fourier term is for $k_x = 4 \pi / L_x$, and is completely imaginary since only sine is involved. 
+	This comes out to be:
+	\begin{equation}
+		f_{x, 4 \pi / L_x, 0} = - i \frac{\mu_2}{\mu_1} \frac{3 S}{4} 
+		\left[
+		8 k_x^3 L 
+		+ \left( A + S B + \frac{3 S^2}{2} C \right)
+		k_x 
+		\right]
+	\end{equation}
+	Note that we only have nonzero $\hat{f}$ for $i = x$ -- we see this in previous calculations. 
+	
+\end{document}
