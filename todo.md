@@ -37,6 +37,7 @@
 * ~~Fit flowless 2-defect results to a sqrt function to estimate how long they take to annihilate.~~
   - See if you can find formula in de Gennes about that.
 ## Code writing
+* Need to fix the peak-finding algorithm -- something is wrong.
 * Write sub-pixel peak-location finding.
   - To do this, Taylor expand the peak function around neighboring grid-points.
   - Then do a linear least squares fit 
