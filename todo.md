@@ -1,5 +1,12 @@
 # To do
 ---------
+## Before next week
+* Plot S and P for some configurations
+* Look for papers which have hydrodynamics
+* Check that the hydro code runs (compare with analytic solution)
+* Create initial conditions exactly like Svensek and Zumer
+* Figure out how to introduce anisotropy into the Biharmonic source term
+* Try Bjornstad biharmonic solver -- see if it's faster
 ## Simulation tasks
 * Should do a couple of steps with the 512x512 size grid to see ~how long a simulation might take.
 * Need to, for the beginning of the flow simulation, plot the contributtions to eta, mu, and nu from flow-less and then just from flow to see whether there should be a major contribution.
