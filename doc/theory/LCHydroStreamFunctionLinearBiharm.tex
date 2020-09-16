@@ -1307,7 +1307,7 @@
 	\end{split}
 	\end{equation}
 	where we have used \eqref{eq:tau} to simplify. Now define
-	\begin{equation}
+	\begin{equation} \label{eq:dimensionless-constants}
 		a \equiv \frac{\mu_2}{\mu_1},
 		\quad
 		b \equiv \frac{\beta_4}{\mu_1},
@@ -1381,13 +1381,13 @@
 	\end{multline}
 	Note that, by incompressibility, $\partial_i v_i = 0$ so a term in parentheses goes away. Now define:
 	\begin{align}
-		&f_{\mu_2, i}(Q) = 
+		&f_{\mu_2, i}(Q) = \label{eq:f_mu-equation}
 		L \partial^2 \partial_j Q_{ij} 
 		- A \partial_j Q_{ij}
 		- B \partial_j \left( Q_{ik} Q_{kj} \right)
-		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
-		&f_{L, i} (Q) = \partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right) \\
-		&f_i (Q) = -\frac12 \frac{\mu_2}{\mu_1} f_{\mu_2, i} (Q) + L f_{L, i} (Q) \\
+		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\ 
+		&f_{L, i} (Q) = \partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right) \label{eq:f_L-equation} \\ 
+		&f_i (Q) = -\frac12 \frac{\mu_2}{\mu_1} f_{\mu_2, i} (Q) + L f_{L, i} (Q) \label{eq:f-equation} \\
 		&\alpha = \left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)^{-1}
 	\end{align}
 	Then the fluid equation of motion becomes:
@@ -1447,7 +1447,7 @@
 	\end{equation}
 	This is just a Poisson equation in $p$ with periodic boundary conditions.
 	Again rewriting as a Fourier series and using the orthogonality condition, we get:
-	\begin{equation}
+	\begin{equation} \label{eq:p-fourier-components}
 	\begin{split}
 		-\left( k_x^2 + k_y^2 \right) \hat{p}_{k_x k_y}
 		&= i k_i \hat{f}_{i, k_x k_y} \\
@@ -1456,8 +1456,8 @@
 	\end{split}
 	\end{equation}
 	Plugging this back into the original equation yields:
-	\begin{equation}
-		v(x, y) 
+	\begin{equation} \label{eq:velocity-fourier-solution}
+		v_i(x, y) 
 		= \sum_{k_x, k_y} \frac{ -\alpha }{ k^2 } \left(
 		\frac{ k_i k_j \hat{f}_{j, k_x k_y} }{k^2}
 		+ \hat{f}_{i, k_x k_y}
@@ -1474,7 +1474,7 @@
 		= \frac{S}{2} \left( 3 n_i n_j - \delta_{ij} \right)
 	\end{equation}
 	Choose $S$ to be constant. 
-	Plugging $Q_{ij}$ into the expression for $f_{mu_2, i}$ yields:
+	Plugging $Q_{ij}$ into the expression for $f_{\mu_2, i}$ yields:
 	\begin{multline}
 		f_{\mu_2, i} (Q)
 		= \frac{3 S}{2} L \partial^2 \partial_j \left( n_i n_j \right)
@@ -1601,6 +1601,175 @@
 		\right)
 	\end{split}
 	\end{equation}
+	We may define $\overline{\alpha}$ in the same way as \eqref{eq:dimensionless-constants}. 
+	Additionally, we define:
+	\begin{equation}
+		\overline{p} \equiv \frac{\xi^2}{L} p,
+		\quad \overline{f}_i \equiv \frac{\xi^3}{L} f_i
+	\end{equation}
+	Let's find explicit expressions for $\overline{f}_i$ and $\overline{p}$.
+	From \eqref{eq:f-equation} we get:
+	\begin{equation}
+	\begin{split}
+		\overline{f}_i 
+		&= \frac{\xi^3}{L} f_i \\
+		&= \frac{\xi^3}{L} \left( 
+		- \frac12 \frac{\mu_2}{\mu_1} f_{\mu_2, i} (Q)
+		\right)
+		+ \frac{\xi^3}{L} L f_{L, i}(Q)
+	\end{split}
+	\end{equation}
+	Going term by term and using \eqref{eq:f_mu-equation} and \eqref{eq:f_L-equation} yields:
+	\begin{equation}
+	\begin{split}
+		\frac{\xi^3}{L} f_{\mu_2, i} (Q) 
+		&= \frac{\xi^3}{L} \left(
+		L \partial^2 \partial_j Q_{ij} 
+		- A \partial_j Q_{ij}
+		- B \partial_j \left( Q_{ik} Q_{kj} \right)
+		- C \partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right]
+		\right) \\
+		&= \partial^2 \partial_j Q_{ij}
+		- \frac{A \xi^2}{L} \partial_j Q_{ij}
+		- \frac{B \xi^2}{L} \partial_j 
+		\left( Q_{ik}Q_{kj} \right)
+		- \frac{C \xi^2}{L} \partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
+		&= \partial^2 \partial_j Q_{ij}
+		- \overline{A} \partial_j Q_{ij}
+		- \overline{B} \partial_j 
+		\left( Q_{ik}Q_{kj} \right)
+		- \overline{C} \partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
+		&\equiv \overline{f}_{\mu_2, i} (Q)
+	\end{split}
+	\end{equation}
+	Where in the second equality we have invoked the dimensionless derivatives. 
+	Additionally, we get
+	\begin{equation}
+	\begin{split}
+		\xi^3 f_{L, i} (Q) 
+		&= \xi^3 \partial_j \left( 
+		\partial_i Q_{kl} \partial_j Q_{kl} 
+		\right) \\
+		&= \partial_j \left( 
+		\partial_i Q_{kl} \partial_j Q_{kl} 
+		\right) \\
+		&\equiv \overline{f}_{L, i}
+	\end{split}
+	\end{equation}
+	where in the penultimate step we have invoked the dimensionless derivatives. 
+	Hence, we arrive at:
+	\begin{equation}
+		\overline{f}_i 
+		= -\tfrac12 a \overline{f}_{\mu_2, i}
+		+ \overline{f}_{L, i}
+	\end{equation}
+	where we have used the definition of $a$ from \eqref{eq:dimensionless-constants}. 
+	Now for $p$.
+	Since the only explicit expression we have for $p$ is in terms of Fourier components, define $\overline{k}_x \equiv k_x/\xi$ and $\overline{k}_y \equiv k_y/\xi$. 
+	Then \eqref{eq:p-fourier-components} becomes:
+	\begin{equation}
+	\begin{split}
+		\overline{p} 
+		&= \frac{\xi^2}{L} p \\
+		&= \sum_{\overline{k}_x \overline{k}_y}
+		\frac{-i \overline{k}_i}{\overline{k}_x^2 + \overline{k}_y^2}
+		\xi \frac{\xi^2}{L} 
+		\hat{f}_{i, \overline{k}_x \overline{k}_y}
+		e^{i \left(\overline{k}_x \overline{x} + \overline{k}_y \overline{y} \right)} \\
+		&= \sum_{\overline{k}_x \overline{k}_y}
+		\frac{-i \overline{k}_i}{\overline{k}_x^2 + \overline{k}_y^2}
+		\hat{\overline{f}}_{i, \overline{k}_x \overline{k}_y}
+		e^{i \left(\overline{k}_x \overline{x} + \overline{k}_y \overline{y} \right)} 
+	\end{split}
+	\end{equation}
+	where we have defined
+	\begin{equation}
+		\hat{\overline{f}}_{i, \overline{k}_x \overline{k}_y} 
+		\equiv \frac{\xi^3}{L} \hat{f}_{i, \overline{k}_x \overline{k}_y}
+	\end{equation}
+	Let's check consistency with the definition of $\overline{f}_i$:
+	\begin{equation}
+	\begin{split}
+		\overline{f}_i
+		&= \frac{\xi^3}{L} f_i \\
+		&= \frac{\xi^3}{L} \sum_{k_x k_y}
+		\hat{f}_{i, k_x k_y} e^{i\left( k_x x + k_y y \right)} \\
+		&= \sum_{\overline{k}_x \overline{k}_y}
+		\hat{\overline{f}}_{i, \overline{k}_x \overline{k}_y}
+		e^{i \left( \overline{k}_x \overline{x} + \overline{k}_y \overline{y} \right)}
+	\end{split}
+	\end{equation}
+	Great, everything works out. 
+	Then, from above (with our chosen configuration of $\hat{n}$ and fixed $S$) we get
+	\begin{equation}
+	\begin{split}
+		\overline{f}_x
+		&= -\tfrac34 a \overline{k}_x \epsilon^2 S \left( 
+		4 \overline{k}_x^2
+		+ \overline{A} 
+		+ S\overline{B}
+		+ \frac{3 S^2}{2} \overline{C}
+		\right) 
+		\sin \left(
+		2 \overline{k}_x \overline{x}
+		\right)
+		+ \frac{9 S^2}{2}\overline{k}_x^2 \epsilon^2
+		\left(
+		\overline{k}_x \epsilon^2 \sin \left(
+		4 \overline{k}_x \overline{x}
+		\right)
+		+ \sin \left(
+		\overline{k}_x \overline{x}
+		\right)
+		\right) \\
+		\overline{f}_y
+		&= 0
+	\end{split}
+	\end{equation}
+	In this case, we clearly have that $\hat{\overline{f}}_{x, \overline{k}_x \overline{k}_y} = 0$ for $\overline{k}_y \neq 0$. Additionally, since $\overline{f}_x$ only involves sums of sines, we know that all the Fourier components are purely imaginary. Explicitly:
+	\begin{equation}
+	\begin{split}
+		\hat{\overline{f}}_{x, \pm\overline{k}_x, 0}
+		&= \pm\frac{9 S^2}{4i} \overline{k}_x^2 \epsilon^2 \\
+		\hat{\overline{f}}_{x, \pm 2 \overline{k}_x, 0}
+		&= \mp\frac{3}{8i} a \overline{k}_x \epsilon^2 S \left(
+		4 \overline{k}_x^2 
+		+ \overline{A} 
+		+ S \overline{B}
+		+ \frac{3 S^2}{2} \overline{C}
+		\right) \\
+		\hat{\overline{f}}_{x, \pm 4\overline{k}_x, 0}
+		&= \pm \frac{9 S^2}{4i} \overline{k}_x^3 \epsilon^4 \\
+	\end{split}
+	\end{equation}
+	Now, since $\overline{f}_y = 0$ and $\hat{\overline{f}}_{x, \overline{k}_x \overline{k}_y} = 0$ for all $\overline{k}_y \neq 0$ then \eqref{eq:velocity-fourier-solution} reduces to:
+	\begin{equation}
+	\begin{split}
+		v_x 
+		&= \sum_{\overline{k}_x'}
+		\frac{-2\overline{\alpha}}{\overline{k}_x'^2}
+		\hat{\overline{f}}_{x, \overline{k}_x', 0}
+		e^{i \overline{k}'_x \overline{x}} \\
+		v_y
+		&= 0
+	\end{split}
+	\end{equation}
+	Plugging in yields:
+	\begin{equation}
+		v_x
+		= -9 \overline{\alpha} S^2 \epsilon^2 \sin \left( \overline{k}_x \overline{x} \right)
+		+ \frac{3 a \overline{\alpha}}{8 \overline{k}_x} \epsilon^2 S 
+		\left(
+		4 \overline{k}_x^2
+		+ \overline{A}
+		+ S \overline{B}
+		+ \frac{3 S^2}{2} \overline{C}
+		\right)
+		\sin \left( 2 \overline{k}_x \overline{x} \right)
+		- \frac{9 S^2 \overline{k}_x^3}{16} \epsilon^4
+		\sin \left( 4 \overline{k}_x \overline{x} \right)
+	\end{equation}
+	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. For this, we will need to explicitly write out what $\overline{p}$ is. 
 	
 	
 \end{document}
