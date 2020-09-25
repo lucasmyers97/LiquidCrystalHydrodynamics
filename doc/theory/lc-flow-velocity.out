@@ -3,4 +3,6 @@
 \BOOKMARK [1][-]{section.3}{Elastic stress tensor}{}% 3
 \BOOKMARK [1][-]{section.4}{Viscous stress tensor}{}% 4
 \BOOKMARK [1][-]{section.5}{Fluid equation of motion}{}% 5
-\BOOKMARK [1][-]{section.6}{Choosing a specific Qij}{}% 6
+\BOOKMARK [1][-]{section.6}{Solving the fluid equation of motion with periodic boundary conditions}{}% 6
+\BOOKMARK [1][-]{section.7}{Choosing a specific Qij}{}% 7
+\BOOKMARK [2][-]{subsection.7.1}{Nondimensionalizing velocity equations of motion}{section.7}% 8

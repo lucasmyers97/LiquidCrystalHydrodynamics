@@ -1313,7 +1313,7 @@
 		b \equiv \frac{\beta_4}{\mu_1},
 		\quad
 		\overline{\alpha} \equiv \alpha \mu_1
-		= \frac{1}{b - a^2}
+		= \frac{1}{b - \tfrac14 a^2}
 	\end{equation}
 	Note that in Svensek and Zumer they give the typical values:
 	\begin{equation}
@@ -1322,7 +1322,7 @@
 	\end{equation}
 	Hence, we get that
 	\begin{equation}
-		\overline{\alpha} \approx -0.589
+		\overline{\alpha} \approx 0.936
 	\end{equation}
 	Our final, dimensionless flow equation becomes
 	\begin{equation}
@@ -1450,17 +1450,17 @@
 	\begin{equation} \label{eq:p-fourier-components}
 	\begin{split}
 		-\left( k_x^2 + k_y^2 \right) \hat{p}_{k_x k_y}
-		&= i k_i \hat{f}_{i, k_x k_y} \\
+		&= -i k_i \hat{f}_{i, k_x k_y} \\
 		\implies \hat{p}_{k_x k_y}
-		&= \frac{ -i k_i }{ k_x^2 + k_y^2 } \hat{f}_{i, k_x k_y}
+		&= \frac{ i k_i }{ k_x^2 + k_y^2 } \hat{f}_{i, k_x k_y}
 	\end{split}
 	\end{equation}
 	Plugging this back into the original equation yields:
 	\begin{equation} \label{eq:velocity-fourier-solution}
 		v_i(x, y) 
-		= \sum_{k_x, k_y} \frac{ -\alpha }{ k^2 } \left(
+		= \sum_{k_x, k_y} \frac{ \alpha }{ k^2 } \left(
 		\frac{ k_i k_j \hat{f}_{j, k_x k_y} }{k^2}
-		+ \hat{f}_{i, k_x k_y}
+		- \hat{f}_{i, k_x k_y}
 		\right)
 		e^{ i \left( k_x x + k_y y \right) }
 	\end{equation}
@@ -1515,7 +1515,7 @@
 	\end{equation}
 	Our first guess will be:
 	\begin{equation}
-		\hat{n} = \left( \epsilon \cos k_x x, 0, 1 \right)
+		\hat{n} = \left( \epsilon \cos k'_x x, 1, 0 \right)
 	\end{equation}
 	for some small $\epsilon$. 
 	Note that this expression is independent of $y$ so that any $y$-derivatives will be zero by default.
@@ -1523,9 +1523,9 @@
 	\begin{equation}
 	\begin{split}
 		\partial_j \left( n_x n_j \right)
-		&= \partial_x \epsilon^2 \cos^2 k_x x \\
-		&= 2 \epsilon^2 \cos k_x x \left( -k_x \sin k_x x \right) \\
-		&= -k_x \epsilon^2 \sin \left( 2 k_x x \right)
+		&= \partial_x \epsilon^2 \cos^2 k'_x x \\
+		&= 2 \epsilon^2 \cos k'_x x \left( -k'_x \sin k'_x x \right) \\
+		&= -k'_x \epsilon^2 \sin \left( 2 k'_x x \right)
 	\end{split}
 	\end{equation}
 	Great, this still terminates at the endpoints.
@@ -1533,14 +1533,23 @@
 	\begin{equation}
 	\begin{split}
 		\partial^2 \partial_j \left( n_x n_j \right)
-		&= \partial_x^2 \left( -k_x \epsilon^2 \sin \left( 2 k_x x \right) \right) \\
-		&= - 2 k_x^2 \epsilon^2 \partial_x \cos \left( 2 k_x x \right) \\
-		&= 4 k_x ^3 \epsilon^2 \sin \left( 2 k_x x \right)
+		&= \partial_x^2 \left( -k'_x \epsilon^2 \sin \left( 2 k'_x x \right) \right) \\
+		&= - 2 k_x'^2 \epsilon^2 \partial_x \cos \left( 2 k'_x x \right) \\
+		&= 4 k_x'^3 \epsilon^2 \sin \left( 2 k_x' x \right)
 	\end{split}
 	\end{equation}
 	Cool, this also terminates at the endpoints. 
 	So far so good.
-	Clearly there will be no $y$-component because $n_y = 0$.
+	Now for the $y$-component:
+	\begin{equation}
+	\begin{split}
+		\partial^2 \partial_j \left( n_y n_j \right)
+		&= \partial_x^2 \partial_x \left( \epsilon \cos k_x' x \right) \\
+		&= \partial_x^2 \left( - k_x' \epsilon \sin k_x' x \right) \\
+		&= \partial_x \left( - k_x'^2 \epsilon \cos k_x' x \right) \\
+		&= k_x'^3 \epsilon \sin k_x' x
+	\end{split}
+	\end{equation}
 	Now for the last term:
 	\begin{equation}
 	\begin{split}
@@ -1550,21 +1559,21 @@
 		\right] 
 		&= \partial_x
 		\left[
-		\left( \partial_x \epsilon^2 \cos^2 k_x x \right)^2
-		+ \left( \partial_x \epsilon \cos k_x x \right)^2
-		+ \left( \partial_x \epsilon \cos k_x x \right)^2
+		\left( \partial_x \epsilon^2 \cos^2 k_x' x \right)^2
+		+ \left( \partial_x \epsilon \cos k_x' x \right)^2
+		+ \left( \partial_x \epsilon \cos k_x' x \right)^2
 		\right] \\
 		&= \partial_x
 		\left[
-		k_x^2 \epsilon^4 \sin^2 \left( 2 k_x x \right)
-		+ 2 k_x^2 \epsilon^2 \sin^2 \left( k_x x \right) 
+		k_x'^2 \epsilon^4 \sin^2 \left( 2 k_x' x \right)
+		+ 2 k_x'^2 \epsilon^2 \sin^2 \left( k_x' x \right) 
 		\right] \\
-		&= 2 k_x^2 \epsilon^4 \sin \left( 2 k_x x \right)
-		\cos \left( 2 k_x x \right) 2 k_x
-		+ 4 k_x^2 \epsilon^2 \sin \left( k_x x \right)
-		\cos \left( k_x x \right) k_x \\
-		&= 2 k_x^3 \epsilon^4 \sin \left( 4 k_x x \right)
-		+ 2 k_x^2 \epsilon^2 \sin \left( 2 k_x x \right)
+		&= 2 k_x'^2 \epsilon^4 \sin \left( 2 k_x' x \right)
+		\cos \left( 2 k_x' x \right) 2 k_x'
+		+ 4 k_x'^2 \epsilon^2 \sin \left( k_x' x \right)
+		\cos \left( k_x' x \right) k_x' \\
+		&= 2 k_x'^3 \epsilon^4 \sin \left( 4 k_x' x \right)
+		+ 2 k_x'^2 \epsilon^2 \sin \left( 2 k_x' x \right)
 	\end{split}
 	\end{equation}
 	This also terminates at the endpoints, so it works with our no-slip condition. Note that, again, there is no $y$-component because the director field is independent of $y$. 
@@ -1705,71 +1714,94 @@
 	\begin{split}
 		\overline{f}_x
 		&= -\tfrac34 a \overline{k}_x \epsilon^2 S \left( 
-		4 \overline{k}_x^2
+		4 \overline{k}_x'^2
 		+ \overline{A} 
 		+ S\overline{B}
 		+ \frac{3 S^2}{2} \overline{C}
 		\right) 
 		\sin \left(
-		2 \overline{k}_x \overline{x}
+		2 \overline{k}_x' \overline{x}
 		\right)
-		+ \frac{9 S^2}{2}\overline{k}_x^2 \epsilon^2
+		+ \frac{9 S^2}{2}\overline{k}_x'^2 \epsilon^2
 		\left(
-		\overline{k}_x \epsilon^2 \sin \left(
-		4 \overline{k}_x \overline{x}
+		\overline{k}_x' \epsilon^2 \sin \left(
+		4 \overline{k}_x' \overline{x}
 		\right)
 		+ \sin \left(
-		\overline{k}_x \overline{x}
+		\overline{k}_x' \overline{x}
 		\right)
 		\right) \\
 		\overline{f}_y
-		&= 0
+		&= -a \tfrac34 \overline{k}_x' \epsilon S
+		\left(
+		\overline{A}
+		+ S \overline{B}
+		+ \frac{3 S^2}{2} \overline{C} 
+		+ \overline{k}_x'^2
+		\right)
+		\sin \overline{k}_x' \overline{x}
 	\end{split}
 	\end{equation}
 	In this case, we clearly have that $\hat{\overline{f}}_{x, \overline{k}_x \overline{k}_y} = 0$ for $\overline{k}_y \neq 0$. Additionally, since $\overline{f}_x$ only involves sums of sines, we know that all the Fourier components are purely imaginary. Explicitly:
 	\begin{equation}
 	\begin{split}
-		\hat{\overline{f}}_{x, \pm\overline{k}_x, 0}
-		&= \pm\frac{9 S^2}{4i} \overline{k}_x^2 \epsilon^2 \\
-		\hat{\overline{f}}_{x, \pm 2 \overline{k}_x, 0}
-		&= \mp\frac{3}{8i} a \overline{k}_x \epsilon^2 S \left(
-		4 \overline{k}_x^2 
+		\hat{\overline{f}}_{x, \pm\overline{k}_x', 0}
+		&= \pm\frac{9 S^2}{4i} \overline{k}_x'^2 \epsilon^2 \\
+		\hat{\overline{f}}_{x, \pm 2 \overline{k}_x', 0}
+		&= \mp\frac{3}{8i} a \overline{k}_x' \epsilon^2 S \left(
+		4 \overline{k}_x'^2 
 		+ \overline{A} 
 		+ S \overline{B}
 		+ \frac{3 S^2}{2} \overline{C}
 		\right) \\
-		\hat{\overline{f}}_{x, \pm 4\overline{k}_x, 0}
-		&= \pm \frac{9 S^2}{4i} \overline{k}_x^3 \epsilon^4 \\
+		\hat{\overline{f}}_{x, \pm 4\overline{k}_x', 0}
+		&= \pm \frac{9 S^2}{4i} \overline{k}_x'^3 \epsilon^4 \\
+		\hat{\overline{f}}_{y, \pm \overline{k}_x', 0}
+		&= \mp \frac{3}{8i} a \overline{k}_x' \epsilon S
+		\left(
+		\overline{A} 
+		+ S\overline{B}
+		+ \frac{3S^2}{2} \overline{C}
+		+ \overline{k}_x'^2
+		\right)
+		\sin \overline{k}_x' \overline{x}
 	\end{split}
 	\end{equation}
 	Now, since $\overline{f}_y = 0$ and $\hat{\overline{f}}_{x, \overline{k}_x \overline{k}_y} = 0$ for all $\overline{k}_y \neq 0$ then \eqref{eq:velocity-fourier-solution} reduces to:
 	\begin{equation}
 	\begin{split}
 		v_x 
-		&= \sum_{\overline{k}_x'}
-		\frac{-2\overline{\alpha}}{\overline{k}_x'^2}
-		\hat{\overline{f}}_{x, \overline{k}_x', 0}
-		e^{i \overline{k}'_x \overline{x}} \\
+		&= \sum_{\overline{k}_x}
+		\frac{\overline{\alpha}}{\overline{k}_x^2}
+		\left(
+		\hat{\overline{f}}_{x, \overline{k}_x, 0}
+		- \hat{\overline{f}}_{x, \overline{k}_x, 0}
+		\right)
+		e^{i \overline{k}_x \overline{x}}
+		= 0 \\
 		v_y
-		&= 0
+		&= \sum_{\overline{k}_x}
+		\frac{\overline{\alpha}}{\overline{k}^2}
+		\hat{\overline{f}}_{y, \overline{k}_x, 0} 
+		e^{i \overline{k}_x \overline{x}}
 	\end{split}
 	\end{equation}
 	Plugging in yields:
 	\begin{equation}
+	\begin{split}
 		v_x
-		= -9 \overline{\alpha} S^2 \epsilon^2 \sin \left( \overline{k}_x \overline{x} \right)
-		+ \frac{3 a \overline{\alpha}}{8 \overline{k}_x} \epsilon^2 S 
+		&= 0 \\
+		v_y
+		&= -\frac{3 \overline{\alpha} a S}{4 \overline{k}_x'}
 		\left(
-		4 \overline{k}_x^2
-		+ \overline{A}
+		\overline{A}
 		+ S \overline{B}
 		+ \frac{3 S^2}{2} \overline{C}
+		+ \overline{k}_x'^2
 		\right)
-		\sin \left( 2 \overline{k}_x \overline{x} \right)
-		- \frac{9 S^2 \overline{k}_x^3}{16} \epsilon^4
-		\sin \left( 4 \overline{k}_x \overline{x} \right)
+		\epsilon \sin \overline{k}_x' \overline{x}
+	\end{split}
 	\end{equation}
 	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. For this, we will need to explicitly write out what $\overline{p}$ is. 
-	
 	
 \end{document}
