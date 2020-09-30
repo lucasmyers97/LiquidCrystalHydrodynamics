@@ -19,3 +19,6 @@
 \BOOKMARK [1][-]{section.4}{Checking the code using velocity formulation}{}% 19
 \BOOKMARK [2][-]{subsection.4.1}{Writing velocity equations of motion}{section.4}% 20
 \BOOKMARK [2][-]{subsection.4.2}{Nondimensionalizing velocity equations of motion}{section.4}% 21
+\BOOKMARK [1][-]{section.5}{Adding anisotropic elasticity}{}% 22
+\BOOKMARK [2][-]{subsection.5.1}{Generalized force additions from anisotropic elasticity}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.2}{Elastic stress tensor additions from anisotropic elasticity}{section.5}% 24

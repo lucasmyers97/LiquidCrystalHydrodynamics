@@ -1802,6 +1802,80 @@
 		\epsilon \sin \overline{k}_x' \overline{x}
 	\end{split}
 	\end{equation}
-	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. For this, we will need to explicitly write out what $\overline{p}$ is. 
+	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. 
+	For this, we will need to explicitly write out what $\overline{p}$ is. 
+	
+	\section{Adding anisotropic elasticity}
+	In this scheme, the nondimensionalized elastic free energy is given by:
+	\begin{equation}
+		f_e = \partial_k Q_{ij} \partial_k Q_{ij} 
+		+ \kappa_2 \partial_j Q_{ij} \partial_k Q_{ik} 
+		+ \kappa_3 Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+	\end{equation}
+	
+	\subsection{Generalized force additions from anisotropic elasticity}
+	Then the generalized force from this piece is given by $\partial_m \partial f_e/\partial (\partial_m Q_{np})$. 
+	Calculating one term at a time:
+	\begin{equation}
+	\begin{split}
+		\partial_m \frac{\partial}{\partial (\partial_m Q_{np})}
+		\partial_k Q_{ij} \partial_k Q_{ij} 
+		&= \partial_m \left( 
+		\delta_{m, k} \delta_{n, i} \delta_{p, j} \partial_k Q_{ij}
+		+ \partial_k Q_{ij} \delta_{m, k} \delta_{n, i} \delta_{p, j}
+		\right) \\
+		&= \partial_m \partial_m Q_{np} + \partial_m \partial_m Q_{np} \\
+		&= 2 \partial_m^2 Q_{np}
+	\end{split}
+	\end{equation}
+	Cool, that's what we got before.
+	Now for the next term:
+	\begin{equation}
+	\begin{split}
+		\partial_m \frac{\partial}{\partial (\partial_m Q_{np})} 
+		\partial_j Q_{ij} \partial_k Q_{ik}
+		&= \partial_m \left(
+		\delta_{m, j} \delta_{i, n} \delta_{j, p} \partial_k Q_{ik}
+		+ \delta_{m, k} \delta_{n, i} \delta_{p, k} \partial_j Q_{ij}
+		\right) \\
+		&= \partial_m \delta_{m, p} \partial_k Q_{nk} + \partial_m \delta_{m, p} \partial_j Q_{nj} \\
+		&= 2 \partial_p \partial_k Q_{nk}
+	\end{split}
+	\end{equation}
+	Last term:
+	\begin{equation}
+	\begin{split}
+		\partial_m \frac{\partial}{\partial (\partial_m Q_{np})} 
+		Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+		&= \partial_m Q_{kl} \left(
+		\delta_{m, k} \delta_{n, i} \delta_{p, j} \partial_l Q_{ij}
+		+ \delta_{m, l} \delta_{n, i} \delta_{p, j} \partial_k Q_{ij}
+		\right) \\
+		&= \partial_m Q_{kl} \left(
+		\delta_{m, k} \partial_l Q_{np}
+		+ \delta_{m, l} \partial_k Q_{np}
+		\right) \\
+		&= \partial_m \left( Q_{ml} \partial_l Q_{np} \right)
+		+ \partial_m \left( Q_{km} \partial_k Q_{np} \right) \\
+		&= 2 \partial_m \left( Q_{mk} \partial_k Q_{np} \right) \\
+		&= 2 \left[
+		\left(\partial_m Q_{mk} \right) \left( \partial_k Q_{np} \right)
+		+ Q_{mk} \partial_m \partial_k Q_{np}
+		\right]
+	\end{split}
+	\end{equation}
+	
+	\subsection{Elastic stress tensor additions from anisotropic elasticity}
+	Now we need to calculate the elastic stress tensor. 
+	This is given by:
+	\begin{equation}
+	\begin{split}
+		\sigma^e_{ij} 
+		&= -\frac{\partial f}{\partial \left(\partial_i Q_{kl}\right)} \partial_j Q_{kl} \\
+		&= -\frac{\partial f_e}{\partial \left(\partial_i Q_{kl}\right)} \partial_j Q_{kl}
+	\end{split}
+	\end{equation}
+	where the last equality follows because the other portion of the free energy has no dependence on the spatial derivatives of $Q$.
+	
 	
 \end{document}
