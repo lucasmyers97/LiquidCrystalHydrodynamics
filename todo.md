@@ -1,9 +1,11 @@
 # To do
 ---------
 ## Comparing analytic to numerical solution
-* Plot source term for various sizes
-* Plot magnitude for long domains
-* Plot magnitude for wide domains
+~~* Plot source term for long domains~~ (no change)
+~~* Plot source term for wide domains~~ (no change)
+~~* Plot source term for different grid-spacings~~ (no change)
+~~* Plot magnitude for long domains~~ (no change)
+~~* Plot magnitude for wide domains~~ (no change)
 * Plot magnitude as a function of various different paramters
 * Plot magnitude as a function of wave-number
 ## Before next week
