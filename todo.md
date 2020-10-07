@@ -1,5 +1,10 @@
 # To do
 ---------
+## Comparing analytic to numerical solution
+* Plot source term for various sizes
+* Plot magnitude for long domains
+* Plot magnitude for wide domains
+* Plot magnitude as a function of various different paramters
 ## Before next week
 * Plot S and P for some configurations
 * Look for papers which have hydrodynamics
