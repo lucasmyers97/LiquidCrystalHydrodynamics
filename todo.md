@@ -5,6 +5,7 @@
 * Plot magnitude for long domains
 * Plot magnitude for wide domains
 * Plot magnitude as a function of various different paramters
+* Plot magnitude as a function of wave-number
 ## Before next week
 * Plot S and P for some configurations
 * Look for papers which have hydrodynamics
