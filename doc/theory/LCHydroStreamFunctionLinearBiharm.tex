@@ -3,6 +3,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{mathrsfs}
+\usepackage{mathtools}
 \usepackage{enumerate}
 \usepackage{esint}
 \usepackage{relsize}
@@ -1806,11 +1807,11 @@
 	For this, we will need to explicitly write out what $\overline{p}$ is. 
 	
 	\section{Adding anisotropic elasticity}
-	In this scheme, the nondimensionalized elastic free energy is given by:
+	In this scheme, the elastic free energy is given by:
 	\begin{equation}
-		f_e = \partial_k Q_{ij} \partial_k Q_{ij} 
-		+ \kappa_2 \partial_j Q_{ij} \partial_k Q_{ik} 
-		+ \kappa_3 Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+		f_e = L_1 \partial_k Q_{ij} \partial_k Q_{ij} 
+		+ L_2 \partial_j Q_{ij} \partial_k Q_{ik} 
+		+ L_3 Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
 	\end{equation}
 	
 	\subsection{Generalized force additions from anisotropic elasticity}
@@ -1864,6 +1865,19 @@
 		\right]
 	\end{split}
 	\end{equation}
+	The new generalized elastic force gives, in full (and nondimensionalized):
+	\begin{multline}
+		h^{he}_{ij} = 2 \left(
+		L_1 \partial_k^2 Q_{ij}
+		+ L_2 \partial_j \partial_k Q_{ik}
+		+ L_3 \left[
+		\left( \partial_l Q_{kl} \right)
+		\left( \partial_k Q_{ij} \right)
+		+ Q_{kl} \partial_k \partial_l Q_{ij}
+		\right]
+		\right) \\
+		- A Q_{ij} - B Q_{ik}Q_{kj} - C Q_{ij} (Q_{kl}Q_{lk}) + \lambda\delta_{ij} + \lambda_k \epsilon_{kij}
+	\end{multline}
 	
 	\subsection{Elastic stress tensor additions from anisotropic elasticity}
 	Now we need to calculate the elastic stress tensor. 
@@ -1875,7 +1889,256 @@
 		&= -\frac{\partial f_e}{\partial \left(\partial_i Q_{kl}\right)} \partial_j Q_{kl}
 	\end{split}
 	\end{equation}
-	where the last equality follows because the other portion of the free energy has no dependence on the spatial derivatives of $Q$.
+	where the last equality follows because the other portion of the free energy has no dependence on the spatial derivatives of $Q$. 
+	Let's do the calculations one term at a time:
+	\begin{equation}
+		\frac{\partial}{\partial \left( \partial_m Q_{np} \right)}
+		\partial_k Q_{ij} \partial_k Q_{ij}
+		= 2 \partial_m Q_{np}
+	\end{equation}
+	Next term:
+	\begin{equation}
+		\frac{\partial}{\partial \left( \partial_m Q_{np} \right)}
+		\partial_j Q_{ij} \partial_k Q_{ik}
+		= 2 \delta_{m, p} \partial_k Q_{nk}
+	\end{equation}
+	Last term:
+	\begin{equation}
+		\frac{\partial}{\partial \left( \partial_m Q_{np} \right)}
+		Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+		= 2 Q_{mk} \partial_k Q_{np}
+	\end{equation}
+	Taking $m \to i$, $n \to k$, and $p \to l$ then summing appropriately yields:
+	\begin{equation}
+		\sigma^e_{ij} = -2\left(
+		L_1 \partial_i Q_{kl} \partial_j Q_{kl}
+		+ L_2 \partial_m Q_{km} \partial_j Q_{ki}
+		+ L_3 Q_{im} \partial_m Q_{kl} \partial_j Q_{kl}
+		\right)
+	\end{equation}
 	
+	\subsection{Force equation of motion}
+	The viscous takes the form as before, so the total equation of motion is given by:
+	\begin{multline}
+		\mu_1 \frac{\partial Q_{ij}}{\partial t}
+		= 2 \left(
+		L_1 \partial_k^2 Q_{ij}
+		+ L_2 \partial_j \partial_k Q_{ik}
+		+ L_3 \left[
+		\left( \partial_l Q_{kl} \right)
+		\left( \partial_k Q_{ij} \right)
+		+ Q_{kl} \partial_k \partial_l Q_{ij}
+		\right]
+		\right) \\
+		- A Q_{ij} 
+		- B Q_{ik}Q_{kj} 
+		- C Q_{ij} (Q_{kl}Q_{lk}) 
+		- \tfrac12 \mu_2 \left(
+		\epsilon_{jkl} \partial_i \partial_k \psi_l
+		\epsilon_{ikl} \partial_j \partial_k \psi_l
+		\right)
+	\end{multline}
+	
+	\subsection{Stress tensor equation of motion}
+	In order to actually calculate this, we need to do some calculations on $\sigma^e_{ij}$:
+	\begin{equation}
+		\partial_j \sigma^{e}_{ji} = 
+		-2 \left(
+		L_1 \partial_j \left(\partial_j Q_{kl} \partial_i Q_{kl}\right)
+		+ L_2 \partial_j \left(\partial_m Q_{km} \partial_i Q_{kj}\right)
+		+ L_3 \partial_j \left(Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl}\right)
+		\right)
+	\end{equation}
+	One term at a time:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left(\partial_j Q_{kl} \partial_i Q_{kl}\right)
+		&= \partial_j^2 Q_{kl} \partial_i Q_{kl} 
+		+ \partial_j Q_{kl} \partial_i \partial_j Q_{kl}
+	\end{split}
+	\end{equation}
+	Second term:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left(\partial_m Q_{km} \partial_i Q_{kj} \right)
+		&= \partial_j \partial_m Q_{km} \partial_i Q_{kj}
+		+ \partial_m Q_{km} \partial_j \partial_i Q_{kj}
+	\end{split}
+	\end{equation}
+	Third term:
+	\begin{equation}
+	\begin{split}
+		\partial_j \left(Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl} \right)
+		&= \partial_j Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl}
+		+ Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl}
+		+ Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+	\end{split}
+	\end{equation}
+	This is going to get unwieldy. 
+	We now need to take the curl of all of all of these terms in order to put it into the form of the biharmonic equation.
+	One term at a time:
+	\begin{multline}
+		\epsilon_{npi} \partial_p \left(
+		\partial_j^2 Q_{kl} \partial_i Q_{kl} 
+		+ \partial_j Q_{kl} \partial_i \partial_j Q_{kl}
+		\right)
+		= \epsilon_{npi} \partial_p \partial_j^2 Q_{kl} \partial_i Q_{kl}
+		+ \epsilon_{npi} \partial_j^2 Q_{kl} \partial_p \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_p \partial_j Q_{kl} \partial_i \partial_j Q_{kl}
+		+ \epsilon_{npi} \partial_j Q_{kl} \partial_p \partial_i \partial_j Q_{kl}
+	\end{multline}
+	Note that only the first term is not symmetric in $p$ and $i$, so this becomes:
+	\begin{equation}
+		\epsilon_{npi} \partial_p \left(
+		\partial_j^2 Q_{kl} \partial_i Q_{kl} 
+		+ \partial_j Q_{kl} \partial_i \partial_j Q_{kl}
+		\right)
+		= \epsilon_{npi} \partial_p \partial_j^2 Q_{kl} \partial_i Q_{kl}
+	\end{equation}
+	Second term:
+	\begin{multline}
+		\epsilon_{npi} \partial_p \left(
+		\partial_j \partial_m Q_{km} \partial_i Q_{kj}
+		+ \partial_m Q_{km} \partial_j \partial_i Q_{kj}
+		\right)
+		= \epsilon_{npi} \partial_p \partial_j \partial_m Q_{km} \partial_i Q_{kj}
+		+ \epsilon_{npi}\partial_j \partial_m Q_{km} \partial_p \partial_i Q_{kj} \\
+		+ \epsilon_{npi}\partial_p \partial_m Q_{km} \partial_j \partial_i Q_{kj}
+		+ \epsilon_{npi}\partial_m Q_{km} \partial_j \partial_i \partial_p Q_{kj}
+	\end{multline}
+	Note that only the first term is not symmetric in $p$ and $i$, so this becomes:
+	\begin{equation}
+		\epsilon_{npi} \partial_p \left(
+		\partial_j \partial_m Q_{km} \partial_i Q_{kj}
+		+ \partial_m Q_{km} \partial_j \partial_i Q_{kj}
+		\right)
+		= \epsilon_{npi} \partial_p \partial_j \partial_m Q_{km} \partial_i Q_{kj}
+	\end{equation}
+	Third term:
+	\begin{equation}
+	\begin{multlined}[b]
+		\epsilon_{npi} \partial_p \bigl(
+		\partial_j Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl} \\
+		\hspace{0.5cm}+ Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		\hspace{2cm}+ Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+		\bigr)
+	\end{multlined}
+		=
+	\begin{multlined}[t]
+		\epsilon_{npi} \partial_p \partial_j Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_j Q_{jm} \partial_p \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_j Q_{jm} \partial_m Q_{kl} \partial_p \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_p Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_p \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_j \partial_m Q_{kl} \partial_p \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_p Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_m Q_{kl} \partial_p \partial_i \partial_j Q_{kl}
+	\end{multlined}
+	\end{equation}
+	Only a few of these terms are symmetric in $p$ and $i$, namely terms 3, 6, and 9.
+	This then gives:
+	\begin{equation}
+	\begin{multlined}[b]
+		\epsilon_{npi} \partial_p \bigl(
+		\partial_j Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl} \\
+		\hspace{0.5cm}+ Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		\hspace{2cm}+ Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+		\bigr)
+	\end{multlined}
+		= 
+	\begin{multlined}[t]
+	\epsilon_{npi} \partial_p \partial_j Q_{jm} \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_j Q_{jm} \partial_p \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_p Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_p \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
+		+ \epsilon_{npi} \partial_p Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+		+ \epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+	\end{multlined}
+	\end{equation}
+	Plugging back into the equation of motion (including the stream function) yields:
+	\begin{equation}
+		\beta_4 \partial^4 \psi_n
+		=
+	\begin{multlined}[t]
+		\tfrac12 \mu_2 \epsilon_{npi} \partial_p \partial_j 
+		\frac{\partial Q_{ji}}{\partial_t} 
+		- 2 L_1 \epsilon_{npi} (\partial_p \partial_j^2 Q_{kl}) (\partial_i Q_{kl})
+		- 2 L_2 \epsilon_{npi} (\partial_p \partial_j \partial_m Q_{km}) (\partial_i Q_{kj}) \\
+		- 2 L_3 \epsilon_{npi} \biggl[
+		(\partial_p \partial_j Q_{jm}) (\partial_m Q_{kl}) (\partial_i Q_{kl})
+		+ (\partial_j Q_{jm}) (\partial_p \partial_m Q_{kl}) (\partial_i Q_{kl}) \\
+		\hspace{2cm}+ (\partial_p Q_{jm}) (\partial_j \partial_m Q_{kl}) (\partial_i Q_{kl})
+		+ Q_{jm} (\partial_p \partial_j \partial_m Q_{kl}) (\partial_i Q_{kl}) \\
+		\hspace{3cm}+ (\partial_p Q_{jm}) (\partial_m Q_{kl}) (\partial_i \partial_j Q_{kl})
+		+ Q_{jm} (\partial_p \partial_m Q_{kl}) (\partial_i \partial_j Q_{kl})
+		\biggr]
+	\end{multlined}
+	\end{equation}
+	Call the $L_1, L_2, L_3$ terms $f^e_n(Q)$ -- we can simplify that later. 
+	For now, we assume that $\partial Q_{ji}/\partial t = 0$, since we're working with an equilibrium system. 
+	Here we just need to rewrite all of these terms in terms of the auxiliary variables. 
+	Note that there is both a $p$ and an $i$ derivative acting on each term.
+	Thus, if $n \neq 3$ then $p = 3$ or $i = 3$ which goes to zero in our quasi-2D system.
+	We already have the $L_1$ term from our definition of $f_1(Q)$ in the first part.
+	Now for the $L_2$ term:
+	\begin{equation}
+	\begin{split}
+		\epsilon_{3pi} (\partial_p \partial_j \partial_m Q_{km}) (\partial_i Q_{kj})
+		&= (\partial_1 \partial_j \partial_m Q_{km}) (\partial_2 Q_{kj})
+		- (\partial_2 \partial_j \partial_m Q_{km}) (\partial_1 Q_{kj}) \\
+		&= 
+	\begin{multlined}[t]
+		(\partial_1 \partial_1 \partial_1 Q_{11})(\partial_2 Q_{11})
+		+ (\partial_1 \partial_1 \partial_1 Q_{21}) (\partial_2 Q_{21}) \\
+		+ (\partial_1 \partial_1 \partial_2 Q_{12}) (\partial_2 Q_{11})
+		+ (\partial_1 \partial_1 \partial_2 Q_{22}) (\partial_2 Q_{21}) \\
+		+ (\partial_1 \partial_2 \partial_1 Q_{11}) (\partial_2 Q_{12}) 
+		+ (\partial_1 \partial_2 \partial_1 Q_{21}) (\partial_2 Q_{22}) \\
+		+ (\partial_1 \partial_2 \partial_2 Q_{12}) (\partial_2 Q_{12}) 
+		+ (\partial_1 \partial_2 \partial_2 Q_{22}) (\partial_2 Q_{22}) \\
+	\end{multlined} \\
+		&=
+	\begin{multlined}[t]
+		(\partial_1^3 Q_{11})(\partial_2 Q_{11}) 
+		+ (\partial_1^3 Q_{21}) (\partial_2 Q_{21}) \\
+		+ (\partial_1^2 \partial_2 Q_{12}) (\partial_2 Q_{11})
+		+ (\partial_1^2 \partial_2 Q_{22}) (\partial_2 Q_{21}) \\
+		+ (\partial_1^2 \partial_2 Q_{11}) (\partial_2 Q_{12})
+		+ (\partial_1^2 \partial_2 Q_{12}) (\partial_2 Q_{22}) \\
+		+ (\partial_1 \partial_2^2 Q_{12}) (\partial_2 Q_{12})
+		+ (\partial_1 \partial_2^2 Q_{22}) (\partial_2 Q_{22})
+	\end{multlined} \\
+		&=
+	\begin{multlined}[t]
+		
+	\end{multlined}
+	\end{split}
+	\end{equation}
+	
+	\subsection{Non-dimensionalizing the anisotropic elasticity terms}
+	Note that $\kappa_2 \equiv L_2 / L_1$ and that $\kappa_3 \equiv L_3 / L_1$. Note also that $L = 2 L_1$ so that
+	\begin{multline}
+		\frac{h^{he}_{ij} \xi^2}{L} =
+		\partial_k^2 Q_{ij}
+		+ \kappa_2 \partial_j \partial_k Q_{ik}
+		+ \kappa_3 \left[
+		\left(\partial_l Q_{kl}\right)
+		\left(\partial_k Q_{ij}\right)
+		+ Q_{kl} \partial_k \partial_l Q_{ij}
+		\right] \\
+		- \overline{A} Q_{ij}
+		- \overline{B} Q_{ik} Q_{kj}
+		- \overline{C} Q_{ij} \left( Q_{kl} Q_{lk} \right)
+		+ \lambda \delta_{ij}
+		+ \lambda_k \epsilon_{kij}
+	\end{multline}
+	Similarly for the elastic stress tensor:
+	\begin{equation}
+		\frac{\sigma^e_{ij} \xi^2}{L} =
+		- \partial_i Q_{kl} \partial_j Q_{kl}
+		- \kappa_2 \partial_l Q_{lk} \partial_j Q_{ik}
+		- \kappa_3 Q_{im} \partial_m Q_{kl} \partial_j Q_{kl}
+	\end{equation}
 	
 \end{document}

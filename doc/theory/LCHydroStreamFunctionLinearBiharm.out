@@ -22,3 +22,6 @@
 \BOOKMARK [1][-]{section.5}{Adding anisotropic elasticity}{}% 22
 \BOOKMARK [2][-]{subsection.5.1}{Generalized force additions from anisotropic elasticity}{section.5}% 23
 \BOOKMARK [2][-]{subsection.5.2}{Elastic stress tensor additions from anisotropic elasticity}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.3}{Force equation of motion}{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.4}{Stress tensor equation of motion}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.5}{Non-dimensionalizing the anisotropic elasticity terms}{section.5}% 27
