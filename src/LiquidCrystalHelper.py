@@ -707,11 +707,10 @@ def nuFlowEOM(nu, eta, mu, psi, dx, dy=None, A=A, B=B, C=C):
                     
     return dnu_dt
 
-def f1(eta, mu, nu, dx, dy=None):
+def Phi_L1(eta, mu, nu, dx, dy=None):
     """
-    Returns the first of two terms in the source term of the (modified)
-    biharmonic equation for the flow. See 
-    doc/theory/LCHydroStreamFunctionLinearBiharm.pdf for more info on where
+    Returns the biharmonic source term due to isotropic elasticity. See 
+    doc/FlowFromElasticForces.pdf for more info on where
     this function comes from. 
 
     Parameters
@@ -733,39 +732,212 @@ def f1(eta, mu, nu, dx, dy=None):
 
     Returns
     -------
-    f1 : ndarray
-        mxn array holding the value of f_1(eta, mu, nu) across the whole
+    Phi_L1 : ndarray
+        mxn array holding the value of Phi_L1(eta, mu, nu) across the whole
         domain. Note that the boundary values are zero, for they cannot be
         easily calculated using the ghost point method.
 
     """
     
     if dy:
-        f1 = ( (1/3)*fd.dy(fd.dx2(eta, dx) + fd.dy2(eta, dy), dy, 0)
-               * fd.dx(eta, dx, 0)
-               - (1/3)*fd.dx(fd.dx2(eta, dx) + fd.dy2(eta, dy), dx, 0)
-               * fd.dy(eta, dy, 0)
-               + fd.dy(fd.dx2(mu, dx) + fd.dy2(mu, dy), dy, 0)*fd.dx(mu, dx, 0)
-               - fd.dx(fd.dx2(mu, dx) + fd.dy2(mu, dy), dx, 0)*fd.dy(mu, dy, 0)
-               + fd.dy(fd.dx2(nu, dx) + fd.dy2(nu, dy), dy, 0)*fd.dx(nu, dx, 0)
-               - fd.dx(fd.dx2(nu, dx) + fd.dy2(nu, dy), dx, 0)*fd.dy(nu, dy, 0)
+        Phi_L1 = -2*( fd.dx(fd.dx2(eta, dx) + fd.dy2(eta, dy), dx, 0)
+                      * fd.dy(eta, dy, 0)
+                    - fd.dy(fd.dx2(eta, dx) + fd.dy2(eta, dy), dy, 0)
+                      * fd.dx(eta, dx, 0)
+               + fd.dx(fd.dx2(mu, dx) + fd.dy2(mu, dy), dx, 0)*fd.dy(mu, dy, 0)
+               - fd.dy(fd.dx2(mu, dx) + fd.dy2(mu, dy), dy, 0)*fd.dx(mu, dx, 0)
+               + fd.dx(fd.dx2(nu, dx) + fd.dy2(nu, dy), dx, 0)*fd.dy(nu, dy, 0)
+               - fd.dy(fd.dx2(nu, dx) + fd.dy2(nu, dy), dy, 0)*fd.dx(nu, dx, 0)
                )
     else:
-        f1 = ( (1/3) * fd.dy(fd.d2(eta, dx), dx, 0) * fd.dx(eta, dx, 0)
-               - (1/3) * fd.dx(fd.d2(eta, dx), dx, 0) * fd.dy(eta, dx, 0)
-               + fd.dy(fd.d2(mu, dx), dx, 0) * fd.dx(mu, dx, 0)
-               - fd.dx(fd.d2(mu, dx), dx, 0) * fd.dy(mu, dx, 0)
-               + fd.dy(fd.d2(nu, dx), dx, 0) * fd.dx(nu, dx, 0)
-               - fd.dx(fd.d2(nu, dx), dx, 0) * fd.dy(nu, dx, 0) )
+        Phi_L1 = -2*( fd.dx(fd.d2(eta, dx), dx, 0) * fd.dy(eta, dx, 0)
+               - fd.dy(fd.d2(eta, dx), dx, 0) * fd.dx(eta, dx, 0)
+               + fd.dx(fd.d2(mu, dx), dx, 0) * fd.dy(mu, dx, 0)
+               - fd.dy(fd.d2(mu, dx), dx, 0) * fd.dx(mu, dx, 0)
+               + fd.dx(fd.d2(nu, dx), dx, 0) * fd.dy(nu, dx, 0)
+               - fd.dy(fd.d2(nu, dx), dx, 0) * fd.dx(nu, dx, 0) )
     
-    return f1
+    return Phi_L1
 
-def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
+def Phi_L2(eta, mu, nu, dx, dy=None):
     """
-    Returns the second of two terms in the source term of the (modified)
-    biharmonic equation for the flow. See 
-    doc/theory/LCHydroStreamFunctionLinearBiharm.pdf for more info on where
-    this function comes from.
+    Returns the biharmonic source term due to anisotropic elasticity. See 
+    doc/FlowFromElasticForces.pdf for more info on where
+    this function comes from. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    Phi_L2 : ndarray
+        mxn array holding the value of Phi_L2(eta, mu, nu) across the whole
+        domain. Note that the boundary values are zero, for they cannot be
+        easily calculated using the ghost point method.
+
+    """
+    
+    c = np.sqrt(3)
+    
+    if not dy:
+        dy = dx
+
+    Phi_L2 = - ( (1/3)*fd.dx(eta, dx, 0)*(c*fd.dy(fd.dy2(mu, dy), dy, 0)
+                                          - fd.dy(fd.dy2(eta, dy), dy, 0)
+                                          - 4*fd.dy(fd.dx2(eta, dx), dy, 0)
+                                          - c*fd.dx(fd.dy2(nu, dy), dx, 0)
+                                          )
+                + (1/3)*fd.dy(eta, dy, 0)*(4*fd.dx(fd.dx2(eta, dx), dx, 0)
+                                           + fd.dx(fd.dy2(eta, dy), dx, 0)
+                                           - c*fd.dx(fd.dy2(mu, dy), dx, 0)
+                                           + c*fd.dy(fd.dx2(nu, dx), dy, 0)
+                                           )
+                + fd.dx(mu, dx, 0)*((1/c)*fd.dy(fd.dy2(eta, dy), dy, 0)
+                                    - fd.dy(fd.dy2(mu, dy), dy, 0)
+                                    - fd.dx(fd.dy2(nu, dy), dx, 0)
+                                    )
+                + fd.dy(mu, dy, 0)*(-(1/c)*fd.dx(fd.dy2(eta, dy), dx, 0)
+                                    + fd.dx(fd.dy2(mu, dy), dx, 0)
+                                    + fd.dy(fd.dx2(nu, dx), dy, 0)
+                                    )
+                - fd.dx(nu, dx, 0)*(fd.dy(fd.dy2(nu, dy), dy, 0)
+                                    + (1/c)*fd.dx(fd.dy2(eta, dy), dx, 0)
+                                    + fd.dx(fd.dy2(mu, dy), dx, 0)
+                                    + fd.dy(fd.dx2(nu, dx), dy, 0)
+                                    )
+                + fd.dy(nu, dy, 0)*(fd.dx(fd.dx2(nu, dx), dx, 0)
+                                    + (1/c)*fd.dy(fd.dx2(eta, dx), dy, 0)
+                                    + fd.dy(fd.dx2(mu, dx), dy, 0)
+                                    + fd.dx(fd.dy2(nu, dy), dx, 0)
+                                    )
+                )
+    
+    return Phi_L2
+
+def Phi_L3(eta, mu, nu, dx, dy=None):
+    """
+    Returns the biharmonic source term due to anisotropic elasticity. See 
+    doc/FlowFromElasticForces.pdf for more info on where
+    this function comes from. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    Phi_L3 : ndarray
+        mxn array holding the value of Phi_L3(eta, mu, nu) across the whole
+        domain. Note that the boundary values are zero, for they cannot be
+        easily calculated using the ghost point method.
+
+    """
+    
+    c = np.sqrt(3)
+    
+    if not dy:
+        dy = dx
+        
+    Phi_L3 = -( (2/c)*eta*( fd.dx(eta, dx, 0)*fd.dy(
+                            fd.dy2(eta, dy) - 2*fd.dx2(eta, dx), dy, 0)
+                            + fd.dy(eta, dy, 0)*fd.dx(
+                            2*fd.dx2(eta, dx) - fd.dy2(eta, dy), dx, 0)
+                            + fd.dx(mu, dx, 0)*fd.dy(
+                            fd.dy2(mu, dy) - 2*fd.dx2(mu, dx), dy, 0)
+                            + fd.dy(mu, dy, 0)*fd.dx(
+                            2*fd.dx2(mu, dx) - fd.dy2(mu, dy), dx, 0)
+                            + fd.dx(nu, dx, 0)*fd.dy(
+                            fd.dy2(nu, dy) - 2*fd.dx2(nu, dx), dy, 0)
+                            + fd.dy(nu, dy, 0)*fd.dx(
+                            2*fd.dx2(nu, dx) - fd.dy2(nu, dy), dx, 0)
+                           )
+                + 2*mu*( fd.dy(eta, dy, 0)*fd.dy2(fd.dx(eta, dx), dy, 0)
+                         - fd.dx(eta, dx, 0)*fd.dy2(fd.dy(eta, dy), dy, 0)
+                         + fd.dy(mu, dy, 0)*fd.dy2(fd.dx(mu, dx), dy, 0)
+                         - fd.dx(mu, dx, 0)*fd.dy2(fd.dy(mu, dy), dy, 0)
+                         + fd.dy(nu, dy, 0)*fd.dy2(fd.dx(nu, dx), dy, 0)
+                         - fd.dx(nu, dx, 0)*fd.dy2(fd.dy(nu, dy), dy, 0)
+                        )
+                + 4*nu*( fd.dy(eta, dy, 0)*fd.dy(fd.dx2(eta, dx), dy, 0)
+                         - fd.dx(eta, dx, 0)*fd.dy2(fd.dx(eta, dx), dy, 0)
+                         + fd.dy(mu, dy, 0)*fd.dy(fd.dx2(mu, dx), dy, 0)
+                         - fd.dx(mu, dx, 0)*fd.dy2(fd.dx(mu, dx), dy, 0)
+                         + fd.dy(nu, dy, 0)*fd.dy(fd.dx2(nu, dx), dy, 0)
+                         - fd.dx(nu, dx, 0)*fd.dy2(fd.dx(nu, dx), dy, 0)
+                        )
+                + (2/c)*fd.dx(eta, dx, 0)
+                  *( fd.dy(eta, dy, 0)*( 2*fd.dx2(eta, dx, 0)
+                                         + fd.dy2(eta, dy, 0)
+                                         - c*fd.dy2(mu, dy, 0) )
+                     + 2*fd.dy(mu, dy, 0)*( 2*fd.dx2(mu, dx, 0)
+                                            - fd.dy2(mu, dy, 0)
+                                            - c*fd.dy2(eta, dy, 0) )
+                     + 2*fd.dy(nu, dy, 0)*( 2*fd.dx2(nu, dx, 0)
+                                            - fd.dy2(nu, dy, 0)
+                                            - 2*c*fd.dx(
+                                                fd.dy(eta, dy), dx, 0) )
+                    )
+                + (4/c)*fd.dy(eta, dy, 0)
+                    *( fd.dx(mu, dy, 0)*( c*fd.dy2(eta, dy, 0)
+                                          - 2*fd.dx2(mu, dx, 0)
+                                          + fd.dy2(mu, dy, 0) )
+                      + fd.dx(nu, dx, 0)*( 2*c*fd.dx(
+                                              fd.dy(eta, dy), dx, 0)
+                                           - 2*fd.dx2(nu, dx, 0)
+                                           + fd.dy2(nu, dy, 0) )
+                      )
+                - 2*( fd.dx(eta, dx, 0)**2 + fd.dx(mu, dx, 0)**2
+                      + fd.dx(nu, dx, 0)**2 )
+                    *( fd.dy2(nu, dy, 0) 
+                       + (2/c)*fd.dy(fd.dx(eta, dx), dy, 0) )
+                + 2*( fd.dy(eta, dy, 0)**2 + fd.dy(mu, dy, 0)**2
+                      + fd.dy(nu, dy, 0)**2 )
+                    *( fd.dx2(nu, dx, 0) 
+                       - (1/c)*fd.dy(fd.dx(eta, dx), dy, 0)
+                       + fd.dy(fd.dx(mu, dx), dy, 0) )
+                + (2/3)*( 2*c*fd.dx2(eta, dx, 0) + c*fd.dy2(eta, dy, 0)
+                          - 3*fd.dy2(mu, dy, 0) )
+                        *( fd.dx(mu, dx, 0)*fd.dy(mu, dy, 0)
+                           + fd.dx(nu, dx, 0)*fd.dy(nu, dy, 0) )
+                + 4*( fd.dy2(nu, dy, 0) - 2*fd.dy(fd.dx(mu, dx), dy, 0) )
+                    *( fd.dx(mu, dx, 0)*fd.dy(nu, dy, 0)
+                       - fd.dy(mu, dy, 0)*fd.dx(nu, dx, 0) )
+               )
+    
+    return Phi_L3
+
+def Phi_mu2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
+    """
+    Returns the biharmonic source term due to viscosity. See
+    doc/FlowFromElasticForces.pdf for more info on where this function comes 
+    from.
 
     Parameters
     ----------
@@ -795,7 +967,7 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
 
     Returns
     -------
-    f2 : ndarray
+    Phi_mu2 : ndarray
         mxn array holding the value of f_2(eta, mu, nu) across the whole
         domain. Note that the boundary values are zero, for they cannot be
         easily calculated using the ghost point method.
@@ -810,11 +982,11 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
                          - A*(mu - eta) 
                          - B*(-(1/9)*eta**2 - (2/3)*eta*mu + mu**2)
                          - C*(mu - eta)*((2/3)*eta**2 + 2*nu**2 + 2*mu**2) )
-        f2 = ( fd.dx2(bracket_term1, dx, 0) 
+        Phi_mu2 = ( fd.dx2(bracket_term1, dx, 0) 
                - fd.dy2(bracket_term1, dy, 0)
                + fd.dx(fd.dy(bracket_term2, dy, 0), dx, 0) )
     else:
-        f2 = ( fd.dx2_dy2(fd.d2(nu, dx) 
+        Phi_mu2 = ( fd.dx2_dy2(fd.d2(nu, dx) 
                           - A*nu - B*((1/3)*eta*nu + mu*nu) 
                           - C*nu*((2/3)*eta**2 + 2*nu**2 + 2*mu**2), dx, 0)
                + fd.dxdy(fd.d2(mu - eta, dx) 
@@ -823,7 +995,293 @@ def f2(eta, mu, nu, dx, dy=None, A=A, B=B, C=C):
                          - C*(mu - eta)*((2/3)*eta**2 
                                          + 2*nu**2 + 2*mu**2), dx) )
         
-    return f2
+    return Phi_mu2
+
+def fL1(eta, mu, nu, dx, dy=None):
+    """
+    Returns the isotropic elastic force due to a nematic configuration
+    described by `eta`, `mu`, and `nu`. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    fL1_x : ndarray
+        mxn array holding the x-component of the force from the isotropic
+        elasticity term.
+    fL1_y : ndarray
+        mxn array holding the y-component of the force from the isotropic
+        elasticity term.
+
+    """
+    
+    if not dy:
+        dy = dx
+        
+        fL1_x = -2 * ( fd.dx(eta, dx)*(2*fd.dx2(eta, dx) 
+                                       + fd.dy2(eta, dy))
+                          + fd.dy(eta, dy)*fd.dxdy(eta, dx)
+                          + fd.dx(mu, dx)*(2*fd.dx2(mu, dx) 
+                                           + fd.dy2(mu, dy)) 
+                          + fd.dy(mu, dy)*fd.dxdy(mu, dx)
+                          + fd.dx(nu, dx)*(2*fd.dx2(nu, dx) 
+                                           + fd.dy2(nu, dy))
+                          + fd.dy(nu, dy)*fd.dxdy(nu, dx) )
+        
+        fL1_y = -2 * ( fd.dy(eta, dy)*(2*fd.dy2(eta, dy)
+                                       + fd.dx2(eta, dx))
+                         + fd.dx(eta, dx)*fd.dxdy(eta, dx)
+                         + fd.dy(mu, dy)*(2*fd.dy2(mu, dy)
+                                          + fd.dx2(mu, dx))
+                         + fd.dx(mu, dx)*fd.dxdy(mu, dx)
+                         + fd.dy(nu, dy)*(2*fd.dy2(nu, dy)
+                                          + fd.dx2(nu, dx))
+                         + fd.dx(nu, dx)*fd.dxdy(nu, dx) )
+        
+    else:
+        fL1_x = -2 * ( fd.dx(eta, dx)*(2*fd.dx2(eta, dx) 
+                                       + fd.dy2(eta, dy))
+                          + (1/3)*fd.dy(eta, dy)*fd.dx(fd.dy(eta, dy), dx)
+                          + fd.dx(mu, dx)*(2*fd.dx2(mu, dx) 
+                                           + fd.dy2(mu, dy)) 
+                          + fd.dy(mu, dy)*fd.dx(fd.dy(mu, dy), dx)
+                          + fd.dx(nu, dx)*(2*fd.dx2(nu, dx) 
+                                           + fd.dy2(nu, dy))
+                          + fd.dy(nu, dy)*fd.dx(fd.dy(nu, dy), dx) )
+        
+        fL1_y = -2 * ( fd.dy(eta, dy)*(2*fd.dy2(eta, dy)
+                                       + fd.dx2(eta, dx))
+                         + (1/3)*fd.dx(eta, dx)*fd.dx(fd.dy(eta, dy), dx)
+                         + fd.dy(mu, dy)*(2*fd.dy2(mu, dy)
+                                         + fd.dx2(mu, dx))
+                         + fd.dx(mu, dx)*fd.dx(fd.dy(mu, dy), dx)
+                         + fd.dy(nu, dy)*(2*fd.dy2(nu, dy)
+                                         + fd.dx2(nu, dx))
+                         + fd.dx(nu, dy)*fd.dx(fd.dy(nu, dy), dx) )
+        
+    return fL1_x, fL1_y
+
+def fL2(eta, mu, nu, dx, dy=None):
+    """
+    Returns the isotropic elastic force due to a nematic configuration
+    described by `eta`, `mu`, and `nu`. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    fL2_x : ndarray
+        mxn array holding the x-component of the force from the isotropic
+        elasticity term.
+    fL2_y : ndarray
+        mxn array holding the y-component of the force from the isotropic
+        elasticity term.
+
+    """
+    c = np.sqrt(3)
+    
+    if not dy:
+        dy = dx
+        
+    fL2_x = -( (1/3)*fd.dx(eta, dx)*(8*fd.dx2(eta, dx)
+                                     + fd.dy2(eta, dy)
+                                     - c*fd.dy2(mu, dy)
+                                     + 3*c*fd.dx(fd.dy(nu, dy), dx)
+                                     )
+              + (1/3)*fd.dy(eta, dy)*(-c*fd.dx2(nu, dx)
+                                      + fd.dx(fd.dy(eta, dy), dx)
+                                      - c*fd.dx(fd.dy(mu, dy), dx)
+                                      )
+              + fd.dx(mu, dx)*(-(1/c)*fd.dy2(eta, dy) 
+                               + fd.dy2(mu, dy)
+                               + fd.dx(fd.dy(nu, dy), dx)
+                               )
+              + fd.dy(mu, dy)*(fd.dx2(nu, dx)
+                               - (1/c)*fd.dx(fd.dy(eta, dy), dx)
+                               + fd.dx(fd.dy(mu, dy), dx)
+                               )
+              + fd.dx(nu, dx)*(2*fd.dx2(nu, dx)
+                               + fd.dy2(nu, dy)
+                               + 2*fd.dx(fd.dy(mu, dy), dx)
+                               )
+              + fd.dy(nu, dy)*(fd.dx(fd.dy(nu, dy), dx)
+                               + (2/c)*fd.dx2(eta, dx)
+                               )
+              )
+    
+    fL2_y = -( (2/3)*fd.dx(eta, dx)*(c*fd.dy2(nu, dy)
+                                     + 2*fd.dy(fd.dx(eta, dx), dy)
+                                     )
+              + (2/3)*fd.dy(eta, dy)*(2*fd.dx2(eta, dx)
+                                      + fd.dy2(eta, dy)
+                                      - c*fd.dy2(mu, dy)
+                                      )
+              + 2*fd.dy(mu, dy)*(fd.dy2(mu, dy)
+                                 + fd.dx(fd.dy(nu, dy), dx)
+                                 - (1/c)*fd.dy2(eta, dy)
+                                 )
+              + fd.dx(nu, dx)*(fd.dy2(mu, dy)
+                               - (1/c)*fd.dy2(eta, dy)
+                               + fd.dx(fd.dy(nu, dy), dx)
+                               )
+              + fd.dy(nu, dy)*(fd.dx2(nu, dx)
+                               + 2*fd.dy2(nu, dy)
+                               + c*fd.dx(fd.dy(eta, dy), dx)
+                               + fd.dx(fd.dy(mu, dy), dx)
+                               )
+              )
+    
+    return fL2_x, fL2_y
+        
+def fL3(eta, mu, nu, dx, dy=None):
+    """
+    Returns the isotropic elastic force due to a nematic configuration
+    described by `eta`, `mu`, and `nu`. 
+
+    Parameters
+    ----------
+    eta : ndarray
+        mxn array holding value of the auxiliary variable eta across the
+        whole domain.
+    mu : ndarray
+        mxn array holding value of the auxiliary variable mu across the
+        whole domain.
+    nu : ndarray
+        mxn array holding value of the auxiliary variable nu across the
+        whole domain.
+    dx : double
+        Spacing between gridpoints in the x-direction.
+    dy : double, optional
+        Spacing between gridpoints in the y-direction. If not included, it is
+        assumed that the grid-spacings are equal. 
+
+    Returns
+    -------
+    fL3_x : ndarray
+        mxn array holding the x-component of the force from the isotropic
+        elasticity term.
+    fL3_y : ndarray
+        mxn array holding the y-component of the force from the isotropic
+        elasticity term.
+
+    """
+    c = np.sqrt(3)
+    
+    if not dy:
+        dy = dx
+        
+    fL3_x = -( (2/c)*eta*(fd.dx(eta, dx)*(4*fd.dx2(eta, dx)
+                                          - fd.dy2(eta, dy))
+                          + fd.dx(mu, dx)*(4*fd.dx2(mu, dx)
+                                           - fd.dy2(mu, dy))
+                          + fd.dx(nu, dx)*(4*fd.dx2(nu, dx)
+                                           - fd.dy2(nu, dy))
+                          - fd.dy(mu, dy)*fd.dy(fd.dx(mu, dx), dy)
+                          - fd.dy(eta, dy)*fd.dy(fd.dx(eta, dx), dy)
+                          - fd.dy(nu, dy)*fd.dy(fd.dx(nu, dx), dy)
+                          )
+              + 2*mu*(fd.dx(eta, dx)*fd.dy2(eta, dy) 
+                      + fd.dy(eta, dy)*fd.dy(fd.dx(eta, dx), dy)
+                      + fd.dx(mu, dx)*fd.dy2(mu, dy)
+                      + fd.dy(mu, dy)*fd.dy(fd.dx(mu, dx), dy)
+                      + fd.dx(nu, dx)*fd.dy2(nu, dy)
+                      + fd.dy(nu, dy)*fd.dy(fd.dx(nu, dx), dy)
+                      )
+              + 2*nu*(3*fd.dx(eta, dx)*fd.dy(fd.dx(eta, dx), dy)
+                      + fd.dx2(eta, dx)*fd.dy(eta, dy)
+                      + 3*fd.dx(mu, dx)*fd.dy(fd.dx(mu, dx), dy)
+                      + fd.dx2(mu, dx)*fd.dy(mu, dy)
+                      + 3*fd.dx(nu, dx)*fd.dy(fd.dx(nu, dx), dy)
+                      + fd.dx2(nu, dx)*fd.dy(nu, dy)
+                      )
+              + 2*fd.dx(eta, dx)*(fd.dx(eta, dx)*((2/c)*fd.dx(eta, dx)
+                                                  + fd.dy(nu, dy))
+                                  + fd.dy(eta, dy)*(fd.dy(mu, dy)
+                                                    + fd.dx(nu, dx)
+                                                    - (1/c)*fd.dy(eta, dy))
+                                  + (2/c)*fd.dx(mu, dx)**2
+                                  + (2/c)*fd.dx(nu, dx)**2
+                                  )
+              - (2/c)*fd.dy(eta, dy)*(fd.dx(mu, dx)*fd.dy(mu, dy)
+                                      + fd.dx(nu, dx)*fd.dy(nu, dy))
+              + 2*fd.dy(nu, dy)*(fd.dx(mu, dx)**2
+                                 + fd.dy(mu, dy)*fd.dx(nu, dx)
+                                 + 2*fd.dx(nu, dx)**2)
+              + 2*fd.dx(mu, dx)*fd.dy(mu, dy)*(fd.dy(mu, dy)
+                                               + fd.dx(nu, dx))
+              )
+    
+    fL3_y = -( (4/c)*eta*(fd.dy(eta, dy)*(fd.dx2(eta, dx)
+                                          - fd.dy2(eta, dy))
+                          + fd.dy(mu, dy)*(fd.dx2(mu, dx)
+                                           - fd.dy2(mu, dy))
+                          + fd.dy(nu, dy)*(fd.dx2(nu, dx)
+                                           - fd.dy2(nu, dy))
+                          + fd.dx(eta, dx)*fd.dx(fd.dy(eta, dy), dx)
+                          + fd.dx(mu, dx)*fd.dx(fd.dy(mu, dy), dx)
+                          + fd.dx(nu, dx)*fd.dx(fd.dy(nu, dy), dx)
+                       )
+              + 4*mu*(fd.dy(eta, dy)*fd.dy2(eta, dy)
+                      + fd.dy(mu, dy)*fd.dy2(mu, dy)
+                      + fd.dy(nu, dy)*fd.dy2(nu, dy)
+                      )
+              + 2*nu*(fd.dx(eta, dx)*fd.dy2(eta, dy)
+                      + 3*fd.dy(eta, dy)*fd.dy(fd.dx(eta, dx), dy)
+                      + fd.dx(mu, dx)*fd.dy2(mu, dy)
+                      + 3*fd.dy(mu, dy)*fd.dy(fd.dx(mu, dx), dy)
+                      + fd.dx(nu, dx)*fd.dy2(nu, dy)
+                      + 3*fd.dy(nu, dy)*fd.dy(fd.dx(nu, dx), dy)
+                      )
+              + (4/c)*fd.dx(eta, dx)*(fd.dx(eta, dx)*fd.dy(eta, dy)
+                                      + (c/2)*fd.dy(eta, dy)*fd.dy(nu, dy)
+                                      + fd.dx(mu, dx)*fd.dy(mu, dy)
+                                      + fd.dx(nu, dx)*fd.dy(nu, dy)
+                                      )
+              + 2*fd.dy(eta, dy)*(fd.dy(eta, dy)*(fd.dy(mu, dy)
+                                                  + fd.dx(nu, dx)
+                                                  - (1/c)*fd.dy(eta, dy))
+                                  - (1/c)*fd.dy(mu, dy)**2
+                                  - (1/c)*fd.dy(nu, dy)**2
+                                  )
+              + 2*fd.dy(mu, dy)*(fd.dx(mu, dx)*fd.dy(nu, dy)
+                                 + fd.dy(mu, dy)**2
+                                 + fd.dy(mu, dy)*fd.dx(nu, dx)
+                                 + fd.dy(nu, dy)**2
+                                 )
+              + 4*fd.dx(nu, dx)*fd.dy(nu, dy)**2
+              )
+    
+    return fL3_x, fL3_y
 
 def findMinima(f):
     """
@@ -897,16 +1355,16 @@ def findDefects(lambda_max, X, Y, num_defects):
     
     return min_vals, min_x, min_y
 
-def estAnnihilationTime():
-    """
-    Estimates how much time t/tau it takes for the defects to annihilate based
-    on the square root fitting of the flow-less 2-defect simulation.
+# def estAnnihilationTime():
+#     """
+#     Estimates how much time t/tau it takes for the defects to annihilate based
+#     on the square root fitting of the flow-less 2-defect simulation.
 
-    Returns
-    -------
-    double
-        Approximate time for annihilation
+#     Returns
+#     -------
+#     double
+#         Approximate time for annihilation
 
-    """
+#     """
     
-    return a*b**2 + c
+#     return a*b**2 + c

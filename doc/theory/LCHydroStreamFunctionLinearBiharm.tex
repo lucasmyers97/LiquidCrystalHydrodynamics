@@ -2036,7 +2036,17 @@
 		+ \epsilon_{npi} Q_{jm} \partial_m Q_{kl} \partial_p \partial_i \partial_j Q_{kl}
 	\end{multlined}
 	\end{equation}
-	Only a few of these terms are symmetric in $p$ and $i$, namely terms 3, 6, and 9.
+	Only a few of these terms are symmetric in $p$ and $i$, namely terms 3, 6, and 9. But also note that, for the penultimate term:
+	\begin{equation}
+	\begin{split}
+		\epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+		&= -\epsilon_{nip} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+		&= -\epsilon_{nip} Q_{jm} \partial_i \partial_j Q_{kl} \partial_p \partial_m Q_{kl} \\
+		&= -\epsilon_{npi} Q_{mj} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+		&= -\epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+	\end{split}
+	\end{equation}
+	where in the penultimate line we have relabeled lots of indices, and in the last line we have used the fact that $Q_{mj}$ is symmetric.
 	This then gives:
 	\begin{equation}
 	\begin{multlined}[b]
@@ -2053,7 +2063,6 @@
 		+ \epsilon_{npi} \partial_p Q_{jm} \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
 		+ \epsilon_{npi} Q_{jm} \partial_p \partial_j \partial_m Q_{kl} \partial_i Q_{kl} \\
 		+ \epsilon_{npi} \partial_p Q_{jm} \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
-		+ \epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
 	\end{multlined}
 	\end{equation}
 	Plugging back into the equation of motion (including the stream function) yields:
@@ -2071,7 +2080,6 @@
 		\hspace{2cm}+ (\partial_p Q_{jm}) (\partial_j \partial_m Q_{kl}) (\partial_i Q_{kl})
 		+ Q_{jm} (\partial_p \partial_j \partial_m Q_{kl}) (\partial_i Q_{kl}) \\
 		\hspace{3cm}+ (\partial_p Q_{jm}) (\partial_m Q_{kl}) (\partial_i \partial_j Q_{kl})
-		+ Q_{jm} (\partial_p \partial_m Q_{kl}) (\partial_i \partial_j Q_{kl})
 		\biggr]
 	\end{multlined}
 	\end{equation}
@@ -2108,10 +2116,6 @@
 		+ (\partial_1^2 \partial_2 Q_{12}) (\partial_2 Q_{22}) \\
 		+ (\partial_1 \partial_2^2 Q_{12}) (\partial_2 Q_{12})
 		+ (\partial_1 \partial_2^2 Q_{22}) (\partial_2 Q_{22})
-	\end{multlined} \\
-		&=
-	\begin{multlined}[t]
-		
 	\end{multlined}
 	\end{split}
 	\end{equation}
@@ -2139,6 +2143,55 @@
 		- \partial_i Q_{kl} \partial_j Q_{kl}
 		- \kappa_2 \partial_l Q_{lk} \partial_j Q_{ik}
 		- \kappa_3 Q_{im} \partial_m Q_{kl} \partial_j Q_{kl}
+	\end{equation}
+	
+	\section{Active Nematic Fluid Equation}
+	For active nematics, the active stress tensor is given by:
+	\begin{equation}
+		\sigma^a_{ij} = \zeta Q_{ij}
+	\end{equation}
+	To calculate the equation of motion from this stress tensor, we need to take the divergence:
+	\begin{equation}
+		\partial_j \sigma^a_{ji} = \zeta \partial_j Q_{ji}
+	\end{equation}
+	Now we take the curl to get rid of the pressure in the equation of motion:
+	\begin{equation}
+		\epsilon_{kli} \partial_l \partial_j \sigma^a_{ij} = \epsilon_{kli} \zeta \partial_l \partial_j Q_{ji}
+	\end{equation}
+	This then becomes the source term of the biharmonic equation in the stream function:
+	\begin{equation}
+		\beta_4 \partial^4 \psi_k = \zeta \epsilon_{kli} \partial_l \partial_j Q_{ji}
+	\end{equation}
+	Plugging in with the auxiliary variables yields:
+	\begin{equation}
+		\beta_4 \partial^4 \psi 
+		= \zeta \left[ 
+		\left( \partial_x^2 - \partial_y^2 \right) \nu
+		+ \partial_x \partial_y \mu
+		- \partial_x \partial_y \eta
+		\right]
+	\end{equation}
+	Making this non-dimensional:
+	\begin{equation}
+		\overline{\psi} = \frac{\zeta}{\beta_4 \tau}
+		\left[
+		\left( \partial_x^2 - \partial_y^2 \right) \nu
+		+ \partial_x \partial_y \mu
+		- \partial_x \partial_y \eta
+		\right]
+	\end{equation}
+	where all the derivatives are dimensionless now. Define the variable:
+	\begin{equation}
+		\overline{\zeta} \equiv \frac{\zeta}{\beta_4 \tau}
+	\end{equation}
+	So that the completely nondimensional equation reads:
+	\begin{equation}
+		\overline{\psi} = \overline{\zeta}
+		\left[
+		\left( \partial_x^2 - \partial_y^2 \right) \nu
+		+ \partial_x \partial_y \mu
+		- \partial_x \partial_y \eta
+		\right]
 	\end{equation}
 	
 \end{document}

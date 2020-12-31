@@ -3,6 +3,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{mathrsfs}
+\usepackage{mathtools}
 \usepackage{enumerate}
 \usepackage{esint}
 \usepackage{relsize}
@@ -159,7 +160,8 @@
 	\end{equation}
 	Plugging in for the time evolution of $Q_{ij}$ gives:
 	\begin{equation}
-		\sigma^v_{ij} \approx 
+	\begin{split}
+		\sigma^v_{ij} &\approx 
 		\beta_4 \left(\partial_i v_j + \partial_j v_i\right)
 		+ \frac12 \frac{\mu_2}{\mu_1} \left[
 		L\partial^2 Q_{ij}
@@ -167,7 +169,16 @@
 		- B Q_{ik} Q_{kj}
 		- C Q_{ij} \left( Q_{kl} Q_{lk} \right)
 		- \frac12 \mu_2 \left( \partial_i v_j + \partial_j v_i \right)
-		\right]
+		\right] \\
+		&= \left(\beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)
+		\left( \partial_i v_j + \partial_j v_i \right)
+		+ \frac12 \frac{\mu_2}{\mu_1} \biggl[
+		L\partial^2 Q_{ij}
+		- A Q_{ij}
+		- B Q_{ik} Q_{kj}
+		- C Q_{ij} \left( Q_{kl} Q_{lk} \right)
+		\biggr]
+	\end{split}
 	\end{equation}
 	
 	\section{Fluid equation of motion}
@@ -178,7 +189,7 @@
 	We can make the assumption that $\partial v_i/\partial t \approx 0$. Using this and plugging in for $\sigma^v_{ji}$ and $\sigma^e_{ji}$, we get:
 	\begin{multline}
 		\partial_i p = 
-		\left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)
+		\left(\beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)
 		\left( \partial_i \partial_j v_j + \partial^2 v_i \right) \\
 		+ \frac12 \frac{\mu_2}{\mu_1}
 		\left[
@@ -198,7 +209,7 @@
 		- C\partial_j \left[ Q_{ij} \left( Q_{kl} Q_{lk} \right) \right] \\
 		&f_{L, i} (Q) = \label{eq:f_L-equation} \partial_j \left( \partial_i Q_{kl} \partial_j Q_{kl} \right) \\
 		&f_i (Q) = -\frac12 \frac{\mu_2}{\mu_1} \label{eq:f-equation} f_{\mu_2, i} (Q) + L f_{L, i} (Q) \\
-		&\alpha = \left( \beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)^{-1}
+		&\alpha = \left(\beta_4 - \frac14 \frac{\mu_2^2}{\mu_1} \right)^{-1}
 	\end{align}
 	Then the fluid equation of motion becomes:
 	\begin{equation}\label{eq:fluid-laplace-equation}
@@ -616,6 +627,66 @@
 	\epsilon \sin \overline{k}_x' \overline{x}
 	\end{split}
 	\end{equation}
-	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. For this, we will need to explicitly write out what $\overline{p}$ is. 
+	Now we should go back to make sure that $\partial_i \overline{v}_i = 0$ and that the original velocity equation is satisfied. For this, we will need to explicitly write out what $\overline{p}$ is.
+	
+	\section{Calculating the elastic force from a weakly perturbed configuration}
+	Recall that the elastic force is given by:
+	\begin{equation}
+		f^e_i = \partial_j \sigma^e_{ji}
+	\end{equation}
+	In terms of the director field, the stress tensor is given by:
+	\begin{equation}
+	\begin{split}
+		\sigma^e_{ji} &= -L \left( \partial_j Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+		&= -L \frac{9S^2}{4} \left( \partial_j n_k n_l \right)
+		\left( \partial_i n_k n_l \right) \\
+		&= -L \frac{9S^2}{4} \bigl[ (\partial_j n_k) n_l
+		+ n_k (\partial_j n_l) \bigr]
+		\bigl[ (\partial_i n_k) n_l
+		+ n_k (\partial_i n_l) \bigr]\\
+		&= -L \frac{9S^2}{4} \biggl[ (\partial_j n_k) n_l (\partial_i n_k) n_l
+		+ 2 (\partial_i n_k) n_l n_k (\partial_j n_l)
+		+  n_k (\partial_i n_l)  n_k (\partial_i n_l)
+		\biggr]
+	\end{split}
+	\end{equation}
+	But note that $n_k n_k = 1$ so that the middle term goes away:
+	\begin{equation}
+	\begin{split}
+		\left( \partial_i n_k \right) n_k &= \tfrac12 \partial_i \left( n_k n_k \right) \\
+		&= \tfrac12 \partial_i \left( 1 \right) \\
+		&= 0
+	\end{split}
+	\end{equation}
+	Hence, this becomes:
+	\begin{equation}
+		\sigma^e_{ji} = -L \frac{9S^2}{2} \bigl[
+		\left( \partial_j n_k \right) \left( \partial_i n_k \right)
+		\bigr]
+	\end{equation}
+	Now we calculate $\sigma^e_{ji}$ for the weakly perturbed uniaxial configuration with constant $S$ value, $n_k = \left( \epsilon \cos k x, 1, 0 \right)$.
+	Note first that:
+	\begin{equation}
+		\partial_x n_k = \left( -k \epsilon \sin kx, 0, 0 \right)
+	\end{equation}
+	and that $\partial_y n_k = 0$ (clearly).
+	Thus, the stress tensor reads:
+	\begin{equation}
+		\sigma^e_{xx} = -L \frac{9 S^2}{2}
+		\bigl[
+		k^2 \epsilon^2 \sin^2 kx
+		\bigr]
+	\end{equation}
+	Taking the divergence of this gives the elastic force. 
+	Since there's only an $x$ component, this gives:
+	\begin{equation}
+	\begin{split}
+		f^e_{x} &= -L \frac{9 S^2}{2}
+		\bigl[
+		2 k^3 \epsilon^2 \sin kx \cos kx
+		\bigr] \\
+		&= -L \frac{9 S^2}{2} k^3 \epsilon^2 \sin 2kx
+	\end{split}
+	\end{equation}
 	
 \end{document}

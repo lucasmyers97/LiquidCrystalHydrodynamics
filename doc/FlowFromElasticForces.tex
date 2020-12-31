@@ -1,0 +1,971 @@
+\documentclass[reqno]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{relsize}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{pgf, tikz}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usetikzlibrary{graphs}
+
+\setlength{\textheight}{9truein}
+\setlength{\topmargin}{-0.5truein}
+\setlength{\textwidth}{6truein}
+\setlength{\oddsidemargin}{.25truein}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\newcommand{\Pic}[1]{\text{Pic}(#1)}
+\newcommand{\Div}[1]{\text{Div}(#1)}
+\newcommand{\divv}[1]{\text{div}(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Jac}{\text{Jac}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{conjecture}{Theorem}
+
+\setlength{\parindent}{40pt}
+
+\begin{document}
+\title{Flow around nematic liquid crystals due to elastic forces}
+\author{Lucas Myers}
+\maketitle
+	
+\section{The fluid equation of motion}
+The equation of motion for the fluid is given by
+\begin{equation}\label{eq:fluid-eom}
+	\rho \frac{\partial v_i}{\partial t} 
+	= -\partial_i p 
+	+ \partial_j (\sigma^v_{ji} + \sigma^{e}_{ji})
+\end{equation}
+We make the assumption that $\partial v_i/\partial t \approx 0$.
+Note that we may get rid of the pressure term as well by taking the curl of both sides:
+\begin{equation}
+\begin{split}
+	0 &= -\epsilon_{lki} \partial_k \partial_i p
+	+ \epsilon_{lki} \partial_l \partial_j \sigma^v_{ji}
+	+ \epsilon_{lki} \partial_l \partial_j \sigma^e_{ji} \\
+	&= \epsilon_{lki} \partial_l \partial_j \sigma^v_{ji}
+	+ \epsilon_{lki} \partial_l \partial_j \sigma^e_{ji}
+\end{split}
+\end{equation}
+where in the second step we have used that $\partial_k \partial_i p$ is symmetric in $k$ and $i$, so that $\epsilon_{lki} \partial_k \partial_i p = 0$.
+
+\section{The viscous stress tensor}
+The viscous stress tensor is given by:
+\begin{equation}
+	\sigma^v_{ij} = \beta_1 Q_{ij}Q_{kl}A_{kl} 
+	+ \beta_4 A_{ij} + \beta_5 Q_{ik} A_{ki} 
+	+ \frac{1}{2} \mu_2 N_{ij} 
+	- \mu_1 Q_{ik}N_{kj} 
+	+ \mu_1 Q_{jk}N_{ki}
+\end{equation}
+Each term in the $A$-tensor and $N$-tensor involve at least one factor of $v_i$ or $Q_{ij}$.
+Since we are taking a linear approximation, we may neglect all but the $\beta_4$ and $\mu_2$ terms.
+$A_{ij}$ is given by
+\begin{equation}
+	A_{ij} \equiv \tfrac12 \left(
+	\partial_i v_j + \partial_j v_i
+	\right)
+\end{equation}
+Also, $N_{ij}$ is given by
+\begin{equation}
+	N_{ij} 
+	\equiv \frac{d Q_{ij}}{dt}
+	+ W_{ik} Q_{kj}
+	- Q_{ik} W_{kj}
+\end{equation}
+where
+\begin{equation}
+	\frac{d Q_{ij}}{dt}
+	\equiv \frac{\partial Q_{ij}}{\partial t}
+	+ \left( v \cdot \nabla \right) Q_{ij}
+\end{equation}
+and
+\begin{equation}
+	W_{ij}
+	\equiv \tfrac12 \left(
+	\partial_i v_j - \partial_j v_i 
+	\right)
+\end{equation}
+The only term which is linear in $v_i$ and $Q_{ij}$ is the time evolution term. Hence
+\begin{equation}
+	N_{ij} \approx \frac{\partial Q_{ij}}{\partial t}
+\end{equation}
+The viscous stress tensor then reads:
+\begin{equation}
+	\sigma^v_{ij}
+	\approx \tfrac12 \beta_4 \left(
+	\partial_i v_j + \partial_j v_i
+	\right)
+	+ \tfrac12 \mu_2 \frac{\partial Q_{ij}}{\partial t}
+\end{equation}
+We need to take the divergence and curl to plug it into the equation of motion:
+\begin{equation}
+\begin{split}
+	\partial_j \sigma^v_{ji}
+	&= \partial_j \left(
+	\tfrac12 \beta_4 
+	\left(
+	\partial_j v_i + \partial_i v_j
+	\right)
+	+ \tfrac12 \mu_2 \frac{\partial Q_{ij}}{\partial t}
+	\right) \\
+	&= \tfrac12 \beta_4
+	\left(
+	\partial_j^2 v_i + \partial_i \partial_j
+	\right)
+	+ \tfrac12 \mu_2 \partial_j \frac{\partial Q_{ij}}{\partial t} \\
+	&= \tfrac12 \beta_4 \partial_j^2 v_i 
+	+ \tfrac12 \mu_2 \partial_j \frac{\partial Q_{ij}}{\partial t}
+\end{split}
+\end{equation}
+In the last step we have used the incompressibility condition $\partial_j v_j = 0$. 
+Taking the curl and substituting in the stream function $v_i = \epsilon_{imn} \partial_m \psi_n$ yields:
+\begin{equation}
+\begin{split}
+	\epsilon_{lki} \partial_k \partial_j \sigma^v_{ji}
+	&= \tfrac12 \beta_4 \epsilon_{lki} \partial_k \partial_j^2 v_i
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t} \\
+	&= \tfrac12 \beta_4 \epsilon_{lki} \epsilon_{imn} \partial_k \partial_j^2 \partial_m \psi_n
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t} \\
+	&= \tfrac12 \beta_4 
+	\left( \delta_{lm} \delta_{kn} - \delta_{ln} \delta_{km} \right)
+	\partial_k \partial_j^2 \partial_m \psi_n
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t} \\
+	&= \tfrac12 \beta_4 \left(
+	\partial_j^2 \partial_l \partial_k \psi_k
+	- \partial_j^2 \partial_k^2 \psi_l
+	\right)
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t} \\
+	&= - \tfrac12 \beta_4 \partial_j^2 \partial_k^2 \psi_l
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+\end{split}
+\end{equation}
+In the last step we have noted that only the $z$-component of $\psi_k$ is nonzero.
+However, we are assuming a quasi-2D system, so that the system is constant in the $z$-direction.
+Hence, $\partial_k \psi_k = 0$ so we can get rid of that term.
+
+\section{The elastic stress tensor}
+The elastic stress tensor is given by:
+\begin{equation}
+	\sigma^e_{ij}
+	= - \frac{\partial f}{\partial \left(\partial_i Q_{kl}\right)}
+	\partial_j Q_{kl}
+\end{equation}
+where $f$ is the free energy of the system.
+We only have to consider the elastic portion of the free energy, because that is the only part dependent on spatial derivatives of $Q_{ij}$:
+\begin{equation}
+	f_e	\left(Q_{ij}, \partial_k Q_{ij}\right)
+	= L_1 \partial_k Q_{ij} \partial_k Q_{ij}
+	+ L_2 \partial_j Q_{ij} \partial_k Q_{ik}
+	+ L_3 Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+\end{equation}
+Right now we are only considering the case of isotropic elasticity, so we assume $L_2 = L_3 = 0$. 
+We also define $L \equiv 2 L_1$ to be consistent with the Zumer paper.
+Hence, for our purposes:
+\begin{equation}
+	f_e	\left(Q_{np}, \partial_m Q_{np}\right)
+	= \tfrac12 L \partial_m Q_{np} \partial_m Q_{np}
+\end{equation}
+This yields:
+\begin{equation}
+\begin{split}
+	\frac{\partial f}{\partial \left(\partial_i Q_{kl}\right)}
+	&= \tfrac12 L \left(
+	\delta_{im} \delta_{kn} \delta_{lp} \partial_m Q_{np}
+	+ \partial_m Q_{np} \delta_{im} \delta_{kn} \delta_{lp}
+	\right) \\
+	&= \tfrac12 L \left(
+	\partial_i Q_{kl} + \partial_i Q_{kl}
+	\right) \\
+	&= L \partial_i Q_{kl}
+\end{split}
+\end{equation}
+Then the isotropic elastic stress tensor reads:
+\begin{equation}
+	\sigma^e_{ij}
+	= - L \left( \partial_i Q_{kl} \right) \left( \partial_j Q_{kl} \right)
+\end{equation}
+Taking the divergence yields:
+\begin{equation}
+	f^{L_1}_i \equiv \partial_j \sigma^e_{ji}
+	= - L \left[ \left( \partial_j^2 Q_{kl} \right) 
+	\left( \partial_i Q_{kl} \right)
+	+ \left(\partial_j Q_{kl} \right) 
+	\left( \partial_i \partial_j Q_{kl} \right)
+	\right]
+\end{equation}
+Note that this is the force which acts on an infinitessimal area of the fluid, and so we have called it $f^{e, L_1}_i$.
+Taking the curl of this yields:
+\begin{equation}
+\begin{split}
+	\epsilon_{mni} \partial_n \partial_j \sigma^e_{ji}
+	&= 
+	- \begin{multlined}[t]
+	L \epsilon_{mni} \biggl[
+	\left( \partial_n \partial_j^2 Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	+ \left( \partial_j^2 Q_{kl} \right) \left( \partial_n \partial_i Q_{kl} \right) \\
+	\hspace{1cm} + \left( \partial_n \partial_j Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	+ \left( \partial_j Q_{kl} \right) \left( \partial_n \partial_i \partial_j Q_{kl} \right)
+	\biggr]
+	\end{multlined} \\
+	&= - \epsilon_{mni} L \left( \partial_n \partial_j^2 Q_{kl} \right)
+	\left( \partial_i Q_{kl} \right)
+\end{split}
+\end{equation}
+In the last step, we have noted that all the terms in brackets, except the first, are symmetric in $n$ and $i$.
+Since there is an $\epsilon_{mni}$ out front, these go to zero.
+
+\section{The stream function equation}
+Plugging these terms back into the equation of motion yields:
+\begin{equation}
+\begin{split}
+	0 &= -\tfrac12 \beta_4 \partial_j^2 \partial_k^2 \psi_l
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	- \epsilon_{lki} L \left( \partial_k \partial_j^2 Q_{mn} \right) \left( \partial_i Q_{mn} \right) \\
+	\implies \tfrac12 \beta_4 \partial_j^2 \partial_k^2 \psi_l
+	&= -\epsilon_{lki} L \left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	+ \tfrac12 \mu_2 \epsilon_{lki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+\end{split}
+\end{equation}
+Again, the only nonzero component of $\psi_l$ is the $z$-component.
+This lets us define the two-dimensional Levi-Civita tensor $\epsilon_{ki} \equiv \epsilon_{3ki}$.
+Additionally, we may define the biharmonic operator $\partial^4 \equiv \partial_j^2 \partial_k^2$. The equation then reads:
+\begin{equation}
+	\partial^4 \psi = -\epsilon_{ki} \left[
+	2 \frac{L}{\beta_4} \left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	- \frac{\mu_2}{\beta_4} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	\right]
+\end{equation}
+
+\section{Nondimensionalizing the stream function equation}
+Define a dimensionless length and time:
+\begin{equation}
+	\overline{x} = \frac{x}{\xi}, \: \overline{t} \equiv \frac{t}{\tau}
+\end{equation}
+Further, choose the time scale to be such that
+\begin{equation}
+	\tau = \frac{\mu_1 \xi^2}{L}
+\end{equation}
+Finally, define 
+\begin{equation}
+	\overline{\psi} \equiv \frac{\tau}{\xi^2} \psi
+\end{equation}
+For brevity, we drop the overlines.
+Plugging this in yields:
+\begin{equation}
+\begin{split}
+	\frac{1}{\xi^4} \partial^4 \frac{\xi^2}{\tau} \psi
+	&= -\epsilon_{ki} \left[
+	2 \frac{L}{\beta_4} \frac{1}{\xi^4} 
+	\left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	- \frac{\mu_2}{\beta_4} \frac{1}{\tau \xi^2} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	\right] \\
+	\implies \partial^4 \psi
+	&= -\epsilon_{ki} \left[
+	2 \frac{1}{\beta_4} \frac{L \tau}{\xi^2} 
+	\left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	- \frac{\mu_2}{\beta_4} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	\right] \\
+	&= -\epsilon_{ki} \left[
+	2 \frac{\mu_1}{\beta_4} 
+	\left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	- \frac{\mu_2}{\beta_4} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	\right]
+\end{split}
+\end{equation}
+Finally, we define the dimensionless quantities:
+\begin{equation}
+\begin{split}
+	a &\equiv \frac{\mu_2}{\mu_1} \approx -1.92 \\
+	b &\equiv \frac{\beta_4}{\mu_1} \approx 1.99
+\end{split}
+\end{equation}
+Plugging this in gives:
+\begin{equation}
+	\partial^4 \psi
+	= -\epsilon_{ki} \left[
+	\frac{2}{b} \left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+	- \frac{a}{b} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+	\right]
+\end{equation}
+Finally, define:
+\begin{equation}
+	\Phi_{L_1} (Q) \equiv -\epsilon_{ki} \left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+\end{equation}
+and
+\begin{equation}
+	\Phi_{\mu_2} (Q) \equiv \epsilon_{ki} \partial_k \partial_j \frac{\partial Q_{ij}}{\partial t}
+\end{equation}
+where we note from above that:
+\begin{equation}
+	\epsilon_{mni} L \left( \partial_n \partial_j^2 Q_{kl}\right)
+	\left( \partial_i Q_{kl} \right)
+	= \frac{L}{\xi^4} \Phi_{L_1} (Q)
+	= \frac{2 L_1}{\xi^4} \Phi_{L_1} (Q)
+\end{equation}
+Now we have that the final equation reads:
+\begin{equation}
+	\partial^4 \psi = \frac{1}{b} \left[
+	2 \Phi_{L_1} (Q) + a \Phi_{\mu_2} (Q)
+	\right]
+\end{equation}
+where we note that $a$ is negative in this case.
+
+\section{Writing in terms of auxiliary variables}
+Since $Q_{ij}$ is necessarily symmetric and symmetric, we would like to choose a representation which takes advantage of the fewer degrees of freedom.
+Further, since we're in a quasi-2D system, it is necessary that $Q_{31} = Q_{32} = 0$. 
+This gives us three degrees of freedom for the $2\times 2$ sub-matrix, and then no extra degrees of freedom for the $Q_{33}$ entry (since it needs to be traceless).
+Hence, we define three auxiliary variables $\eta$, $\mu$, and $\nu$ such that
+\begin{equation}
+	Q = 
+	\begin{pmatrix}
+	\frac{2}{\sqrt3} \eta & \nu & 0\\
+	\nu & -\frac{1}{\sqrt3}\eta + \mu & 0 \\
+	0 & 0 & -\frac{1}{\sqrt3}\eta - \mu
+	\end{pmatrix}
+\end{equation}
+This is just the sum of three basis elements which are themselves tracless, symmetric matrices:
+\begin{equation}
+	e_1 = \begin{pmatrix}
+	\tfrac{2}{\sqrt3} & 0 & 0 \\
+	0 & -\tfrac{1}{\sqrt3} & 0 \\
+	0 & 0 & -\tfrac{1}{\sqrt3}
+	\end{pmatrix}
+	;
+	\hspace{1cm}
+	e_2 = \begin{pmatrix}
+	0 & 1 & 0 \\
+	1 & 0 & 0 \\
+	0 & 0 & 0
+	\end{pmatrix}
+	;
+	\hspace{1cm}
+	e_3 = \begin{pmatrix}
+	0 & 0 & 0 \\
+	0 & 1 & 0 \\
+	0 & 0 & 1
+	\end{pmatrix}
+\end{equation}
+Note that these are all orthogonal, and have norm $\sqrt{2}$.
+We want to write our force terms ($\Phi_{L_1} (Q)$ and $\Phi_{\mu_2} (Q)$) in terms of these auxiliary variables.
+For now, we are only interested in $\Phi_{L_1}(Q)$ because we assume the configurations given are in equilibrium. 
+We can write up a Sympy program to carry out this sum explicitly. 
+The result is given below:
+\begin{equation}
+	\Phi_{L_1} (Q) =
+	\begin{multlined}[t]
+	-2 \bigl[
+	\left( \partial_x \partial^2 \eta \right) \left( \partial_y \eta \right)
+	- \left( \partial_y \partial^2 \eta \right) \left( \partial_x \eta \right)
+	+ \left(\partial_x \partial^2 \mu \right) \left( \partial_y \mu \right) \\
+	- \left( \partial_y \partial^2 \mu \right) \left( \partial_x \mu \right)
+	+ \left( \partial_x \partial^2 \nu \right) \left( \partial_y \nu \right)
+	- \left( \partial_y \partial^2 \nu \right) \left(\partial_x \nu \right)
+	\bigr]
+	\end{multlined}
+\end{equation}
+where $\partial^2$ is the Laplacian. The stream function for the equilibrium configurations is just the solution to the biharmonic equation above with the source terms as $\Phi_{L_1} (Q)$ given above and $\Phi_{\mu_2} (Q) = 0$. 
+
+\section{Force from the elastic stress tensor}
+We can nondimensionalize the elastic force as follows:
+\begin{equation}
+\overline{f}^{L_1}_i 
+\equiv \frac{\xi^3}{L} f^{L_1}_i
+= - \left[
+\left( \partial_j^2 Q_{kl} \right)
+\left( \partial_i Q_{kl} \right)
++ \left( \partial_j Q_{kl} \right)
+\left( \partial_i \partial_j Q_{kl} \right)
+\right]
+\end{equation}
+We drop the overline for brevity.
+Now we can plug in for $Q_{kl}$ to get everything in terms of the auxiliary variables.
+Carrying this out in Sympy yields:
+\begin{equation}
+\begin{split}
+	f^{L_1}_x
+	=
+	\begin{multlined}[t]
+	-2 \bigl[
+	\left(\partial_x \eta \right) \left( 2 \partial_x^2 \eta + \partial_y^2 \eta \right)
+	+ \left( \partial_y \eta \right) \left( \partial_x \partial_y \eta \right) \\
+	\hspace{0.5cm}+ \left( \partial_x \mu \right) \left( 2 \partial_x^2 \mu + \partial_y^2 \mu \right)
+	+ \left( \partial_y \mu \right) \left( \partial_x \partial_y \mu \right) \\
+	\hspace{1cm}+ \left( \partial_x \nu \right) \left( 2 \partial_x^2 \nu + \partial_y^2 \nu \right)
+	+ \left( \partial_y \nu \right) \left( \partial_x \partial_y \nu \right)
+	\bigr]
+	\end{multlined}
+\end{split}
+\end{equation}
+
+\begin{equation}
+	f^{L_1}_y
+	=
+	\begin{multlined}[t]
+	-2 \bigl[
+	\left( \partial_y \eta \right) \left( 2 \partial_y^2 \eta + \partial_x^2 \eta \right)
+	+ \left( \partial_x \eta \right) \left( \partial_x \partial_y \eta \right) \\
+	\hspace{0.5cm}+ \left( \partial_y \mu \right) \left( 2\partial_y^2 \mu + \partial_x^2 \mu \right)
+	+ \left( \partial_x \mu \right) \left( \partial_x \partial_y \mu \right)  \\
+	\hspace{1cm}+ \left( \partial_y \nu \right) \left( 2\partial_y^2 \nu + \partial_x^2 \nu \right)
+	+ \left( \partial_y \nu \right) \left( \partial_x \partial_y \nu \right)
+	\bigr]
+	\end{multlined}
+\end{equation}
+
+\section{The elastic stress tensor cont. (anisotropic parts)}
+\label{section:anisotropic-stress-tensor}
+Here we explicitly evaluate the anisotropic parts of the elastic stress tensor.
+First let's consider the $L_2$ term:
+\begin{equation}
+\begin{split}
+	\frac{\partial}{\partial \left( \partial_m Q_{np} \right)}
+	\partial_j Q_{ij} \partial_k Q_{ik}
+	&= \delta_{jm} \delta_{ni} \delta_{pj} \partial_k Q_{ik}
+	+ \partial_j Q_{ij} \delta_{mk} \delta_{ni} \delta_{pk} \\
+	&= \delta_{mp} \partial_k Q_{nk} + \delta_{mp} \partial_j  Q_{nj} \\
+	&= 2 \delta_{mp} \partial_k Q_{nk}
+\end{split}
+\end{equation}
+Then the $L_3$ term:
+\begin{equation}
+\begin{split}
+	\frac{\partial}{\partial \left( \partial_m Q_{np} \right)}
+	Q_{kl} \partial_k Q_{ij} \partial_l Q_{ij}
+	&= Q_{kl} \left( \delta_{mk} \delta_{ni} \delta_{pj} \partial_l Q_{ij} + \delta_{ml} \delta_{ni} \delta_{pj} \partial_k Q_{ij} \right) \\
+	&= Q_{ml} \partial_l Q_{np} + Q_{km} \partial_k Q_{np} \\
+	&= 2 Q_{mk} \partial_k Q_{np}
+\end{split}
+\end{equation}
+Recall the definition of the elastic stress tensor, using indices as above:
+\begin{equation}
+	\sigma^e_{mj}
+	= - \frac{\partial f}{\partial \left(\partial_m Q_{np}\right)}
+	\partial_j Q_{np}
+\end{equation}
+Substituting these (and the $L_1$ term) into the above equation yields:
+\begin{equation}
+	\sigma^e_{mj} 
+	= -2 \left[
+	L_1 \left( \partial_m Q_{np} \right) \left( \partial_j Q_{np} \right)
+	+ L_2 \left( \partial_k Q_{nk} \right) \left( \partial_j Q_{nm} \right)
+	+ L_3 Q_{mk} \left( \partial_k Q_{np} \right) \left( \partial_j Q_{np} \right)
+	\right]
+\end{equation}
+Making the substitutions $m \to j$, $n \to k$, $p \to l$, $k \to m$, and $j \to i$ yields:
+\begin{equation} \label{eq:full-stress-tensor}
+	\sigma^e_{ji} = -2\left[
+	L_1 \left( \partial_j Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	+ L_2 \left( \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+	+ L_3 Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	\right]
+\end{equation}
+Now we need to take the divergence of the two latter terms. 
+For the second term this yields:
+\begin{equation}
+\begin{split}
+	\partial_j \left(\partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+	&= \left( \partial_j \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+	+ \left( \partial_m Q_{km} \right) \left( \partial_j \partial_i Q_{kj} \right)
+\end{split}
+\end{equation}
+Third term:
+\begin{equation}
+\begin{split}
+	\partial_j \left[ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \right]
+	&= 
+	\begin{multlined}[t]
+	\left( \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ Q_{jm} \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	+ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\end{multlined}
+\end{split}
+\end{equation}
+Taking the curl of the $L_2$ term yields:
+\begin{equation}
+\begin{split}
+	\begin{multlined}[b]
+	\epsilon_{npi} \partial_p \bigl[
+	\left( \partial_j \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right) \\
+	\hspace{1cm}+ \left( \partial_m Q_{km} \right) \left( \partial_j \partial_i Q_{kj} \right)
+	\bigr]
+	\end{multlined}
+	&= 
+	\begin{multlined}[t]
+	\epsilon_{npi} \bigl[
+	\left( \partial_p \partial_j \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+	+ \left( \partial_j \partial_m Q_{km} \right) \left( \partial_p \partial_i Q_{kj} \right) \\
+	\hspace{0.5cm}+ \left( \partial_p \partial_m Q_{km} \right) \left( \partial_j \partial_i Q_{kj} \right)
+	+ \left( \partial_m Q_{km} \right) \left( \partial_j \partial_i \partial_p Q_{kj} \right)
+	\bigr]
+	\end{multlined} \\
+	&= \epsilon_{npi} \left( \partial_p \partial_j \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+\end{split}
+\end{equation}
+where the last step follows from the fact that each term except the first is symmetric in $i$ and $p$.
+Give that last expression a name (including the minus sign from \eqref{eq:full-stress-tensor}):
+\begin{equation}
+	\Phi_{L_2} (Q) \equiv -2 L_2 \epsilon_{npi} \left( \partial_p \partial_j \partial_m Q_{km} \right) \left( \partial_i Q_{kj} \right)
+\end{equation}
+Taking the curl of the $L_3$ term yields:
+\begin{equation}
+\begin{multlined}[b]
+	\epsilon_{npi} \partial_p \bigl[
+	\left( \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{0.5cm}+ Q_{jm} \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{2cm}+ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+\end{multlined}
+=
+\begin{multlined}[t]
+	\epsilon_{npi} \bigl[
+	\left( \partial_p \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ \left( \partial_j Q_{jm} \right) \left( \partial_p \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ \left( \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_p \partial_i Q_{kl} \right) \\
+	+ \left( \partial_p Q_{jm} \right) \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right)\\
+	+ Q_{jm} \left( \partial_p \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ Q_{jm} \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_p \partial_i Q_{kl} \right) \\
+	+ \left( \partial_p Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right) \\
+	+ Q_{jm} \left( \partial_p \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right) \\
+	+ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_p \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+\end{multlined}
+\end{equation}
+Only a few of these terms are symmetric in $p$ and $i$, namely terms 3, 6, and 9. But also note that, for the penultimate term:
+\begin{equation}
+\begin{split}
+	\epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+	&= -\epsilon_{nip} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+	&= -\epsilon_{nip} Q_{jm} \partial_i \partial_j Q_{kl} \partial_p \partial_m Q_{kl} \\
+	&= -\epsilon_{npi} Q_{mj} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl} \\
+	&= -\epsilon_{npi} Q_{jm} \partial_p \partial_m Q_{kl} \partial_i \partial_j Q_{kl}
+\end{split}
+\end{equation}
+where in the penultimate line we have relabeled lots of indices, and in the last line we have used the fact that $Q_{mj}$ is symmetric.
+This then gives:
+\begin{equation}
+\begin{multlined}[b]
+	\epsilon_{npi} \partial_p \bigl[
+	\left( \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{0.5cm}+ Q_{jm} \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{2cm}+ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+\end{multlined}
+= 
+\begin{multlined}[t]
+	\epsilon_{npi} \bigl[ 
+	\left( \partial_p \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ \left( \partial_j Q_{jm} \right) \left( \partial_p \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ \left( \partial_p Q_{jm} \right) \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ Q_{jm} \left( \partial_p \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	+ \left( \partial_p Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+\end{multlined}
+\end{equation}
+Give this last expression a name (including the minus sign from \eqref{eq:full-stress-tensor}):
+\begin{equation}
+	\Phi_{L_3}(Q)
+	= 
+	\begin{multlined}[t]
+	-2 L_3 \epsilon_{npi} \bigl[ 
+	\left( \partial_p \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_j Q_{jm} \right) \left( \partial_p \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_p Q_{jm} \right) \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ Q_{jm} \left( \partial_p \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_p Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+	\end{multlined}
+\end{equation}
+Note that in these equations, only the $n = 3$ term is nonzero since we have $\partial_p$ and $\partial_i$ terms in each term.
+Hence, if we have $p = 3$ or $i = 3$ then everything goes to zero. 
+Thus, we can just use the 2D Levi-Civita. 
+We may also non-dimensionalize these equations by dividing by $L = 2 L_1$ and multiplying by $\xi^4$. We will consider only the non-dimensionalized equations as follows.
+
+\section{Writing anisotropic elastic source terms using auxiliary variables}
+Plugging the expression for $f_{L_2}$ into Sympy yields:
+\begin{equation}
+\begin{split}
+	\Phi_{L_2} 
+	&=
+	\begin{multlined}[t]
+	- \kappa_2 \Biggl[
+	\tfrac13 \left(\partial_x \eta\right) \Bigl[
+	\sqrt3 \partial_y^3 \mu
+	- \partial_y^3 \eta 
+	- 4 \partial_y \partial_x^2 \eta 
+	- \sqrt3 \partial_y^2 \partial_x \nu
+	\Bigr] \\ 
+	+ \tfrac13 \left(\partial_y \eta\right) \Bigl[
+	4 \partial_x^3 \eta
+	+  \partial_y^2 \partial_x \eta
+	- \sqrt3 \partial_y^2 \partial_x \mu
+	+ \sqrt3 \partial_y \partial_x^2 \nu 
+	\Bigr] \\
+	+ \left(\partial_x \mu\right) \Bigl[
+	\tfrac{1}{\sqrt3} \partial_y^3 \eta
+	- \partial_y^3 \mu 
+	- \partial_y^2 \partial_x \nu
+	\Bigr] \\
+	+ \left(\partial_y \mu \right) \Bigl[
+	- \tfrac{1}{\sqrt3} \partial_y^2 \partial_x \eta 
+	+ \partial_y^2 \partial_x \mu 
+	+ \partial_y \partial_x^2 \nu 
+	\Bigr] \\
+	- \left(\partial_x \nu \right) \Bigl[
+	\partial_y^3 \nu 
+	+ \tfrac{1}{\sqrt3} \partial_y^2 \partial_x \eta
+	+ \partial_y^2 \partial_x \mu 
+	+ \partial_y \partial_x^2 \nu
+	\Bigr] \\
+	+ \left(\partial_y \nu\right) \Bigl[
+	\partial_x^3 \nu 
+	+ \tfrac{1}{\sqrt3}  \partial_y \partial_x^2 \eta
+	+ \partial_y \partial_x^2 \mu 
+	+ \partial_y^2 \partial_x \nu
+	\Bigr]
+	\Biggr]
+	\end{multlined}
+\end{split}
+\end{equation}
+where we have defined $\kappa_2 \equiv L_2/L_1$, and in the last line we have simplified a few terms.
+Now we may plug in for $\Phi_{L_3}(Q)$ in terms of the auxiliary variables:
+\begin{equation}
+\begin{split}
+	\Phi_{L_3}(Q)
+	&= 
+	\begin{multlined}[t]
+	- \kappa_3 \Biggl[
+	\tfrac{2}{\sqrt3} \eta \biggl[
+	\left(\partial_x \eta\right) \bigl( \partial_y^3 \eta - 2\partial_y\partial_x^2 \eta \bigr)
+	+ \left(\partial_y \eta\right) \bigl( 2 \partial_x^3 \eta - \partial_x \partial_y^2 \eta \bigr) \\
+	+ \left(\partial_x \mu\right) \bigl( \partial_y^3 \mu - 2 \partial_y \partial_x^2 \mu \bigr)
+	+ \left( \partial_y \mu \right) \bigl( 2\partial_x^3 \mu - \partial_x \partial_y^2 \mu \bigr) \\
+	+ \left( \partial_x \nu \right) \bigl( \partial_y^3 \nu - 2 \partial_y \partial_x^2 \nu \bigr)
+	+ \left(\partial_y \nu\right) \bigl( 2\partial_x^3 \nu - \partial_x \partial_y^2 \nu \bigr)
+	\biggr]\\
+	+ 2 \mu \biggl[
+	\left(\partial_y \eta\right) \left(\partial_y^2 \partial_x \eta\right)
+	- \left(\partial_x \eta\right) \left(\partial_y^3 \eta\right)
+	+ \left(\partial_y \mu\right) \left(\partial_y^2 \partial_x \mu\right)\\
+	- \left(\partial_x \mu\right) \left(\partial_y^3 \mu\right)
+	+ \left(\partial_y \nu\right) \left(\partial_y^2 \partial_x \nu\right)
+	- \left(\partial_x \nu\right) \left(\partial_y^3 \nu\right)
+	\biggr] \\
+	+ 4 \nu \biggl[ 
+	\left(\partial_y \eta\right) \left(\partial_y \partial_x^2 \eta\right)
+	- \left(\partial_x \eta\right) \left(\partial_y^2 \partial_x \eta\right)
+	+ \left(\partial_y \mu\right) \left(\partial_y \partial_x^2 \mu\right)\\
+	- \left(\partial_x \mu\right) \left(\partial_y^2 \partial_x \mu\right) 
+	+ \left(\partial_y \nu\right) \left(\partial_y \partial_x^2 \nu\right)
+	- \left(\partial_x \nu\right) \left(\partial_y^2 \partial_x \nu\right)
+	\biggr] \\
+	+ \tfrac{2}{\sqrt3} \partial_x \eta \biggl[
+	\left(\partial_y \eta\right) \left( 2 \partial_x^2 \eta + \partial_y^2 \eta - \sqrt3 \partial_y^2 \mu \right) \\
+	+ 2 \left(\partial_y \mu\right) \left( 2\partial_x^2 \mu - \partial_y^2 \mu - \sqrt3 \partial_y^2 \eta\right) 
+	+ 2 \left(\partial_y \nu\right) \left( 2 \partial_x^2 \nu - \partial_y^2 \nu - 2\sqrt3 \partial_x \partial_y \eta\right) 
+	\biggr] \\
+	+ \tfrac{4}{\sqrt3} \partial_y \eta \biggl[
+	\partial_x \mu \left( \sqrt3 \partial_y^2 \eta - 2 \partial_x^2 \mu + \partial_y^2 \mu \right)
+	+ \partial_x \nu \left( 2 \sqrt3 \partial_x \partial_y \eta - 2 \partial_x^2 \nu + \partial_y^2 \nu \right)
+	\biggr] \\
+	- 2 \biggl[
+	\left(\left(\partial_x \eta\right)^2 
+	+ \left(\partial_x \mu\right)^2 
+	+ \left(\partial_x \nu\right)^2\right)
+	\left(\partial_y^2 \nu 
+	+ \tfrac{2}{\sqrt3} \partial_y \partial_x \eta\right)
+	\biggr] \\
+	+ 2 \biggl[
+	\left( \left(\partial_y \eta\right)^2 
+	+ \left(\partial_y \mu\right)^2 
+	+ \left(\partial_y \nu\right)^2\right)
+	\left(\partial_x^2 \nu 
+	- \tfrac{1}{\sqrt3} \partial_y \partial_x \eta
+	+ \partial_y \partial_x \mu\right)
+	\biggr] \\
+	+ \tfrac23\biggl[
+	\left(2 \sqrt3 \partial_x^2 \eta 
+	+ \sqrt3 \partial_y^2 \eta 
+	- 3 \partial_y^2 \mu \right) 
+	\left(\partial_x \mu \partial_y \mu 
+	+ \partial_x \nu \partial_y \nu \right)
+	\biggr]\\
+	+ 4 \biggl[\left(\partial_y^2 \nu 
+	- 2 \partial_y \partial_x \mu\right) 
+	\left(\partial_x \mu \partial_y \nu 
+	-  \partial_y \mu \partial_x \nu\right) \biggr]
+	\Biggr]
+	\end{multlined}
+\end{split}
+\end{equation}
+Note that, with these definitions, the anisotropic flow equation becomes:
+\begin{equation}
+	\partial^4 \psi = \frac{1}{b} \Bigl[
+	2 \bigl( \Phi_{L_1} (Q) 
+	+ \kappa_2 \Phi_{L_2} (Q)
+	+ \kappa_3 \Phi_{L_3} (Q) \bigr)
+	+ a \Phi_{\mu_2} (Q)
+	\Bigr]
+\end{equation}
+
+\section{Anisotropic elastic forces}
+These forces are just given by the divergence of the corresponding terms in the elastic stress tensor.
+From section \ref{section:anisotropic-stress-tensor}, we may read off that:
+\begin{equation}
+\begin{split}
+	f^{L_2}_i
+	&= - 2 L_2 \left[
+	\left( \partial_j \partial_m Q_{km} \right)
+	\left( \partial_i Q_{kj} \right)
+	+ \left( \partial_m Q_{km} \right)
+	\left( \partial_j \partial_i Q_{kj} \right)
+	\right] \\
+\end{split}
+\end{equation}
+Define $\overline{f}^{L_2}_i \equiv \frac{\xi^3}{L} f^{L_2}_i$ and then drop the overline for brevity sake.
+then we get that:
+\begin{equation}
+	f^{L_2}_i
+	= -\kappa_2 \left[
+	\left( \partial_j \partial_m Q_{km} \right)
+	\left( \partial_i Q_{kj} \right)
+	+ \left( \partial_m Q_{km} \right)
+	\left( \partial_j \partial_i Q_{kj} \right)
+	\right]
+\end{equation}
+where $\kappa_2 \equiv L_2/L_1$. 
+Plugging this into Sympy to get an expression in terms of the auxiliary variables yields:
+\begin{equation}
+\begin{split}
+	f^{L_2}_x &=
+	-\kappa_2
+	\begin{multlined}[t]
+	\biggl[
+	\tfrac13 \left(\partial_x \eta\right)
+	\bigl[
+	8 \partial_x^2 \eta 
+	+ \partial_y^2 \eta 
+	- \sqrt3 \partial_y^2 \mu
+	+ 3\sqrt{3} \partial_y \partial_x \nu 
+	\bigr] \\
+	+ \tfrac13 \left( \partial_y \eta \right)
+	\bigl[
+	- \sqrt3 \partial_x^2 \nu 
+	+ \partial_x \partial_y \eta 
+	- \sqrt3 \partial_y \partial_x \mu 
+	\bigr] \\ 
+	+ \left( \partial_x \mu \right)
+	\bigl[
+	- \tfrac{1}{\sqrt3} \partial_y^2 \eta
+	+ \partial_y^2 \mu 
+	+ \partial_x \partial_y \nu
+	\bigr] \\
+	+ \left(\partial_y \mu \right)
+	\bigl[
+	\partial_x^2 \nu 
+	- \tfrac{1}{\sqrt3} \partial_x \partial_y \eta
+	+ \partial_x \partial_y \mu
+	\bigr] \\
+	+ \left( \partial_x \nu \right)
+	\bigl[
+	2 \partial_x^2 \nu 
+	+ \partial_y^2 \nu 
+	+ 2 \partial_x \partial_y \mu
+	\bigr] \\
+	+ \left(\partial_y \nu \right) 
+	\bigl[\partial_x \partial_y \nu
+	+ \tfrac{2}{\sqrt3} \partial_x^2 \eta \bigr]
+	\biggr]
+	\end{multlined} \\
+	f^{L_2}_y &=
+	\begin{multlined}[t]
+	-\kappa_2 \biggl[
+	\tfrac23 \left( \partial_x \eta \right)
+	\bigl[
+	\sqrt3 \partial_y^2 \nu 
+	+ 2 \partial_x \partial_y \eta
+	\bigr] \\
+	+ \tfrac23 \left( \partial_y \eta \right)
+	\bigl[
+	2 \partial_x^2 \eta
+	+ \partial_y^2 \eta
+	- \sqrt3 \partial_y^2 \mu
+	\bigr] \\
+	+ 2 \left( \partial_y \mu \right)
+	\bigl[
+	\partial_y^2 \mu 
+	+ \partial_x \partial_y \nu
+	- \tfrac{1}{\sqrt3} \partial_y^2 \eta
+	\bigr]  \\
+	+ \left( \partial_x \nu \right)
+	\bigl[
+	\partial_y^2 \mu 
+	- \tfrac{1}{\sqrt3} \partial_y^2 \eta 
+	+ \partial_x \partial_y \nu
+	\bigr] \\
+	+ \left( \partial_y \nu \right)
+	\bigl[
+	\partial_x^2 \nu
+	+ 2 \partial_y^2 \nu 
+	+ \sqrt3 \partial_x \partial_y \eta 
+	+ \partial_x \partial_y \mu
+	\bigr]
+	\biggr]
+	\end{multlined}
+\end{split}
+\end{equation}
+For the third anisotropic elastic force, we may read off:
+\begin{equation}
+	f^{L_3}_i
+	= 
+	-2 L_3 \left[
+	\left( \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	+ Q_{jm} \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right)
+	+ Q_{jm} \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\right]
+\end{equation}
+We may define the dimensionless force in the same way as above.
+Then the third anisotropic elastic force is given explicitly by:
+\begin{equation}
+\begin{split}
+	f^{L_3}_x
+	&=
+	\begin{multlined}[t]
+	- \kappa_3 \Biggl[
+	\tfrac{2}{\sqrt3} \eta
+	\Bigl[
+	\left(\partial_x \eta \right)
+	\left( 4 \partial_x^2 \eta 
+	- \partial_y^2 \eta \right)
+	+ \left( \partial_x \mu \right) \left(4 \partial_x^2 \mu 
+	- \partial_y^2 \mu \right) 
+	+ \left(\partial_x \nu\right) \left(4 \partial_x^2 \nu
+	- \partial_y^2 \nu \right) \\
+	- \partial_y \mu \partial_x \partial_y \mu
+	- \partial_y \eta \partial_x \partial_y \eta 
+	- \partial_y \nu \partial_x \partial_y \nu
+	\Bigr] \\
+	+ 2 \mu \Bigl[
+	\partial_x \eta \partial_y^2 \eta 
+	+ \partial_y \eta \partial_x \partial_y \eta 
+	+ \partial_x \mu \partial_y^2 \mu 
+	+ \partial_y \mu \partial_x \partial_y \mu
+	+ \partial_x \nu \partial_y^2 \nu 
+	+ \partial_y \nu \partial_x \partial_y \nu 
+	\Bigr]\\
+	+ 2 \nu \Bigl[
+	3 \partial_x \eta \partial_x \partial_y \eta 
+	+ \partial_x^2 \eta \partial_y \eta 
+	+ 3 \partial_x \mu \partial_x \partial_y \mu
+	+ \partial_x^2 \mu \partial_y \mu 
+	+ 3 \partial_x \nu \partial_x \partial_y \nu 
+	+ \partial_x^2 \nu \partial_y \nu
+	\Bigr] \\
+	+ 2 \left( \partial_x \eta \right) \Bigl[
+	\left(\partial_x \eta\right) \left(
+	\tfrac{2}{\sqrt3} \left(\partial_x \eta\right)
+	+ \partial_y \nu \right)
+	+ \left( \partial_y \eta \right) \left(
+	\partial_y \mu 
+	+ \partial_x \nu 
+	- \tfrac{1}{\sqrt3} \left(\partial_y \eta\right)
+	\right)
+	+ \tfrac{2}{\sqrt3} \left(\partial_x \mu\right)^{2} 
+	+ \tfrac{2}{\sqrt3} \left(\partial_x \nu\right)^{2} 
+	\Bigl]\\
+	- \tfrac{2}{\sqrt3} \left(\partial_y \eta\right)
+	\Bigl[
+	\partial_x \mu \partial_y \mu
+	+ \partial_x \nu \partial_y \nu
+	\Bigr]
+	+ 2 \left(\partial_y \nu\right)
+	\Bigl[
+	\left(\partial_x \mu\right)^{2}
+	+ \partial_y \mu \partial_x \nu 
+	+ 2 \left(\partial_x \nu\right)^{2}
+	\Bigr]
+	+ 2 \left(\partial_x \mu\right) \left(\partial_y \mu\right)
+	\Bigl[
+	\partial_y \mu
+	+ \partial_x \nu 
+	\Bigr]
+	\Biggr]
+	\end{multlined}
+	\\
+	f^{L_3}_y
+	&= 
+	\begin{multlined}[t]
+	- \kappa_3 \Biggl[
+	\tfrac{4}{\sqrt3} \eta \Bigl[
+	\left(\partial_y \eta\right)
+	\left(\partial_x^2 \eta 
+	- \partial_y^2 \eta \right)
+	+ \left(\partial_y \mu\right)
+	\left(\partial_x^2 \mu 
+	- \partial_y^2 \mu \right)
+	+ \left( \partial_y \nu \right)
+	\left(\partial_x^2 \nu
+	- \partial_y^2 \nu \right) \\
+	+ \partial_x \eta \partial_x \partial_y \eta
+	+ \partial_x \mu \partial_x \partial_y \mu 
+	+ \partial_x \nu \partial_x \partial_y \nu
+	\Bigr] \\
+	+ 4 \mu \Bigl[
+	\partial_y \eta \partial_y^2 \eta 
+	+ \partial_y \mu \partial_y^2 \mu 
+	+ \partial_y \nu \partial_y^2 \nu
+	\Bigr] \\
+	2 \nu \Bigl[
+	\partial_x \eta \partial_y^2 \eta 
+	+ 3 \partial_y \eta \partial_x \partial_y \eta 
+	+ \partial_x \mu \partial_y^2 \mu 
+	+ 3 \partial_y \mu \partial_x \partial_y \mu 
+	+ \partial_x \nu \partial_y^2 \nu 
+	+ 3 \partial_y \nu \partial_x \partial_y \nu
+	\Bigr] \\
+	+ \tfrac{4}{\sqrt3} \left(\partial_x \eta\right)
+	\Bigl[
+	\left(\partial_x \eta\right) \partial_y \eta
+	+ \tfrac{\sqrt3}{2} \partial_y \eta \partial_y \nu 
+	+ \partial_x \mu \partial_y \mu
+	+ \partial_x \nu \partial_y \nu
+	\Bigr] \\
+	2 \left( \partial_y \eta \right)
+	\Bigl[
+	\left(\partial_y \eta\right) \left( \partial_y \mu 
+	+ \partial_x \nu 
+	- \tfrac{1}{\sqrt3} \left(\partial_y \eta\right) \right)
+	- \tfrac{1}{\sqrt3} \left(\partial_y \mu\right)^{2} 
+	- \tfrac{1}{\sqrt3} \left(\partial_y \nu\right)^{2}
+	\Bigr] \\ 
+	+ 2 \left(\partial_y \mu\right)
+	\Bigl[
+	\partial_x \mu \partial_y \nu 
+	+ \left(\partial_y \mu\right)^2 
+	+ \left(\partial_y \mu\right) \partial_x \nu 
+	+ \left(\partial_y \nu\right)^{2}
+	\Bigr] 
+	+ 4 \partial_x \nu \left(\partial_y \nu\right)^{2}
+	\Biggr]
+	\end{multlined}
+\end{split}
+\end{equation}
+
+
+\end{document}
