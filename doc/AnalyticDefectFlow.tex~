@@ -1,0 +1,139 @@
+\documentclass[reqno]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{relsize}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{pgf, tikz}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usetikzlibrary{graphs}
+
+\setlength{\textheight}{9truein}
+\setlength{\topmargin}{-0.5truein}
+\setlength{\textwidth}{6truein}
+\setlength{\oddsidemargin}{.25truein}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\newcommand{\Pic}[1]{\text{Pic}(#1)}
+\newcommand{\Div}[1]{\text{Div}(#1)}
+\newcommand{\divv}[1]{\text{div}(#1)}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Jac}{\text{Jac}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{conjecture}{Theorem}
+
+\setlength{\parindent}{40pt}
+
+\begin{document}
+\title{Analytic solution for flow around defect from anisotropic elasticity}
+\author{Lucas Myers}
+\maketitle
+
+\section{Director field configuration}
+The director field configuration is given by:
+\begin{equation}
+  \mathbf{n} = \left( \cos k\phi, \sin k\phi, 0 \right)
+\end{equation}
+for 3-dimensions.
+Recall also that the $Q$-tensor is given by:
+\begin{equation}
+  Q_{ij} = \frac{S}{2} \left( 3 n_i n_j - \delta_{ij} \right)
+\end{equation}
+Plugging this in yields:
+\begin{equation}
+  \begin{split}
+    Q &= \frac{S}{2} \begin{bmatrix}
+      \left(3 \cos^{2}k\phi - 1\right)
+      & \tfrac32 \sin 2k \phi
+      & 0 \\
+      \tfrac32 \sin 2k \phi
+      & \left(3 \sin^{2}k\phi - 1\right)
+      & 0 \\
+      0
+      & 0
+      & -1
+    \end{bmatrix} \\
+    &= \frac{S}{2} \begin{bmatrix}
+      \left(\tfrac12 + \tfrac32 \cos 2k\phi\right)
+      & \tfrac32 \sin 2k \phi
+      & 0 \\
+      \tfrac32 \sin 2k \phi
+      & \left(\tfrac12 - \tfrac32 \cos 2k\phi \right)
+      & 0 \\
+      0
+      & 0
+      & -1
+    \end{bmatrix}
+  \end{split}
+\end{equation}
+
+Now, the flow equation for an equilibrium configuration is given by:
+\begin{equation}
+	\partial^4 \psi = \frac{1}{b} \Bigl[
+	2 \bigl( \Phi_{L_1} (Q) 
+	+ \kappa_2 \Phi_{L_2} (Q)
+	+ \kappa_3 \Phi_{L_3} (Q) \bigr)
+	+ a \Phi_{\mu_2} (Q)
+	\Bigr]
+\end{equation}
+with
+\begin{equation}
+	\Phi_{L_1} (Q) \equiv -\epsilon_{ki} \left( \partial_k \partial_j^2 Q_{mn} \right)
+	\left( \partial_i Q_{mn} \right)
+\end{equation}
+and
+\begin{equation}
+	\Phi_{L_3}(Q)
+	= 
+	\begin{multlined}[t]
+	-2 L_3 \epsilon_{npi} \bigl[ 
+	\left( \partial_p \partial_j Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_j Q_{jm} \right) \left( \partial_p \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_p Q_{jm} \right) \left( \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ Q_{jm} \left( \partial_p \partial_j \partial_m Q_{kl} \right) \left( \partial_i Q_{kl} \right) \\
+	\hspace{1.5cm}+ \left( \partial_p Q_{jm} \right) \left( \partial_m Q_{kl} \right) \left( \partial_i \partial_j Q_{kl} \right)
+	\bigr]
+	\end{multlined}
+\end{equation}
+This equation is derived in the ``FlowFromElasticForces'' file.
+Note that we are unconcerned with the $\Phi_{L_2}$ and $\Phi_{\mu_2}$ terms, because for this scenario we set $\kappa_2 = 0$ and assume an equilibrium configuration.
+
+If we plug in the $Q$-configuration from above, this yields the following:
+\begin{equation}
+  \Phi_{L_1}\left(Q\right) = 0
+\end{equation}
+Clearly a solution to the Biharmonic equation is $\psi = 0$.
+See \href{https://math.stackexchange.com/q/156366/683123}{this stack exchange post} for an explanation of uniqueness of this solution.
+
+For the anisotropic term, we get that:
+\begin{equation}
+  \Phi_{L_3}(Q) =
+  \frac{27 S^{3}}{256 r^{4}} \begin{multlined}[t]
+    \bigl[
+    64 \sin^{6}\left(\frac{\phi}{2} \right) \sin\left(2 \phi \right)
+    + 96 \sin^{4}\left(\frac{\phi}{2} \right) \sin\left(\phi \right) \\
+    - 96 \sin^{4}\left(\frac{\phi}{2} \right) \sin\left(2 \phi \right)
+    - 64 \sin^{4}\left(\frac{\phi}{2} \right) \sin\left(3 \phi \right) \\
+    - 12 \sin\left(\phi \right) 
+    + 24 \sin\left(2 \phi \right) 
+    + 9 \sin\left(3 \phi \right)
+    - 16 \sin\left(4 \phi \right)
+    + 5 \sin\left(5 \phi \right)
+    \bigr]
+    \end{multlined}
+\end{equation}
+If we simplify this using various trig identities, we're left with the very simple expression:
+\begin{equation}
+  \Phi_{L_3} (Q) = \frac{81 S^{3} \sin\left(\phi \right)}{32 r^{4}}
+\end{equation}
+
+\end{document}
