@@ -90,8 +90,8 @@ def auxVars(Q):
         
     """
     
-    eta = (3/2)*Q[0, 0]
-    mu = Q[1, 1] + (1/2)*Q[0, 0]
+    eta = (np.sqrt(3)/2)*Q[0, 0]
+    mu = (1/2)*(Q[1, 1] - Q[2, 2])
     nu = Q[0, 1]
     
     return eta, mu, nu
@@ -162,10 +162,11 @@ def calcQEigenvals(eta, mu, nu):
         mxn array holding the largest eigenvalue of the Q-tensor
         evaluated across the domain.
     """
+    c = np.sqrt(3)
     
     # Collecting terms to calculate plus and minus values easier
-    a = (1/6)*eta + (1/2)*mu
-    b = (1/2)*np.sqrt( (eta - mu)**2 + 4*nu**2 )
+    a = (1/(2*c))*eta + (1/2)*mu
+    b = (1/2)*np.sqrt( (c*eta - mu)**2 + 4*nu**2 )
     
     lambda_p = a + b
     lambda_m = a - b
@@ -210,10 +211,11 @@ def calcQEigenvecs(eta, mu, nu, lambda_pm, S_cutoff):
         field vector across the domain. Masked values correspond to places
         where S < S_cutoff.
     """
+    c = np.sqrt(3)
     
     # Calculate Q_11 - lambda and Q_22 - lambda values
-    Q11_lambda = (2/3)*eta - lambda_pm
-    Q22_lambda = -(1/3)*eta + mu - lambda_pm
+    Q11_lambda = (2/c)*eta - lambda_pm
+    Q22_lambda = -(1/c)*eta + mu - lambda_pm
     
     # Masks for where to use first/second row of Q to calculate eigenvecs
     # first row mask --> frm; second row mask --> srm

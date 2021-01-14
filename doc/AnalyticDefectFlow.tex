@@ -76,6 +76,8 @@ Plugging this in yields:
   \end{split}
 \end{equation}
 
+\section{Flow equation and source terms}
+
 Now, the flow equation for an equilibrium configuration is given by:
 \begin{equation}
 	\partial^4 \psi = \frac{1}{b} \Bigl[
@@ -134,6 +136,152 @@ For the anisotropic term, we get that:
 If we simplify this using various trig identities, we're left with the very simple expression:
 \begin{equation}
   \Phi_{L_3} (Q) = \frac{81 S^{3} \sin\left(\phi \right)}{32 r^{4}}
+\end{equation}
+
+\section{Solution for the anisotropic source term}
+This source term is separable in polar coordinates, so we attempt a separable solution:
+\begin{equation}
+  \psi(r, \phi) = R(r) \Phi (\phi)
+\end{equation}
+where $\Phi(\phi)$ is not to be confused with $\Phi_{L_3}(Q)$.
+We also write our source term as
+\begin{equation}
+  \Phi_{L_3}(Q) = f(r) g(\phi)
+\end{equation}
+so that our solution may be slightly more general.
+Plugging this in and considering the \href{https://www.wikiwand.com/en/Biharmonic_equation}{form of the biharmonic operator in polar coordinates}, the equation becomes:
+\begin{equation}
+  \Delta^2 \psi =
+  \Phi(\phi) F(r)
+  + \frac{2}{r^2} \Phi''(\phi) R''(r)
+  + \frac{1}{r^4} \Phi''''(\phi) R(r)
+  - \frac{2}{r^3} \Phi''(\phi) R'(r)
+  + \frac{4}{r^4} \Phi''(\phi) R(r)
+  =
+  f(\phi) g(r)
+\end{equation}
+where
+\begin{equation}
+  F(r) \equiv
+  \frac{1}{r} \frac{\partial}{\partial r} \left(
+  r \frac{\partial}{\partial r} \left(
+  \frac{1}{r} \frac{\partial}{\partial r} \left(
+  r \frac{\partial R}{\partial r}
+  \right)
+  \right)
+  \right)
+  =
+  R''''(r)
+  + \frac{2}{r} R'''(r)
+  - \frac{1}{r^2} R''(r)
+  + \frac{1}{r^3} R'(r)
+\end{equation}
+Now, if we assume the form
+\begin{equation}
+  g(\phi) = \sin m \phi \: ;
+  \Phi(\phi) = \sin m \phi
+\end{equation}
+or
+\begin{equation}
+  g(\phi) = \cos m \phi \: ;
+  \Phi(\phi) = \cos m \phi
+\end{equation}
+then the PDE above reduces to an ODE in $r$:
+\begin{equation}
+  F(r)
+  - \frac{2}{r^2} m^2 R''(r)
+  + \frac{1}{r^4} m^4 R(r)
+  + \frac{2}{r^3} m^2 R'(r)
+  - \frac{4}{r^4} m^2 R(r)
+  =
+  g(r)
+\end{equation}
+Explicitly writing out $F(r)$ yields.
+\begin{equation}
+  R''''(r)
+  + \frac{2}{r} R'''(r)
+  - \frac{1}{r^2} \left(1 + 2m^2\right) R''(r)
+  + \frac{1}{r^3} \left(1 + 2m^2\right) R'(r)
+  + \frac{1}{r^4} \left(m^4 - 4m^2\right) R(r)
+  = \frac{\lambda}{r^4}
+\end{equation}
+We first solve the homogeneous equation.
+From Wolfram Mathematica, the solution is:
+\begin{equation}
+  R(r) =
+  c_1 r^{-m}
+  + c_2 r^{2 - m}
+  + c_3 r^{2 + m}
+  + c_4 r^m
+\end{equation}
+
+Now we have to consider the source term.
+Note that the following is a particular solution:
+\begin{equation}
+  R(r) = \frac{\lambda}{m^4 - 4m^2}
+\end{equation}
+Note that, since the particular solution is constant, we must have that $c_1 = 0$.
+Further, if $m > 2$ we need $c_2 = 0$.
+If $m = 1$ we can absorb $c_2$ into $c_4$.
+We will specify to the $m = 1$ case for now, given that our source term has a $\sin(\phi)$ in it.
+Our first boundary condition gives:
+\begin{equation}
+  c_3 r_0^3 + c_4 r_0 -\tfrac13 \lambda = 0
+  \implies
+  c_4 = \tfrac13 \frac{\lambda}{r_0} - c_3 r_0^2
+\end{equation}
+The second boundary condition gives:
+\begin{equation}
+  3 c_3 r_0^2 + c_4 = 0
+  \implies
+  c_4 = - 3 c_3 r_0^2
+\end{equation}
+These two conditions together give:
+\begin{equation}
+  c_3 = -\tfrac16 \frac{\lambda}{r_0^3} 
+\end{equation}
+Plugging back in gives:
+\begin{equation}
+  c_4 = \tfrac12 \frac{\lambda}{r_0}
+\end{equation}
+Hence, the solution is given by:
+\begin{equation}
+  R(r) =
+  \lambda \left(
+  -\frac16 \left(\frac{r}{r_0}\right)^3
+  + \frac12 \left(\frac{r}{r_0}\right)
+  - \frac13
+  \right)
+\end{equation}
+So that the stream function is given by:
+\begin{equation}
+  \psi(r, \phi) =
+  \lambda \left(
+  -\frac16 \left(\frac{r}{r_0}\right)^3
+  + \frac12 \left(\frac{r}{r_0}\right)
+  - \frac13
+  \right)
+  \sin(\phi)
+\end{equation}
+with $\lambda = 81 S^3 / 32$.
+Taking the curl yields:
+\begin{equation}
+  \begin{split}
+    \nabla \times \psi
+    &= \frac{1}{r} \frac{\partial \psi}{\partial \phi} \hat{r}
+    - \frac{\partial \psi}{\partial r} \hat{\phi} \\
+    &= \lambda \left(
+    -\frac16 \left(\frac{r^2}{r_0^3}\right)
+    + \frac12 \left(\frac{1}{r_0}\right)
+    - \frac13 \frac{1}{r}
+    \right)
+    \cos(\phi) \hat{r}
+    - \lambda \left(
+    -\frac12 \left(\frac{r^2}{r_0^3}\right)
+    + \frac12 \left(\frac{1}{r_0}\right)
+    \right)
+    \sin(\phi) \hat{\phi} \\
+  \end{split}
 \end{equation}
 
 \end{document}
